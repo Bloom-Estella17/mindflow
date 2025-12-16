@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💚 MindFlow - Home</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #8B7EB8;
+    }
+    
+    .icons {
+      display: flex;
+      gap: 15px;
+      font-size: 20px;
+    }
+    
+    /* Main Card */
+    .main-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 25px;
+      padding: 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .greeting {
+      font-size: 28px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      font-size: 16px;
+      color: #8B7EB8;
+      margin-bottom: 30px;
+    }
+    
+    /* Mood Check */
+    .mood-section {
+      margin-bottom: 30px;
+    }
+    
+    .mood-question {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2D2D3A;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .mood-options {
+      display: flex;
+      justify-content: space-around;
+      gap: 10px;
+    }
+    
+    .mood-btn {
+      font-size: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s;
+      padding: 10px;
+      border-radius: 15px;
+    }
+    
+    .mood-btn:hover {
+      transform: scale(1.2);
+      background: rgba(139, 126, 184, 0.1);
+    }
+    
+    /* Luna Card */
+    .luna-card {
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 30px;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s;
+      box-shadow: 0 8px 20px rgba(139, 126, 184, 0.3);
+    }
+    
+    .luna-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .luna-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .luna-subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    /* Today's Tasks */
+    .tasks-section {
+      margin-bottom: 30px;
+    }
+    
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #2D2D3A;
+      margin-bottom: 15px;
+    }
+    
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      margin-bottom: 10px;
+      background: rgba(139, 126, 184, 0.05);
+      border-radius: 15px;
+      transition: background 0.2s;
+    }
+    
+    .task-item:hover {
+      background: rgba(139, 126, 184, 0.1);
+    }
+    
+    .task-icon {
+      font-size: 24px;
+    }
+    
+    .task-text {
+      flex: 1;
+      font-size: 15px;
+      color: #2D2D3A;
+    }
+    
+    .task-done {
+      opacity: 0.5;
+    }
+    
+    /* Week Graph */
+    .graph-section {
+      background: rgba(168, 216, 234, 0.1);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .graph-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2D2D3A;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .graph-placeholder {
+      height: 120px;
+      background: white;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8B7EB8;
+      font-size: 40px;
+    }
+    
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 25px;
+      padding: 15px 30px;
+      display: flex;
+      gap: 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      backdrop-filter: blur(10px);
+    }
+    
+    .nav-item {
+      font-size: 28px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      opacity: 0.5;
+    }
+    
+    .nav-item.active {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+    
+    .nav-item:hover {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+    
+    /* Responsive */
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 10px;
+      }
+      
+      .mood-btn {
+        font-size: 32px;
+      }
+      
+      .bottom-nav {
+        gap: 25px;
+        padding: 12px 20px;
+      }
+      
+      .nav-item {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">💚 MindFlow</div>
+      <div class="icons">
+        <span>🔔</span>
+        <span>👤</span>
+      </div>
+    </div>
+    
+    <!-- Main Card -->
+    <div class="main-card">
+      <!-- Greeting -->
+      <div class="greeting">Bonjour ! 🌙</div>
+      <div class="subtitle">Comment te sens-tu aujourd'hui ?</div>
+      
+      <!-- Mood Check -->
+      <div class="mood-section">
+        <div class="mood-question">Choisis ton humeur</div>
+        <div class="mood-options">
+          <button class="mood-btn" onclick="selectMood('😊')">😊</button>
+          <button class="mood-btn" onclick="selectMood('😐')">😐</button>
+          <button class="mood-btn" onclick="selectMood('😔')">😔</button>
+          <button class="mood-btn" onclick="selectMood('😰')">😰</button>
+          <button class="mood-btn" onclick="selectMood('😡')">😡</button>
+        </div>
+      </div>
+      
+      <!-- Luna Card -->
+      <div class="luna-card" onclick="openLuna()">
+        <div class="luna-title">
+          <span>💬</span>
+          <span>Parler à Luna</span>
+        </div>
+        <div class="luna-subtitle">"Je suis là pour toi, 24/7" 🌙</div>
+      </div>
+      
+      <!-- Today's Tasks -->
+      <div class="tasks-section">
+        <div class="section-title">Aujourd'hui :</div>
+        <div cl
