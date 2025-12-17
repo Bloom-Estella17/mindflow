@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>📚 MindFlow - Ressources</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      min-height: 100vh;
+      padding: 15px;
+      padding-bottom: 100px;
+    }
+    
+    .container {
+      max-width: 450px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 5px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      background: white;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .back-btn {
+      font-size: 24px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    
+    .header-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #8B7EB8;
+    }
+    
+    .intro-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    
+    .intro-icon {
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+    
+    .intro-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 10px;
+    }
+    
+    .intro-text {
+      font-size: 15px;
+      color: #666;
+      line-height: 1.6;
+    }
+    
+    .condition-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .condition-card:active {
+      transform: scale(0.98);
+    }
+    
+    .condition-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .condition-icon {
+      font-size: 40px;
+      min-width: 50px;
+      text-align: center;
+    }
+    
+    .condition-title {
+      flex: 1;
+    }
+    
+    .condition-name {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 3px;
+    }
+    
+    .condition-subtitle {
+      font-size: 13px;
+      color: #999;
+    }
+    
+    .condition-arrow {
+      font-size: 24px;
+      color: #ccc;
+    }
+    
+    .condition-preview {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .bottom-nav {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: 25px;
+      padding: 15px 25px;
+      display: flex;
+      gap: 35px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      z-index: 1000;
+      max-width: 350px;
+      width: calc(100% - 40px);
+      justify-content: center;
+    }
+    
+    .nav-item {
+      font-size: 26px;
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0.4;
+      text-decoration: none;
+    }
+    
+    .nav-item.active {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 3000;
+      display: none;
+    }
+    
+    .modal-overlay.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 25px;
+      padding: 30px;
+      max-width: 90%;
+      width: 420px;
+      max-height: 85vh;
+      overflow-y: auto;
+      z-index: 3001;
+      display: none;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .modal.show {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
+    
+    @keyframes slideUp {
+      from { transform: translate(-50%, -40%); opacity: 0; }
+      to { transform: translate(-50%, -50%); opacity: 1; }
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    
+    .modal-title-area {
+      flex: 1;
+    }
+    
+    .modal-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+    
+    .modal-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 5px;
+    }
+    
+    .modal-subtitle {
+      font-size: 14px;
+      color: #999;
+    }
+    
+    .modal-close {
+      font-size: 28px;
+      cursor: pointer;
+      color: #888;
+      min-width: 28px;
+    }
+    
+    .modal-section {
+      margin-bottom: 25px;
+    }
+    
+    .modal-section-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #8B7EB8;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .modal-text {
+      font-size: 15px;
+      color: #666;
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+    
+    .symptom-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .symptom-list li {
+      padding: 10px 0 10px 30px;
+      position: relative;
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .symptom-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .symptom-list li:before {
+      content: "•";
+      position: absolute;
+      left: 10px;
+      color: #8B7EB8;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    
+    .help-box {
+      background: rgba(139, 126, 184, 0.08);
+      padding: 15px;
+      border-radius: 12px;
+      border-left: 4px solid #8B7EB8;
+    }
+    
+    .help-item {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    
+    .help-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .resource-link {
+      display: block;
+      background: rgba(139, 126, 184, 0.08);
+      padding: 12px 15px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      text-decoration: none;
+      color: #8B7EB8;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .resource-link:active {
+      background: rgba(139, 126, 184, 0.15);
+    }
+    
+    .warning-box {
+      background: rgba(239, 68, 68, 0.08);
+      padding: 15px;
+      border-radius: 12px;
+      border-left: 4px solid #ef4444;
+      margin-top: 20px;
+    }
+    
+    .warning-title {
+      font-size: 15px;
+      font-weight: bold;
+      color: #ef4444;
+      margin-bottom: 8px;
+    }
+    
+    .warning-text {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <a href="profil.html" class="back-btn">←</a>
+      <div class="header-title">Ressources</div>
+      <div style="width: 24px;"></div>
+    </div>
+    
+    <div class="intro-card">
+      <div class="intro-icon">📚</div>
+      <div class="intro-title">Bibliothèque médicale</div>
+      <div class="intro-text">Informations basées sur le DSM-5 pour mieux comprendre les troubles de santé mentale.</div>
+    </div>
+    
+    <div class="condition-card" onclick="openModal('tdi')">
+      <div class="condition-header">
+        <div class="condition-icon">🎭</div>
+        <div class="condition-title">
+          <div class="condition-name">TDI</div>
+          <div class="condition-subtitle">Trouble Dissociatif de l'Identité</div>
+        </div>
+        <div class="condition-arrow">→</div>
+      </div>
+      <div class="condition-preview">Présence de deux ou plusieurs états de personnalité distincts avec amnésie entre les épisodes...</div>
+    </div>
+    
+    <div class="condition-card" onclick="openModal('bipolaire')">
+      <div class="condition-header">
+        <div class="condition-icon">🌊</div>
+        <div class="condition-title">
+          <div class="condition-name">Trouble Bipolaire</div>
+          <div class="condition-subtitle">Types I, II et Cyclothymie</div>
+        </div>
+        <div class="condition-arrow">→</div>
+      </div>
+      <div class="condition-preview">Alternance entre épisodes dépressifs et maniaques/hypomaniaques affectant l'humeur et l'énergie...</div>
+    </div>
+    
+    <div class="condition-card" onclick="openModal('borderline')">
+      <div class="condition-header">
+        <div class="condition-icon">💔</div>
+        <div class="condition-title">
+          <div class="condition-name">Trouble Borderline</div>
+          <div class="condition-subtitle">Trouble de la Personnalité Limite (TPL)</div>
+        </div>
+        <div class="condition-arrow">→</div>
+      </div>
+      <div class="condition-preview">Instabilité des relations, de l'image de soi et des affects avec impulsivité marquée...</div>
+    </div>
+    
+    <div class="condition-card" onclick="openModal('anxiete')">
+      <div class="condition-header">
+        <div class="condition-icon">😰</div>
+        <div class="condition-title">
+          <div class="condition-name">Trouble Anxieux Généralisé</div>
+          <div class="condition-subtitle">TAG</div>
+        </div>
+        <div class="condition-arrow">→</div>
+      </div>
+      <div class="condition-preview">Anxiété et inquiétude excessives concernant divers événements, difficiles à contrôler...</div>
+    </div>
+    
+    <div class="condition-card" onclick="openModal('depression')">
+      <div class="condition-header">
+        <div class="condition-icon">😔</div>
+        <div class="condition-title">
+          <div class="condition-name">Dépression</div>
+          <div class="condition-subtitle">Trouble Dépressif Majeur</div>
+        </div>
+        <div class="condition-arrow">→</div>
+      </div>
+      <div class="condition-preview">Humeur dépressive et/ou perte d'intérêt durant au moins deux semaines avec impact fonctionnel...</div>
+    </div>
+  </div>
+  
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">🏠</a>
+    <a href="mood.html" class="nav-item">😊</a>
+    <a href="journal.html" class="nav-item">📝</a>
+    <a href="traitement.html" class="nav-item">💊</a>
+    <a href="profil.html" class="nav-item">👤</a>
+  </div>
+  
+  <!-- Modals -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+  
+  <!-- TDI Modal -->
+  <div class="modal" id="tdiModal">
+    <div class="modal-header">
+      <div class="modal-title-area">
+        <div class="modal-icon">🎭</div>
+        <div class="modal-title">TDI</div>
+        <div class="modal-subtitle">Trouble Dissociatif de l'Identité</div>
+      </div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">📌 Définition DSM-5</div>
+      <div class="modal-text">
+        Présence de deux ou plusieurs identités ou états de personnalité distincts, chacun avec sa propre façon de percevoir et d'interagir avec l'environnement et soi-même. S'accompagne d'amnésie pour les informations personnelles quotidiennes.
+      </div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">🎯 Symptômes principaux</div>
+      <ul class="symptom-list">
+        <li>Deux ou plusieurs identités distinctes (alters)</li>
+        <li>Amnésie pour événements quotidiens, informations personnelles</li>
+        <li>Sentiment de dépersonnalisation ou déréalisation</li>
+        <li>Périodes de temps manquantes</li>
+        <li>Voix intérieures distinctes</li>
+        <li>Changements soudains de comportement</li>
+        <li>Découverte d'objets sans souvenir de les avoir acquis</li>
+      </ul>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">💡 Ce qui peut aider</div>
+      <div class="help-box">
+        <div class="help-item">• Psychothérapie spécialisée (trauma)</div>
+        <div class="help-item">• Communication interne entre alters</div>
+        <div class="help-item">• Journal pour suivre les switchs</div>
+        <div class="help-item">• Techniques de grounding</div>
+        <div class="help-item">• Environnement stable et sécurisant</div>
+      </div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">🔗 Ressources</div>
+      <a href="https://www.psycom.org" class="resource-link">Psycom - Info santé mentale</a>
+      <a href="https://www.has-sante.fr" class="resource-link">HAS - Recommandations</a>
+    </div>
+    
+    <div class="warning-box">
+      <div class="warning-title">⚠️ Quand consulter</div>
+      <div class="warning-text">Si vous expérimentez des pertes de temps fréquentes, des amnésies ou découvrez des preuves de comportements dont vous n'avez aucun souvenir, consultez un professionnel spécialisé en trauma.</div>
+    </div>
+  </div>
+  
+  <!-- Bipolaire Modal -->
+  <div class="modal" id="bipolaireModal">
+    <div class="modal-header">
+      <div class="modal-title-area">
+        <div class="modal-icon">🌊</div>
+        <div class="modal-title">Trouble Bipolaire</div>
+        <div class="modal-subtitle">Types I, II et Cyclothymie</div>
+      </div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">📌 Définition DSM-5</div>
+      <div class="modal-text">
+        Trouble de l'humeur caractérisé par l'alternance d'épisodes dépressifs et maniaques (Type I) ou hypomaniaques (Type II). La cyclothymie présente des fluctuations chroniques moins sévères.
+      </div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">🎯 Symptômes</div>
+      <ul class="symptom-list">
+        <li><strong>Dépression:</strong> Tristesse, fatigue, perte d'intérêt, pensées suicidaires</li>
+        <li><strong>Manie:</strong> Énergie excessive, insomnie, pensées rapides, impulsivité</li>
+        <li><strong>Hypomanie:</strong> Symptômes maniaques moins intenses</li>
+        <li>Changements brusques d'humeur et d'énergie</li>
+        <li>Impact sur le fonctionnement quotidien</li>
+        <li>Comportements à risque en phase maniaque</li>
+      </ul>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">💡 Ce qui peut aider</div>
+      <div class="help-box">
+        <div class="help-item">• Stabilisateurs de l'humeur (lithium, etc.)</div>
+        <div class="help-item">• Psychothérapie (TCC, psychoéducation)</div>
+        <div class="help-item">• Routine de sommeil régulière</div>
+        <div class="help-item">• Suivi des cycles d'humeur</div>
+        <div class="help-item">• Éviter alcool et drogues</div>
+        <div class="help-item">• Reconnaître les signaux précoces</div>
+      </div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">🔗 Ressources</div>
+      <a href="https://www.france-depression.org" class="resource-link">France Dépression</a>
+      <a href="https://argos2001.fr" class="resource-link">Argos 2001 - Association bipolaire</a>
+    </div>
+    
+    <div class="warning-box">
+      <div class="warning-title">⚠️ Urgence</div>
+      <div class="warning-text">En cas d'idées suicidaires ou de comportements dangereux en phase maniaque, contactez immédiatement le 15 ou le 3114.</div>
+    </div>
+  </div>
+  
+  <!-- Borderline Modal -->
+  <div class="modal" id="borderlineModal">
+    <div class="modal-header">
+      <div class="modal-title-area">
+        <div class="modal-icon">💔</div>
+        <div class="modal-title">Trouble Borderline</div>
+        <div class="modal-subtitle">Trouble de la Personnalité Limite</div>
+      </div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">📌 Définition DSM-5</div>
+      <div class="modal-text">
+        Mode général d'instabilité des relations interpersonnelles, de l'image de soi et des affects, avec une impulsivité marquée. Début à l'âge adulte jeune.
+      </div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">🎯 Critères diagnostiques (5 sur 9)</div>
+      <ul class="symptom-list">
+        <li>Efforts effrénés pour éviter l'abandon</li>
+        <li>Relations instables et intenses</li>
+        <li>Perturbation de l'identité</li>
+        <li>Impulsivité dommageable (2 domaines min.)</li>
+        <li>Comportements suicidaires ou auto-mutilation</li>
+        <li>Instabilité affective marquée</li>
+        <li>Sentiment chronique de vide</li>
+        <li>Colères intenses inappropriées</li>
+        <li>Idéation persécutoire ou dissociation</li>
+      </ul>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">💡 Ce qui peut aider</div>
+      <div class="help-box">
+        <div class="help-item">• Thérapie DBT (Dialectical Behavior Therapy)</div>
+        <div class="help-item">• Skills de régulation émotionnelle</div>
+        <div class="help-item">• Techniques de tolérance à la détresse</div>
+        <div class="help-item">• Communication efficace (DEAR MAN)</div>
+        <div class="help-item">• Mindfulness et pleine conscience</div>
+        <div class="help-item">• Plan de sécurité personnalisé</div>
+      </div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">🔗 Ressources</div>
+      <a href="https://www.aapel.org" class="resource-link">AAPEL - Association borderline</a>
+      <a href="https://www.psycom.org" class="resource-link">Psycom - Info TPL</a>
+    </div>
+    
+    <div class="warning-box">
+      <div class="warning-title">⚠️ En cas de crise</div>
+      <div class="warning-text">Si vous avez des pensées d'auto-mutilation ou suicidaires, utilisez votre plan de crise ou contactez le 3114 (prévention suicide).</div>
+    </div>
+  </div>
+  
+  <!-- Anxiété Modal -->
+  <div class="modal" id="anxieteModal">
+    <div class="modal-header">
+      <div class="modal-title-area">
+        <div class="modal-icon">😰</div>
+        <div class="modal-title">TAG</div>
+        <div class="modal-subtitle">Trouble Anxieux Généralisé</div>
+      </div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">📌 Définition DSM-5</div>
+      <div class="modal-text">
+        Anxiété et inquiétudes excessives concernant divers événements ou activités, présentes la plupart du temps durant au moins 6 mois, difficiles à contrôler.
+      </div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">🎯 Symptômes (3 sur 6 minimum)</div>
+      <ul class="symptom-list">
+        <li>Agitation ou sensation d'être survolté</li>
+        <li>Fatigabilité</li>
+        <li>Difficultés de concentration</li>
+        <li>Irritabilité</li>
+        <li>Tension musculaire</li>
+        <li>Perturbation du sommeil</li>
+        <li>Inquiétudes excessives et incontrôlables</li>
+      </ul>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">💡 Ce qui peut aider</div>
+      <div class="help-box">
+        <div class="help-item">• Thérapie cognitivo-comportementale (TCC)</div>
+        <div class="help-item">• Exercices de respiration (4-7-8)</div>
+        <div class="help-item">• Relaxation musculaire progressive</div>
+        <div class="help-item">• Activité physique régulière</div>
+        <div class="help-item">• Limitation caféine et alcool</div>
+        <div class="help-item">• Techniques de grounding (5-4-3-2-1)</div>
+      </div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">🔗 Ressources</div>
+      <a href="https://www.anxiete-depression.org" class="resource-link">Association Anxiété Dépression</a>
+      <a href="https://www.psycom.org" class="resource-link">Psycom - Info anxiété</a>
+    </div>
+    
+    <div class="warning-box">
+      <div class="warning-title">⚠️ Quand consulter</div>
+      <div class="warning-text">Si l'anxiété interfère avec votre vie quotidienne, votre travail ou vos relations, consultez un professionnel de santé mentale.</div>
+    </div>
+  </div>
+  
+  <!-- Dépression Modal -->
+  <div class="modal" id="depressionModal">
+    <div class="modal-header">
+      <div class="modal-title-area">
+        <div class="modal-icon">😔</div>
+        <div class="modal-title">Dépression</div>
+        <div class="modal-subtitle">Trouble Dépressif Majeur</div>
+      </div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">📌 Définition DSM-5</div>
+      <div class="modal-text">
+        Présence d'au moins 5 symptômes durant une période de 2 semaines, incluant obligatoirement humeur dépressive ou perte d'intérêt/plaisir, avec impact fonctionnel significatif.
+      </div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">🎯 Symptômes (5 sur 9 minimum)</div>
+      <ul class="symptom-list">
+        <li>Humeur dépressive la majeure partie de la journée</li>
+        <li>Diminution marquée de l'intérêt ou du plaisir</li>
+        <li>Perte ou gain de poids significatif</li>
+        <li>Insomnie ou hypersomnie</li>
+        <li>Agitation ou ralentissement psychomoteur</li>
+        <li>Fatigue ou perte d'énergie</li>
+        <li>Sentiment de dévalorisation ou culpabilité</li>
+        <li>Diminution de concentration</li>
+        <li>Pensées de mort récurrentes</li>
+      </ul>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">💡 Ce qui peut aider</div>
+      <div class="help-box">
+        <div class="help-item">• Psychothérapie (TCC, psychodynamique)</div>
+        <div class="help-item">• Antidépresseurs si nécessaire</div>
+        <div class="help-item">• Activité physique régulière</div>
+        <div class="help-item">• Routine quotidienne stable</div>
+        <div class="help-item">• Exposition à la lumière naturelle</div>
+        <div class="help-item">• Soutien social et groupes de parole</div>
+      </div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">🔗 Ressources</div>
+      <a href="https://www.france-depression.org" class="resource-link">France Dépression</a>
+      <a href="tel:3114" class="resource-link">3114 - Prévention suicide</a>
+    </div>
+    
+    <div class="warning-box">
+      <div class="warning-title">🚨 URGENCE</div>
+      <div class="warning-text">Si vous avez des pensées suicidaires, appelez immédiatement le 3114 (prévention suicide) ou le 15 (SAMU). Vous n'êtes pas seul(e).</div>
+    </div>
+  </div>
+  
+  <script>
+    function openModal(type) {
+      const modals = {
+        'tdi': 'tdiModal',
+        'bipolaire': 'bipolaireModal',
+        'borderline': 'borderlineModal',
+        'anxiete': 'anxieteModal',
+        'depression': 'depressionModal'
+      };
+      
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById(modals[type]).classList.add('show');
+    }
+    
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('show');
+      document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('show'));
+    }
+  </script>
+</body>
+</html>
+```
+
+---
+
+## ✅ **COMMIT MESSAGE :**
+```
+Création page Ressources DSM-5 avec fiches médicales
