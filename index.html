@@ -117,64 +117,56 @@
       background: rgba(139, 126, 184, 0.15);
     }
     
-    .luna-card {
-      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+    .quick-access {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .quick-card {
       border-radius: 20px;
-      padding: 25px;
-      margin-bottom: 20px;
+      padding: 20px;
       color: white;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 8px 20px rgba(139, 126, 184, 0.3);
+      text-decoration: none;
+      display: block;
+      min-height: 110px;
     }
     
-    .luna-card:active {
+    .quick-card:active {
       transform: scale(0.98);
     }
     
-    .luna-title {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .luna-subtitle {
-      font-size: 14px;
-      opacity: 0.95;
+    .luna-card {
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      box-shadow: 0 8px 20px rgba(139, 126, 184, 0.3);
     }
     
     .crise-card {
       background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
-      border-radius: 20px;
-      padding: 25px;
-      margin-bottom: 30px;
-      color: white;
-      cursor: pointer;
-      transition: all 0.3s ease;
       box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
-      text-decoration: none;
-      display: block;
     }
     
-    .crise-card:active {
-      transform: scale(0.98);
+    .triggers-card {
+      background: linear-gradient(135deg, #FFC107 0%, #FFD54F 100%);
+      box-shadow: 0 8px 20px rgba(255, 193, 7, 0.3);
     }
     
-    .crise-title {
-      font-size: 20px;
+    .quick-title {
+      font-size: 18px;
       font-weight: bold;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     
-    .crise-subtitle {
-      font-size: 14px;
+    .quick-subtitle {
+      font-size: 13px;
       opacity: 0.95;
+      line-height: 1.4;
     }
     
     .tasks-section {
@@ -313,21 +305,31 @@
         </div>
       </div>
       
-      <div class="luna-card" onclick="openLuna()">
-        <div class="luna-title">
-          <span>💬</span>
-          <span>Parler à Luna</span>
+      <div class="quick-access">
+        <div class="luna-card quick-card" onclick="openLuna()">
+          <div class="quick-title">
+            <span>💬</span>
+            <span>Luna</span>
+          </div>
+          <div class="quick-subtitle">Compagnon IA empathique 24/7</div>
         </div>
-        <div class="luna-subtitle">"Je suis là pour toi, 24/7" 🌙</div>
+        
+        <a href="crise.html" class="crise-card quick-card">
+          <div class="quick-title">
+            <span>🚨</span>
+            <span>Crise</span>
+          </div>
+          <div class="quick-subtitle">Urgences et stratégies rapides</div>
+        </a>
+        
+        <a href="triggers.html" class="triggers-card quick-card">
+          <div class="quick-title">
+            <span>📋</span>
+            <span>Triggers</span>
+          </div>
+          <div class="quick-subtitle">Identification et gestion</div>
+        </a>
       </div>
-      
-      <a href="crise.html" class="crise-card">
-        <div class="crise-title">
-          <span>🚨</span>
-          <span>Plan de Crise</span>
-        </div>
-        <div class="crise-subtitle">Accès rapide aux urgences et stratégies</div>
-      </a>
       
       <div class="tasks-section">
         <div class="section-title">Aujourd'hui :</div>
@@ -375,4 +377,4 @@
 
 **Message :**
 ```
-Ajout card Plan de Crise sur Home
+Ajout card Triggers sur Home avec grid layout
