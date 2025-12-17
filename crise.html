@@ -102,6 +102,43 @@
       margin-top: 5px;
     }
     
+    .contact-item {
+      background: rgba(139, 126, 184, 0.08);
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .contact-info {
+      flex: 1;
+    }
+    
+    .contact-name {
+      font-size: 16px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 4px;
+    }
+    
+    .contact-phone {
+      font-size: 14px;
+      color: #8B7EB8;
+    }
+    
+    .contact-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .call-btn {
+      font-size: 24px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    
     .section-card {
       background: white;
       border-radius: 25px;
@@ -479,6 +516,14 @@
     
     <div class="section-card">
       <div class="section-header">
+        <div class="section-title">📱 Mes contacts de confiance</div>
+        <div class="add-btn" onclick="openContactModal()">+</div>
+      </div>
+      <div id="contactsList"></div>
+    </div>
+    
+    <div class="section-card">
+      <div class="section-header">
         <div class="section-title">Mes signaux d'alerte</div>
         <div class="add-btn" onclick="openSignalModal()">+</div>
       </div>
@@ -510,8 +555,28 @@
     <a href="profil.html" class="nav-item">👤</a>
   </div>
   
-  <!-- Signal Modal -->
+  <!-- Contact Modal -->
   <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+  <div class="modal" id="contactModal">
+    <div class="modal-header">
+      <div class="modal-title">Ajouter un contact</div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Nom / Relation</label>
+      <input type="text" class="form-input" id="contactName" placeholder="Ex: Maman, Marie, Dr. Dupont">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Numéro de téléphone</label>
+      <input type="tel" class="form-input" id="contactPhone" placeholder="Ex: 06 12 34 56 78">
+    </div>
+    
+    <button class="save-btn" onclick="saveContact()">💚 Enregistrer</button>
+  </div>
+  
+  <!-- Signal Modal -->
   <div class="modal" id="signalModal">
     <div class="modal-header">
       <div class="modal-title">Ajouter un signal</div>
@@ -573,9 +638,38 @@
   
   <script>
     function loadCrisisData() {
+      loadContacts();
       loadSignals();
       loadSteps();
       loadCoping();
+    }
+    
+    function loadContacts() {
+      const contacts = JSON.parse(localStorage.getItem('mindflow_crisis_contacts') || '[]');
+      const list = document.getElementById('contactsList');
+      
+      if (contacts.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📱</div>
+            <div class="empty-text">Ajoute tes contacts de confiance</div>
+          </div>
+        `;
+        return;
+      }
+      
+      list.innerHTML = contacts.map(contact => `
+        <div class="contact-item">
+          <div class="contact-info">
+            <div class="contact-name">${contact.name}</div>
+            <div class="contact-phone">${contact.phone}</div>
+          </div>
+          <div class="contact-actions">
+            <a href="tel:${contact.phone.replace(/\s/g, '')}" class="call-btn">📞</a>
+            <div class="delete-icon" onclick="deleteContact(${contact.id})">🗑️</div>
+          </div>
+        </div>
+      `).join('');
     }
     
     function loadSignals() {
@@ -650,6 +744,11 @@
       `).join('');
     }
     
+    function openContactModal() {
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('contactModal').classList.add('show');
+    }
+    
     function openSignalModal() {
       document.getElementById('modalOverlay').classList.add('show');
       document.getElementById('signalModal').classList.add('show');
@@ -668,11 +767,31 @@
     function closeModal() {
       document.getElementById('modalOverlay').classList.remove('show');
       document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('show'));
+      document.getElementById('contactName').value = '';
+      document.getElementById('contactPhone').value = '';
       document.getElementById('signalText').value = '';
       document.getElementById('stepLevel').value = '';
       document.getElementById('stepAction').value = '';
       document.getElementById('copingTitle').value = '';
       document.getElementById('copingDesc').value = '';
+    }
+    
+    function saveContact() {
+      const name = document.getElementById('contactName').value.trim();
+      const phone = document.getElementById('contactPhone').value.trim();
+      
+      if (!name || !phone) {
+        alert('Remplis tous les champs ! 💚');
+        return;
+      }
+      
+      const contacts = JSON.parse(localStorage.getItem('mindflow_crisis_contacts') || '[]');
+      contacts.push({ id: Date.now(), name: name, phone: phone });
+      localStorage.setItem('mindflow_crisis_contacts', JSON.stringify(contacts));
+      
+      closeModal();
+      showSuccess();
+      loadContacts();
     }
     
     function saveSignal() {
@@ -727,6 +846,14 @@
       loadCoping();
     }
     
+    function deleteContact(id) {
+      if (!confirm('Supprimer ce contact ?')) return;
+      let contacts = JSON.parse(localStorage.getItem('mindflow_crisis_contacts') || '[]');
+      contacts = contacts.filter(c => c.id !== id);
+      localStorage.setItem('mindflow_crisis_contacts', JSON.stringify(contacts));
+      loadContacts();
+    }
+    
     function deleteSignal(id) {
       if (!confirm('Supprimer ce signal ?')) return;
       let signals = JSON.parse(localStorage.getItem('mindflow_crisis_signals') || '[]');
@@ -765,6 +892,8 @@
 
 ---
 
-## ✅ **MESSAGE DE COMMIT :**
+## ✅ **COMMIT !**
+
+**Message :**
 ```
-Création module Plan de Crise avec urgences et stratégies
+Ajout section contacts de confiance dans Plan de Crise
