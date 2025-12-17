@@ -12,13 +12,14 @@ Lancement Play Store : Fin Janvier 2025 (flexible)
 - [x] Structure de base
 - [x] GitHub Pages activé
 - [x] Navigation entre pages fonctionnelle
+- [x] Système de sauvegarde localStorage
 
 ### Écrans complétés
 - [x] **Home Screen** - Écran d'accueil complet
   - Design apaisant violet/bleu
   - Navigation vers toutes les sections
   - Aperçu des tâches du jour
-  - Accès rapide à Luna
+  - Accès rapide à Luna et Plan de Crise
   
 - [x] **MoodTracker** - Suivi d'humeur fonctionnel
   - Slider coloré 1-10 avec emojis dynamiques
@@ -27,24 +28,59 @@ Lancement Play Store : Fin Janvier 2025 (flexible)
   - Graphique hebdomadaire automatique
   - Statistiques (humeur moyenne, meilleur jour)
   - Historique complet avec dates
-  - Export de données
+  
+- [x] **Journal** - Écriture libre
+  - Zone de texte illimitée
+  - Compteur de mots en temps réel
+  - Sauvegarde automatique avec date/heure
+  - Historique avec aperçus
+  - Lecture complète en modal
+  - Suppression d'entrées
+  - Stats (entrées totales, ce mois-ci)
+  
+- [x] **Traitement** - Suivi médicaments
+  - Liste médicaments personnalisée
+  - Dosage et fréquence
+  - Moments de la journée (matin/midi/soir)
+  - Check quotidien avec checkbox
+  - Taux d'assiduité sur 7 jours
+  - Streak de jours consécutifs
+  - Historique de prise
+  
+- [x] **Profil** - Paramètres et données
+  - Informations personnelles
+  - Mes conditions de santé
+  - Numéros d'urgence (SAMU, 3114, etc.)
+  - Export PDF (à venir)
+  - Effacer données
+  - À propos de l'app
+
+### Modules spécialisés
+- [x] **Plan de Crise** 🚨
+  - Numéros d'urgence nationaux (1 clic)
+  - Contacts de confiance personnalisés
+  - Technique grounding 5-4-3-2-1
+  - Signaux d'alerte personnalisés
+  - Plan d'action par niveau de crise
+  - Stratégies de coping
+  - Accessible depuis le Home
 
 ---
 
 ## 🔄 EN COURS
 
-- [ ] Mise à jour du PROGRESS.md ✅ (en train de faire !)
+- [ ] Module Triggers (en développement)
 
 ---
 
 ## ⏳ À FAIRE - V1.0
 
-### Écrans prioritaires
-- [ ] **Journal** - Écriture libre
-  - Zone de texte
-  - Sauvegarde automatique
-  - Liste des entrées passées
-  - Recherche par date
+### Modules prioritaires
+- [ ] **Triggers** - Identification déclencheurs 📋
+  - Liste personnalisée
+  - Niveau d'intensité
+  - Stratégies pour chaque trigger
+  - Journal de déclenchements
   
 - [ ] **Luna** - IA Compagnon 🌙
   - Chat interface
@@ -53,23 +89,37 @@ Lancement Play Store : Fin Janvier 2025 (flexible)
   - Détection de crise
   - Numéros d'urgence
   
-- [ ] **Traitement** - Suivi médicaments 💊
-  - Liste médicaments
-  - Rappels horaires
-  - Suivi assiduité
-  - Effets secondaires
+### Modules additionnels (V1.1+)
+- [ ] **TDI/Alters** - Gestion système 🎭
+  - Liste des alters
+  - Profil de chaque alter
+  - Tracking des switches
+  - Communication interne
+  - Journal partagé
   
-- [ ] **Profil/Settings** - Paramètres
-  - Informations personnelles
-  - Notifications
-  - Export PDF complet
-  - Thème sombre/clair
+- [ ] **Cycles (Bipolarité)** - Suivi phases 🌊
+  - Tracking manie/dépression
+  - Graphiques long terme
+  - Indicateurs précoces
+  - Facteurs déclencheurs
+  
+- [ ] **Borderline (DBT)** - Skills régulation 💔
+  - Skills DBT (DEAR MAN, STOP, etc.)
+  - Gestion crises d'abandon
+  - Suivi impulsivité
+  - Journal émotionnel intensif
+  
+- [ ] **Anxiété/TAG** - Gestion anxiété 😰
+  - Échelle d'anxiété
+  - Tracking attaques de panique
+  - Exercices anti-anxiété
+  - Exposition progressive
 
 ### Features additionnelles
 - [ ] Gratitude quotidienne
 - [ ] Exercices respiration guidés
-- [ ] Plan de crise personnalisé
-- [ ] Contacts d'urgence
+- [ ] Sons apaisants
+- [ ] Mode sombre
 
 ---
 
@@ -88,6 +138,7 @@ Lancement Play Store : Fin Janvier 2025 (flexible)
 ## 🔮 VERSIONS FUTURES
 
 ### V1.1 (Février 2025)
+- [ ] Module TDI/Alters
 - [ ] Suivi sommeil
 - [ ] Suivi alimentation
 - [ ] Widgets Android
@@ -100,77 +151,80 @@ Lancement Play Store : Fin Janvier 2025 (flexible)
 - [ ] Module Dépression
 - [ ] Export PDF avancé pour psy
 
-### V1.3 (Avril 2025)
-- [ ] **Module Alters (TDI)** 🧩
-  - Gestion des alters
-  - Tracking des switches
-  - Communication interne
-  - Journal partagé
-- [ ] Module Dissociation
-- [ ] Techniques grounding avancées
-
 ### V2.0 (Été 2025)
 - [ ] Gamification
 - [ ] Communauté (optionnel)
 - [ ] Musiques/sons apaisants
 - [ ] Multi-langue (anglais)
 - [ ] Backup cloud avancé
+- [ ] Luna IA premium
 
 ---
 
 ## 📊 AVANCEMENT GLOBAL
 
-████████░░░░░░░░░░░░ 25%
+████████████░░░░░░░░ 80%
 
-**2 écrans sur 6 terminés !**
+**5 écrans + 1 module terminés !**
 
 ---
 
 ## 💎 FEATURES V1.0 - DÉTAIL
 
-### 🌙 Luna (IA Compagnon)
-- Chat 24/7 empathique
-- Soutien émotionnel
-- Techniques de régulation
-- Détection de crise automatique
-- Numéros d'urgence en 1 clic
+### 🏠 Home Screen ✅
+- Navigation centrale
+- Quick access humeur
+- Luna & Plan de Crise en avant
+- Tâches du jour
+- Aperçu hebdomadaire
 
 ### 😊 Mood Tracker ✅
 - Check-in quotidien
 - Échelle 1-10 visuelle
 - Graphiques semaine/mois
 - Identification patterns
-- Corrélations (sommeil, événements)
+- Notes contextuelles
 
-### 📝 Journal
+### 📝 Journal ✅
 - Écriture libre illimitée
-- Catégories (anxiété, joie, etc.)
-- Recherche par mots-clés
-- Export
+- Compteur de mots
+- Historique accessible
+- Recherche par date
+- Stats mensuelles
 
-### 💊 Traitement
+### 💊 Traitement ✅
 - Liste médicaments
-- Rappels automatiques
+- Rappels visuels
 - Suivi assiduité
-- Effets secondaires
-- Alertes oubli
+- Stats et streak
+- Historique complet
 
-### 🙏 Gratitude
-- 3 gratitudes/jour
-- Archive accessible
-- Rappels doux
+### 👤 Profil ✅
+- Infos personnelles
+- Mes conditions
+- Urgences rapides
+- Gestion données
+- Export (à venir)
 
-### 🌬️ Exercices
-- Respiration guidée (box, 4-7-8)
-- Grounding (5-4-3-2-1)
-- Sons apaisants
+### 🚨 Plan de Crise ✅
+- Urgences nationales
+- Contacts persos
+- Grounding 5-4-3-2-1
+- Signaux & plan d'action
+- Stratégies de coping
 
-### 📄 Export PDF
-- Rapport complet pour psy
-- Graphiques humeur
-- Suivi traitement
-- Événements marquants
-- Évolution globale
+### 📋 Triggers (en cours)
+- Liste déclencheurs
+- Intensité
+- Stratégies associées
+- Journal tracking
+
+### 🌙 Luna (à venir)
+- Chat 24/7 empathique
+- Soutien émotionnel
+- Techniques de régulation
+- Détection de crise
+- Numéros d'urgence
 
 ---
 
@@ -182,15 +236,18 @@ Lancement Play Store : Fin Janvier 2025 (flexible)
 - 🌊 Accent 1: #A8D8EA (Bleu clair)
 - 🌿 Accent 2: #B8E6D5 (Vert menthe)
 - ⚫ Texte: #2D2D3A (Gris foncé)
+- 🔴 Urgent: #ff6b6b (Rouge doux)
+- 🟢 Positif: #4CAF50 (Vert)
 
 **Vibe :**
 - Apaisant, bienveillant, jamais agressif
 - Minimaliste et doux
 - Design mobile-first
+- Interactions tactiles fluides
 
 ---
 
-## 💰 PRICING
+## 💰 PRICING (Futur)
 
 **Freemium :**
 - 3 check-ins humeur/jour
@@ -213,13 +270,12 @@ Lancement Play Store : Fin Janvier 2025 (flexible)
 
 ## 🚀 PROCHAINES ÉTAPES
 
-1. Journal
-2. Traitement
-3. Luna (IA)
-4. Profil/Settings
-5. Tests complets
-6. Android
-7. Play Store !
+1. ~~Plan de Crise~~ ✅
+2. Triggers 📋
+3. Luna (IA) 🌙
+4. Tests complets
+5. Android
+6. Play Store !
 
 ---
 
@@ -229,41 +285,45 @@ Lancement Play Store : Fin Janvier 2025 (flexible)
 - Création repo et structure
 - Home Screen complet
 
-**17 Décembre 2024 :**
-- MoodTracker fonctionnel avec sauvegarde
-- Navigation entre pages
-- Graphiques et stats automatiques
-- Corrections bugs CSS
-- 2 écrans terminés ! 🎉
+**17 Décembre 2024 (Matin) :**
+- MoodTracker fonctionnel
+- Journal avec historique
+- Navigation debugging
+
+**17 Décembre 2024 (Après-midi) :**
+- Traitement avec tracking
+- Profil avec urgences
+- Plan de Crise complet avec contacts persos
+- 5 écrans + 1 module terminés ! 🎉
 
 ---
 
 ## 🎯 MINDFLOW EN CHIFFRES
 
 **Actuellement :**
-- 2 fichiers HTML
-- ~600 lignes de code
-- 2 écrans fonctionnels
+- 6 fichiers HTML
+- ~3500 lignes de code
+- 5 écrans + 1 module fonctionnels
 - Sauvegarde locale active
 - 0€ dépensés
 
 **Objectif V1.0 :**
-- 6 écrans complets
-- ~2000 lignes de code
+- 8-10 écrans complets
+- ~5000 lignes de code
 - App Android native
 - Sur Play Store
 - <100€ investis
 
 ---
 
-*Dernière mise à jour : 17 Décembre 2024*
+*Dernière mise à jour : 17 Décembre 2024 - 19h*
 *Créé avec 💚 par Laura*
 ```
 
 ---
 
-## ✅ **MAINTENANT :**
+## ✅ **COMMIT !**
 
-**Message de commit :**
+**Message :**
 ```
-Mise à jour PROGRESS - 2 écrans terminés !
+Update PROGRESS - Plan de Crise terminé !
