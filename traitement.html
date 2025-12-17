@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>💚 MindFlow - Traitement</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      min-height: 100vh;
+      padding: 15px;
+      padding-bottom: 100px;
+    }
+    
+    .container {
+      max-width: 450px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 5px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      background: white;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .back-btn {
+      font-size: 24px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    
+    .header-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #8B7EB8;
+    }
+    
+    .add-btn {
+      font-size: 24px;
+      cursor: pointer;
+      color: #8B7EB8;
+    }
+    
+    .stats-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    
+    .stat-item {
+      background: rgba(139, 126, 184, 0.08);
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #8B7EB8;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      font-size: 13px;
+      color: #666;
+    }
+    
+    .today-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .card-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 20px;
+    }
+    
+    .med-item {
+      background: rgba(139, 126, 184, 0.05);
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border-left: 4px solid #8B7EB8;
+      transition: all 0.2s;
+    }
+    
+    .med-item:active {
+      background: rgba(139, 126, 184, 0.1);
+      transform: scale(0.98);
+    }
+    
+    .med-item.taken {
+      opacity: 0.6;
+      border-left-color: #4CAF50;
+    }
+    
+    .checkbox {
+      width: 28px;
+      height: 28px;
+      border: 3px solid #8B7EB8;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+    
+    .checkbox.checked {
+      background: #4CAF50;
+      border-color: #4CAF50;
+      color: white;
+    }
+    
+    .med-info {
+      flex: 1;
+    }
+    
+    .med-name {
+      font-size: 17px;
+      font-weight: 600;
+      color: #2D2D3A;
+      margin-bottom: 4px;
+    }
+    
+    .med-details {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .med-time {
+      font-size: 15px;
+      font-weight: 600;
+      color: #8B7EB8;
+      flex-shrink: 0;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+    }
+    
+    .empty-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .empty-text {
+      font-size: 16px;
+    }
+    
+    .all-meds-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .med-list-item {
+      background: rgba(139, 126, 184, 0.05);
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .med-list-item:active {
+      background: rgba(139, 126, 184, 0.1);
+      transform: scale(0.98);
+    }
+    
+    .med-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 8px;
+    }
+    
+    .delete-icon {
+      font-size: 20px;
+      color: #ff6b6b;
+      cursor: pointer;
+    }
+    
+    .bottom-nav {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: 25px;
+      padding: 15px 25px;
+      display: flex;
+      gap: 35px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      z-index: 1000;
+      max-width: 350px;
+      width: calc(100% - 40px);
+      justify-content: center;
+    }
+    
+    .nav-item {
+      font-size: 26px;
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0.4;
+      text-decoration: none;
+    }
+    
+    .nav-item.active {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 3000;
+      display: none;
+    }
+    
+    .modal-overlay.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 25px;
+      padding: 30px;
+      max-width: 90%;
+      width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      z-index: 3001;
+      display: none;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .modal.show {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
+    
+    @keyframes slideUp {
+      from { transform: translate(-50%, -40%); opacity: 0; }
+      to { transform: translate(-50%, -50%); opacity: 1; }
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+    
+    .modal-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+    
+    .modal-close {
+      font-size: 28px;
+      cursor: pointer;
+      color: #888;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #2D2D3A;
+      margin-bottom: 8px;
+      display: block;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.3s;
+    }
+    
+    .form-input:focus {
+      border-color: #8B7EB8;
+    }
+    
+    .form-select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.3s;
+      background: white;
+    }
+    
+    .form-select:focus {
+      border-color: #8B7EB8;
+    }
+    
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    
+    .time-slot {
+      padding: 12px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .time-slot.selected {
+      background: #8B7EB8;
+      color: white;
+      border-color: #8B7EB8;
+    }
+    
+    .save-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.3s;
+    }
+    
+    .save-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .success-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      z-index: 4000;
+      display: none;
+    }
+    
+    .success-message.show {
+      display: block;
+      animation: popup 0.3s ease;
+    }
+    
+    @keyframes popup {
+      from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+    
+    .success-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .success-text {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <a href="index.html" class="back-btn">←</a>
+      <div class="header-title">Mon Traitement</div>
+      <div class="add-btn" onclick="openAddModal()">+</div>
+    </div>
+    
+    <div class="stats-card">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value" id="adherenceRate">0%</div>
+          <div class="stat-label">Assiduité</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="streakDays">0</div>
+          <div class="stat-label">Jours consécutifs</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="today-card">
+      <div class="card-title">Aujourd'hui</div>
+      <div id="todayList"></div>
+    </div>
+    
+    <div class="all-meds-card">
+      <div class="card-title">Tous mes médicaments</div>
+      <div id="allMedsList"></div>
+    </div>
+  </div>
+  
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">🏠</a>
+    <a href="mood.html" class="nav-item">😊</a>
+    <a href="journal.html" class="nav-item">📝</a>
+    <a href="traitement.html" class="nav-item active">💊</a>
+    <a href="#" class="nav-item">👤</a>
+  </div>
+  
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+  <div class="modal" id="addModal">
+    <div class="modal-header">
+      <div class="modal-title">Ajouter un médicament</div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Nom du médicament</label>
+      <input type="text" class="form-input" id="medName" placeholder="Ex: Sertraline">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Dosage</label>
+      <input type="text" class="form-input" id="medDosage" placeholder="Ex: 50mg">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Fréquence</label>
+      <select class="form-select" id="medFrequency">
+        <option value="daily">Quotidien</option>
+        <option value="twice">2x par jour</option>
+        <option value="three">3x par jour</option>
+        <option value="asneeded">Si besoin</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Moment de la journée</label>
+      <div class="time-grid">
+        <div class="time-slot" data-time="matin" onclick="toggleTime('matin')">🌅 Matin</div>
+        <div class="time-slot" data-time="midi" onclick="toggleTime('midi')">☀️ Midi</div>
+        <div class="time-slot" data-time="soir" onclick="toggleTime('soir')">🌙 Soir</div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Horaire (optionnel)</label>
+      <input type="time" class="form-input" id="medTime">
+    </div>
+    
+    <button class="save-btn" onclick="saveMed()">💚 Enregistrer</button>
+  </div>
+  
+  <div class="success-message" id="successMessage">
+    <div class="success-icon">✅</div>
+    <div class="success-text">Médicament ajouté !</div>
+  </div>
+  
+  <script>
+    let selectedTimes = [];
+    
+    function toggleTime(time) {
+      const slot = document.querySelector(`[data-time="${time}"]`);
+      if (selectedTimes.includes(time)) {
+        selectedTimes = selectedTimes.filter(t => t !== time);
+        slot.classList.remove('selected');
+      } else {
+        selectedTimes.push(time);
+        slot.classList.add('selected');
+      }
+    }
+    
+    function openAddModal() {
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('addModal').classList.add('show');
+    }
+    
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('show');
+      document.getElementById('addModal').classList.remove('show');
+      document.getElementById('medName').value = '';
+      document.getElementById('medDosage').value = '';
+      document.getElementById('medFrequency').value = 'daily';
+      document.getElementById('medTime').value = '';
+      selectedTimes = [];
+      document.querySelectorAll('.time-slot').forEach(slot => slot.classList.remove('selected'));
+    }
+    
+    function saveMed() {
+      const name = document.getElementById('medName').value.trim();
+      const dosage = document.getElementById('medDosage').value.trim();
+      const frequency = document.getElementById('medFrequency').value;
+      const time = document.getElementById('medTime').value;
+      
+      if (!name) {
+        alert('Merci d\'entrer le nom du médicament ! 💚');
+        return;
+      }
+      
+      if (selectedTimes.length === 0) {
+        alert('Sélectionne au moins un moment de la journée ! 💚');
+        return;
+      }
+      
+      const med = {
+        id: Date.now(),
+        name: name,
+        dosage: dosage,
+        frequency: frequency,
+        times: selectedTimes,
+        time: time,
+        history: []
+      };
+      
+      let meds = JSON.parse(localStorage.getItem('mindflow_meds') || '[]');
+      meds.push(med);
+      localStorage.setItem('mindflow_meds', JSON.stringify(meds));
+      
+      closeModal();
+      
+      const successMsg = document.getElementById('successMessage');
+      successMsg.classList.add('show');
+      setTimeout(() => {
+        successMsg.classList.remove('show');
+        loadMeds();
+      }, 1500);
+    }
+    
+    function loadMeds() {
+      const meds = JSON.parse(localStorage.getItem('mindflow_meds') || '[]');
+      const today = new Date().toISOString().split('T')[0];
+      
+      // Today's list
+      const todayList = document.getElementById('todayList');
+      if (meds.length === 0) {
+        todayList.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">💊</div>
+            <div class="empty-text">Aucun médicament<br>Ajoute-en un avec le + en haut !</div>
+          </div>
+        `;
+      } else {
+        todayList.innerHTML = meds.map(med => {
+          const taken = med.history.some(h => h.date === today);
+          const timeText = med.time || med.times.map(t => {
+            if (t === 'matin') return '🌅';
+            if (t === 'midi') return '☀️';
+            if (t === 'soir') return '🌙';
+          }).join(' ');
+          
+          return `
+            <div class="med-item ${taken ? 'taken' : ''}" onclick="toggleTaken(${med.id})">
+              <div class="checkbox ${taken ? 'checked' : ''}">${taken ? '✓' : ''}</div>
+              <div class="med-info">
+                <div class="med-name">${med.name}</div>
+                <div class="med-details">${med.dosage}</div>
+              </div>
+              <div class="med-time">${timeText}</div>
+            </div>
+          `;
+        }).join('');
+      }
+      
+      // All meds list
+      const allMedsList = document.getElementById('allMedsList');
+      if (meds.length === 0) {
+        allMedsList.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <div class="empty-text">Liste vide</div>
+          </div>
+        `;
+      } else {
+        allMedsList.innerHTML = meds.map(med => `
+          <div class="med-list-item">
+            <div class="med-header">
+              <div>
+                <div class="med-name">${med.name}</div>
+                <div class="med-details">${med.dosage} - ${med.frequency === 'daily' ? 'Quotidien' : med.frequency === 'twice' ? '2x/jour' : med.frequency === 'three' ? '3x/jour' : 'Si besoin'}</div>
+              </div>
+              <div class="delete-icon" onclick="deleteMed(${med.id}, event)">🗑️</div>
+            </div>
+          </div>
+        `).join('');
+      }
+      
+      // Stats
+      calculateStats(meds);
+    }
+    
+    function toggleTaken(medId) {
+      const meds = JSON.parse(localStorage.getItem('mindflow_meds') || '[]');
+      const med = meds.find(m => m.id === medId);
+      const today = new Date().toISOString().split('T')[0];
+      
+      if (!med) return;
+      
+      const takenIndex = med.history.findIndex(h => h.date === today);
+      if (takenIndex !== -1) {
+        med.history.splice(takenIndex, 1);
+      } else {
+        med.history.push({ date: today, time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) });
+      }
+      
+      localStorage.setItem('mindflow_meds', JSON.stringify(meds));
+      loadMeds();
+    }
+    
+    function deleteMed(medId, event) {
+      event.stopPropagation();
+      if (!confirm('Supprimer ce médicament ?')) return;
+      
+      let meds = JSON.parse(localStorage.getItem('mindflow_meds') || '[]');
+      meds = meds.filter(m => m.id !== medId);
+      localStorage.setItem('mindflow_meds', JSON.stringify(meds));
+      loadMeds();
+    }
+    
+    function calculateStats(meds) {
+      const last7Days = [];
+      for (let i = 0; i < 7; i++) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        last7Days.push(d.toISOString().split('T')[0]);
+      }
+      
+      let totalDoses = meds.length * 7;
+      let takenDoses = 0;
+      
+      meds.forEach(med => {
+        last7Days.forEach(date => {
+          if (med.history.some(h => h.date === date)) {
+            takenDoses++;
+          }
+        });
+      });
+      
+      const adherence = totalDoses > 0 ? Math.round((takenDoses / totalDoses) * 100) : 0;
+      document.getElementById('adherenceRate').textContent = adherence + '%';
+      
+      // Calculate streak
+      let streak = 0;
+      const today = new Date();
+      for (let i = 0; i < 30; i++) {
+        const d = new Date(today);
+        d.setDate(d.getDate() - i);
+        const dateStr = d.toISOString().split('T')[0];
+        
+        const allTaken = meds.every(med => med.history.some(h => h.date === dateStr));
+        
+        if (allTaken && meds.length > 0) {
+          streak++;
+        } else {
+          break;
+        }
+      }
+      
+      document.getElementById('streakDays').textContent = streak;
+    }
+    
+    loadMeds();
+  </script>
+</body>
+</html>
+```
+
+---
+
+## ✅ **MESSAGE DE COMMIT :**
+```
+Création module Traitement avec suivi médicaments
