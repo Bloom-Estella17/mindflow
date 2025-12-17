@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🌊 MindFlow - Cycles</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      min-height: 100vh;
+      padding: 15px;
+      padding-bottom: 100px;
+    }
+    
+    .container {
+      max-width: 450px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 5px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      background: white;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .back-btn {
+      font-size: 24px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    
+    .header-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #8B7EB8;
+    }
+    
+    .current-phase-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .phase-display {
+      text-align: center;
+      padding: 30px 20px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .phase-depression {
+      background: linear-gradient(135deg, #5a67d8 0%, #7c3aed 100%);
+    }
+    
+    .phase-stable {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+    
+    .phase-hypomanie {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    }
+    
+    .phase-manie {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    }
+    
+    .phase-name {
+      font-size: 32px;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 10px;
+    }
+    
+    .phase-duration {
+      font-size: 16px;
+      color: white;
+      opacity: 0.95;
+    }
+    
+    .phase-intensity {
+      font-size: 18px;
+      color: white;
+      margin-top: 10px;
+    }
+    
+    .change-phase-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .change-phase-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .stats-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    
+    .stat-item {
+      background: rgba(139, 126, 184, 0.08);
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #8B7EB8;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      font-size: 13px;
+      color: #666;
+    }
+    
+    .section-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .section-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 20px;
+    }
+    
+    .graph-container {
+      background: rgba(139, 126, 184, 0.05);
+      border-radius: 15px;
+      padding: 20px;
+      height: 200px;
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      overflow-x: auto;
+    }
+    
+    .graph-bar {
+      flex: 1;
+      min-width: 8px;
+      border-radius: 4px 4px 0 0;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    
+    .graph-bar:active {
+      opacity: 0.7;
+    }
+    
+    .history-item {
+      background: rgba(139, 126, 184, 0.05);
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 12px;
+      border-left: 4px solid;
+    }
+    
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .history-phase {
+      font-size: 17px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+    
+    .history-date {
+      font-size: 13px;
+      color: #999;
+    }
+    
+    .history-details {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+    
+    .history-note {
+      font-size: 14px;
+      color: #888;
+      font-style: italic;
+      margin-top: 8px;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+    }
+    
+    .empty-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .empty-text {
+      font-size: 16px;
+    }
+    
+    .bottom-nav {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: 25px;
+      padding: 15px 25px;
+      display: flex;
+      gap: 35px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      z-index: 1000;
+      max-width: 350px;
+      width: calc(100% - 40px);
+      justify-content: center;
+    }
+    
+    .nav-item {
+      font-size: 26px;
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0.4;
+      text-decoration: none;
+    }
+    
+    .nav-item.active {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 3000;
+      display: none;
+    }
+    
+    .modal-overlay.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 25px;
+      padding: 30px;
+      max-width: 90%;
+      width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      z-index: 3001;
+      display: none;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .modal.show {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
+    
+    @keyframes slideUp {
+      from { transform: translate(-50%, -40%); opacity: 0; }
+      to { transform: translate(-50%, -50%); opacity: 1; }
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+    
+    .modal-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+    
+    .modal-close {
+      font-size: 28px;
+      cursor: pointer;
+      color: #888;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #2D2D3A;
+      margin-bottom: 8px;
+      display: block;
+    }
+    
+    .phase-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    
+    .phase-option {
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 3px solid transparent;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .phase-option:active {
+      transform: scale(0.95);
+    }
+    
+    .phase-option.selected {
+      border-color: #2D2D3A;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    
+    .intensity-slider {
+      width: 100%;
+      height: 8px;
+      border-radius: 5px;
+      outline: none;
+      -webkit-appearance: none;
+      background: linear-gradient(to right, #10b981 0%, #f59e0b 50%, #ef4444 100%);
+    }
+    
+    .intensity-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #8B7EB8;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    
+    .intensity-slider::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #8B7EB8;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    
+    .intensity-value {
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+      color: #8B7EB8;
+      margin-bottom: 10px;
+    }
+    
+    .form-textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px 15px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.3s;
+      resize: vertical;
+    }
+    
+    .form-textarea:focus {
+      border-color: #8B7EB8;
+    }
+    
+    .save-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.3s;
+    }
+    
+    .save-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .success-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      z-index: 4000;
+      display: none;
+    }
+    
+    .success-message.show {
+      display: block;
+      animation: popup 0.3s ease;
+    }
+    
+    @keyframes popup {
+      from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+    
+    .success-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .success-text {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <a href="index.html" class="back-btn">←</a>
+      <div class="header-title">Cycles (Bipolarité)</div>
+      <div style="width: 24px;"></div>
+    </div>
+    
+    <div class="current-phase-card">
+      <div class="phase-display" id="phaseDisplay">
+        <div class="phase-name" id="phaseName">Aucune phase</div>
+        <div class="phase-duration" id="phaseDuration">-</div>
+        <div class="phase-intensity" id="phaseIntensity"></div>
+      </div>
+      <button class="change-phase-btn" onclick="openPhaseModal()">🌊 Changer de phase</button>
+    </div>
+    
+    <div class="stats-card">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value" id="totalPhases">0</div>
+          <div class="stat-label">Phases enregistrées</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="avgDuration">0j</div>
+          <div class="stat-label">Durée moyenne</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="section-title">30 derniers jours</div>
+      <div class="graph-container" id="graphContainer"></div>
+    </div>
+    
+    <div class="section-card">
+      <div class="section-title">Historique</div>
+      <div id="historyList"></div>
+    </div>
+  </div>
+  
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">🏠</a>
+    <a href="mood.html" class="nav-item">😊</a>
+    <a href="journal.html" class="nav-item">📝</a>
+    <a href="traitement.html" class="nav-item">💊</a>
+    <a href="profil.html" class="nav-item">👤</a>
+  </div>
+  
+  <!-- Phase Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+  <div class="modal" id="phaseModal">
+    <div class="modal-header">
+      <div class="modal-title">Nouvelle phase</div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Quelle phase ?</label>
+      <div class="phase-options">
+        <div class="phase-option phase-depression" data-phase="depression" onclick="selectPhase('depression')">
+          Dépression
+        </div>
+        <div class="phase-option phase-stable" data-phase="stable" onclick="selectPhase('stable')">
+          Stable
+        </div>
+        <div class="phase-option phase-hypomanie" data-phase="hypomanie" onclick="selectPhase('hypomanie')">
+          Hypomanie
+        </div>
+        <div class="phase-option phase-manie" data-phase="manie" onclick="selectPhase('manie')">
+          Manie
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Intensité</label>
+      <div class="intensity-value" id="intensityDisplay">5</div>
+      <input type="range" class="intensity-slider" id="phaseIntensitySlider" min="1" max="10" value="5" oninput="updateIntensity()">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Notes (optionnel)</label>
+      <textarea class="form-textarea" id="phaseNotes" placeholder="Facteurs déclencheurs, symptômes, contexte..."></textarea>
+    </div>
+    
+    <button class="save-btn" onclick="savePhase()">💚 Enregistrer</button>
+  </div>
+  
+  <div class="success-message" id="successMessage">
+    <div class="success-icon">✅</div>
+    <div class="success-text">Phase enregistrée !</div>
+  </div>
+  
+  <script>
+    let selectedPhase = null;
+    
+    const phaseColors = {
+      depression: '#5a67d8',
+      stable: '#10b981',
+      hypomanie: '#f59e0b',
+      manie: '#ef4444'
+    };
+    
+    const phaseNames = {
+      depression: 'Dépression',
+      stable: 'Stable',
+      hypomanie: 'Hypomanie',
+      manie: 'Manie'
+    };
+    
+    function updateIntensity() {
+      const value = document.getElementById('phaseIntensitySlider').value;
+      document.getElementById('intensityDisplay').textContent = value;
+    }
+    
+    function selectPhase(phase) {
+      selectedPhase = phase;
+      document.querySelectorAll('.phase-option').forEach(opt => opt.classList.remove('selected'));
+      document.querySelector(`[data-phase="${phase}"]`).classList.add('selected');
+    }
+    
+    function loadCycles() {
+      updateCurrentPhase();
+      loadGraph();
+      loadHistory();
+      calculateStats();
+    }
+    
+    function updateCurrentPhase() {
+      const phases = JSON.parse(localStorage.getItem('mindflow_cycles') || '[]');
+      const display = document.getElementById('phaseDisplay');
+      
+      if (phases.length === 0) {
+        display.className = 'phase-display phase-stable';
+        document.getElementById('phaseName').textContent = 'Aucune phase';
+        document.getElementById('phaseDuration').textContent = 'Commence ton suivi !';
+        document.getElementById('phaseIntensity').textContent = '';
+        return;
+      }
+      
+      const current = phases[0];
+      display.className = `phase-display phase-${current.phase}`;
+      document.getElementById('phaseName').textContent = phaseNames[current.phase];
+      document.getElementById('phaseIntensity').textContent = `Intensité: ${current.intensity}/10`;
+      
+      const start = new Date(current.date);
+      const now = new Date();
+      const diff = Math.floor((now - start) / 1000 / 60 / 60 / 24);
+      
+      if (diff === 0) {
+        document.getElementById('phaseDuration').textContent = 'Depuis aujourd\'hui';
+      } else if (diff === 1) {
+        document.getElementById('phaseDuration').textContent = 'Depuis hier';
+      } else {
+        document.getElementById('phaseDuration').textContent = `Depuis ${diff} jours`;
+      }
+    }
+    
+    function loadGraph() {
+      const phases = JSON.parse(localStorage.getItem('mindflow_cycles') || '[]');
+      const container = document.getElementById('graphContainer');
+      
+      const last30Days = [];
+      for (let i = 29; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        last30Days.push(d.toISOString().split('T')[0]);
+      }
+      
+      container.innerHTML = last30Days.map(date => {
+        let phase = 'stable';
+        let height = 50;
+        
+        for (const p of phases) {
+          const phaseDate = new Date(p.date).toISOString().split('T')[0];
+          if (phaseDate <= date) {
+            phase = p.phase;
+            height = (p.intensity / 10) * 100;
+            break;
+          }
+        }
+        
+        return `<div class="graph-bar" style="height: ${height}%; background: ${phaseColors[phase]};" title="${date}"></div>`;
+      }).join('');
+    }
+    
+    function loadHistory() {
+      const phases = JSON.parse(localStorage.getItem('mindflow_cycles') || '[]');
+      const list = document.getElementById('historyList');
+      
+      if (phases.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🌊</div>
+            <div class="empty-text">Aucune phase enregistrée</div>
+          </div>
+        `;
+        return;
+      }
+      
+      list.innerHTML = phases.map((phase, index) => {
+        const date = new Date(phase.date);
+        const dateStr = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+        
+        let duration = '';
+        if (index < phases.length - 1) {
+          const nextDate = new Date(phases[index + 1].date);
+          const diff = Math.floor((date - nextDate) / 1000 / 60 / 60 / 24);
+          duration = `Durée: ${diff} jour${diff > 1 ? 's' : ''}`;
+        } else {
+          const now = new Date();
+          const diff = Math.floor((now - date) / 1000 / 60 / 60 / 24);
+          duration = `En cours (${diff} jour${diff > 1 ? 's' : ''})`;
+        }
+        
+        return `
+          <div class="history-item" style="border-left-color: ${phaseColors[phase.phase]};">
+            <div class="history-header">
+              <div class="history-phase">${phaseNames[phase.phase]}</div>
+              <div class="history-date">${dateStr}</div>
+            </div>
+            <div class="history-details">Intensité: ${phase.intensity}/10 • ${duration}</div>
+            ${phase.notes ? `<div class="history-note">${phase.notes}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+    
+    function calculateStats() {
+      const phases = JSON.parse(localStorage.getItem('mindflow_cycles') || '[]');
+      
+      document.getElementById('totalPhases').textContent = phases.length;
+      
+      if (phases.length < 2) {
+        document.getElementById('avgDuration').textContent = '0j';
+        return;
+      }
+      
+      let totalDays = 0;
+      for (let i = 0; i < phases.length - 1; i++) {
+        const current = new Date(phases[i].date);
+        const next = new Date(phases[i + 1].date);
+        const diff = Math.floor((current - next) / 1000 / 60 / 60 / 24);
+        totalDays += diff;
+      }
+      
+      const avg = Math.round(totalDays / (phases.length - 1));
+      document.getElementById('avgDuration').textContent = avg + 'j';
+    }
+    
+    function openPhaseModal() {
+      selectedPhase = null;
+      document.querySelectorAll('.phase-option').forEach(opt => opt.classList.remove('selected'));
+      document.getElementById('phaseIntensitySlider').value = 5;
+      document.getElementById('intensityDisplay').textContent = 5;
+      document.getElementById('phaseNotes').value = '';
+      
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('phaseModal').classList.add('show');
+    }
+    
+    function savePhase() {
+      if (!selectedPhase) {
+        alert('Sélectionne une phase ! 💚');
+        return;
+      }
+      
+      const intensity = document.getElementById('phaseIntensitySlider').value;
+      const notes = document.getElementById('phaseNotes').value.trim();
+      
+      let phases = JSON.parse(localStorage.getItem('mindflow_cycles') || '[]');
+      
+      phases.unshift({
+        id: Date.now(),
+        phase: selectedPhase,
+        intensity: parseInt(intensity),
+        notes: notes,
+        date: new Date().toISOString()
+      });
+      
+      localStorage.setItem('mindflow_cycles', JSON.stringify(phases));
+      
+      closeModal();
+      showSuccess();
+      loadCycles();
+    }
+    
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('show');
+      document.getElementById('phaseModal').classList.remove('show');
+      selectedPhase = null;
+    }
+    
+    function showSuccess() {
+      const msg = document.getElementById('successMessage');
+      msg.classList.add('show');
+      setTimeout(() => msg.classList.remove('show'), 1500);
+    }
+    
+    loadCycles();
+  </script>
+</body>
+</html>
+```
+
+---
+
+## ✅ **MESSAGE DE COMMIT :**
+```
+Création module Cycles (Bipolarité) avec graphique 30j
