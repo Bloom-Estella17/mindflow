@@ -121,7 +121,7 @@
       background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
       border-radius: 20px;
       padding: 25px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       color: white;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -142,6 +142,37 @@
     }
     
     .luna-subtitle {
+      font-size: 14px;
+      opacity: 0.95;
+    }
+    
+    .crise-card {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 30px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+      text-decoration: none;
+      display: block;
+    }
+    
+    .crise-card:active {
+      transform: scale(0.98);
+    }
+    
+    .crise-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .crise-subtitle {
       font-size: 14px;
       opacity: 0.95;
     }
@@ -290,6 +321,14 @@
         <div class="luna-subtitle">"Je suis là pour toi, 24/7" 🌙</div>
       </div>
       
+      <a href="crise.html" class="crise-card">
+        <div class="crise-title">
+          <span>🚨</span>
+          <span>Plan de Crise</span>
+        </div>
+        <div class="crise-subtitle">Accès rapide aux urgences et stratégies</div>
+      </a>
+      
       <div class="tasks-section">
         <div class="section-title">Aujourd'hui :</div>
         <div class="task-item task-done">
@@ -332,8 +371,8 @@
 
 ---
 
-### **5️⃣ Commit !**
+## ✅ **COMMIT !**
 
 **Message :**
 ```
-Navigation vers Journal activée
+Ajout card Plan de Crise sur Home
