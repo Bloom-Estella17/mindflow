@@ -460,6 +460,17 @@
     </div>
     
     <div class="section-card">
+      <div class="section-title">Ressources & Santé</div>
+      <a href="ressources.html" class="menu-item">
+        <div class="menu-left">
+          <div class="menu-icon">📚</div>
+          <div class="menu-text">Bibliothèque DSM-5</div>
+        </div>
+        <div class="menu-arrow">→</div>
+      </a>
+    </div>
+    
+    <div class="section-card">
       <div class="section-title">Mon compte</div>
       <div class="menu-item" onclick="openProfileModal()">
         <div class="menu-left">
@@ -604,6 +615,7 @@
         • Gestion du traitement<br>
         • Plan de crise<br>
         • Modules spécialisés<br>
+        • Bibliothèque DSM-5<br>
         <br>
         <strong>Confidentialité :</strong><br>
         Toutes tes données sont stockées localement sur ton appareil. Aucune donnée n'est envoyée à des serveurs externes.
@@ -715,6 +727,8 @@
       localStorage.removeItem('mindflow_dbt_logs');
       localStorage.removeItem('mindflow_anxiety_logs');
       localStorage.removeItem('mindflow_panics');
+      localStorage.removeItem('mindflow_tasks');
+      localStorage.removeItem('mindflow_tasks_date');
       
       showSuccess('Données effacées !');
       setTimeout(() => {
@@ -739,8 +753,6 @@
 
 ---
 
-## ✅ **COMMIT !**
-
-**Message :**
+## ✅ **COMMIT MESSAGE :**
 ```
-Profil - Ajout Anxiété/TAG - TOUS LES MODULES COMPLÉTÉS !
+Profil - Ajout section Ressources DSM-5
