@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>📋 MindFlow - Triggers</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      min-height: 100vh;
+      padding: 15px;
+      padding-bottom: 100px;
+    }
+    
+    .container {
+      max-width: 450px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 5px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      background: white;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .back-btn {
+      font-size: 24px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    
+    .header-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #8B7EB8;
+    }
+    
+    .add-btn-header {
+      font-size: 28px;
+      cursor: pointer;
+      color: #8B7EB8;
+    }
+    
+    .stats-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    
+    .stat-item {
+      background: rgba(139, 126, 184, 0.08);
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #8B7EB8;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      font-size: 13px;
+      color: #666;
+    }
+    
+    .section-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .section-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 20px;
+    }
+    
+    .trigger-item {
+      background: rgba(139, 126, 184, 0.05);
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 4px solid #8B7EB8;
+    }
+    
+    .trigger-item:active {
+      background: rgba(139, 126, 184, 0.1);
+      transform: scale(0.98);
+    }
+    
+    .trigger-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 8px;
+    }
+    
+    .trigger-name {
+      font-size: 17px;
+      font-weight: bold;
+      color: #2D2D3A;
+      flex: 1;
+    }
+    
+    .trigger-intensity {
+      background: #8B7EB8;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    
+    .trigger-category {
+      font-size: 14px;
+      color: #8B7EB8;
+      margin-bottom: 8px;
+    }
+    
+    .trigger-strategy {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+    
+    .trigger-stats {
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
+      font-size: 13px;
+      color: #999;
+    }
+    
+    .log-btn {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      margin-top: 10px;
+    }
+    
+    .log-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+    }
+    
+    .empty-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .empty-text {
+      font-size: 16px;
+    }
+    
+    .bottom-nav {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: 25px;
+      padding: 15px 25px;
+      display: flex;
+      gap: 35px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      z-index: 1000;
+      max-width: 350px;
+      width: calc(100% - 40px);
+      justify-content: center;
+    }
+    
+    .nav-item {
+      font-size: 26px;
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0.4;
+      text-decoration: none;
+    }
+    
+    .nav-item.active {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 3000;
+      display: none;
+    }
+    
+    .modal-overlay.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 25px;
+      padding: 30px;
+      max-width: 90%;
+      width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      z-index: 3001;
+      display: none;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .modal.show {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
+    
+    @keyframes slideUp {
+      from { transform: translate(-50%, -40%); opacity: 0; }
+      to { transform: translate(-50%, -50%); opacity: 1; }
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+    
+    .modal-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+    
+    .modal-close {
+      font-size: 28px;
+      cursor: pointer;
+      color: #888;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #2D2D3A;
+      margin-bottom: 8px;
+      display: block;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.3s;
+    }
+    
+    .form-input:focus {
+      border-color: #8B7EB8;
+    }
+    
+    .form-textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px 15px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.3s;
+      resize: vertical;
+    }
+    
+    .form-textarea:focus {
+      border-color: #8B7EB8;
+    }
+    
+    .form-select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.3s;
+      background: white;
+    }
+    
+    .form-select:focus {
+      border-color: #8B7EB8;
+    }
+    
+    .intensity-slider {
+      width: 100%;
+      height: 8px;
+      border-radius: 5px;
+      outline: none;
+      -webkit-appearance: none;
+      background: linear-gradient(to right, #4CAF50 0%, #FFC107 50%, #ff6b6b 100%);
+    }
+    
+    .intensity-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #8B7EB8;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    
+    .intensity-slider::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #8B7EB8;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    
+    .intensity-value {
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+      color: #8B7EB8;
+      margin-bottom: 10px;
+    }
+    
+    .save-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.3s;
+    }
+    
+    .save-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .delete-btn {
+      width: 100%;
+      padding: 12px;
+      background: #ff6b6b;
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: all 0.3s;
+    }
+    
+    .delete-btn:active {
+      transform: scale(0.98);
+      background: #ff5252;
+    }
+    
+    .log-item {
+      background: rgba(255, 107, 107, 0.08);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-left: 4px solid #ff6b6b;
+    }
+    
+    .log-date {
+      font-size: 14px;
+      font-weight: bold;
+      color: #ff6b6b;
+      margin-bottom: 5px;
+    }
+    
+    .log-context {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+    
+    .success-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      z-index: 4000;
+      display: none;
+    }
+    
+    .success-message.show {
+      display: block;
+      animation: popup 0.3s ease;
+    }
+    
+    @keyframes popup {
+      from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+    
+    .success-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .success-text {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <a href="index.html" class="back-btn">←</a>
+      <div class="header-title">Mes Triggers</div>
+      <div class="add-btn-header" onclick="openAddModal()">+</div>
+    </div>
+    
+    <div class="stats-card">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value" id="totalTriggers">0</div>
+          <div class="stat-label">Triggers identifiés</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="totalLogs">0</div>
+          <div class="stat-label">Déclenchements</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="section-title">Mes triggers</div>
+      <div id="triggersList"></div>
+    </div>
+  </div>
+  
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">🏠</a>
+    <a href="mood.html" class="nav-item">😊</a>
+    <a href="journal.html" class="nav-item">📝</a>
+    <a href="traitement.html" class="nav-item">💊</a>
+    <a href="profil.html" class="nav-item">👤</a>
+  </div>
+  
+  <!-- Add/Edit Trigger Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+  <div class="modal" id="triggerModal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitleText">Ajouter un trigger</div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Nom du trigger</label>
+      <input type="text" class="form-input" id="triggerName" placeholder="Ex: Foule, Confrontation...">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Catégorie</label>
+      <select class="form-select" id="triggerCategory">
+        <option value="Personne">Personne</option>
+        <option value="Lieu">Lieu</option>
+        <option value="Situation">Situation</option>
+        <option value="Sensoriel">Sensoriel</option>
+        <option value="Émotionnel">Émotionnel</option>
+        <option value="Autre">Autre</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Intensité moyenne</label>
+      <div class="intensity-value" id="intensityDisplay">5</div>
+      <input type="range" class="intensity-slider" id="triggerIntensity" min="1" max="10" value="5" oninput="updateIntensity()">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Ma stratégie pour gérer ce trigger</label>
+      <textarea class="form-textarea" id="triggerStrategy" placeholder="Que faire quand ce trigger survient ?"></textarea>
+    </div>
+    
+    <button class="save-btn" onclick="saveTrigger()">💚 Enregistrer</button>
+    <button class="delete-btn" id="deleteTriggerBtn" style="display: none;" onclick="deleteTrigger()">🗑️ Supprimer ce trigger</button>
+  </div>
+  
+  <!-- Log Modal -->
+  <div class="modal" id="logModal">
+    <div class="modal-header">
+      <div class="modal-title">Logger un déclenchement</div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Intensité ressentie</label>
+      <div class="intensity-value" id="logIntensityDisplay">5</div>
+      <input type="range" class="intensity-slider" id="logIntensity" min="1" max="10" value="5" oninput="updateLogIntensity()">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Contexte (optionnel)</label>
+      <textarea class="form-textarea" id="logContext" placeholder="Que s'est-il passé ?"></textarea>
+    </div>
+    
+    <button class="save-btn" onclick="saveLog()">💚 Enregistrer</button>
+  </div>
+  
+  <!-- View Trigger Modal -->
+  <div class="modal" id="viewModal">
+    <div class="modal-header">
+      <div class="modal-title" id="viewTriggerName"></div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div id="viewTriggerContent"></div>
+    
+    <button class="save-btn" onclick="editCurrentTrigger()">✏️ Modifier</button>
+    <button class="log-btn" onclick="logCurrentTrigger()" style="width: 100%; margin-top: 10px;">📝 Logger un déclenchement</button>
+  </div>
+  
+  <div class="success-message" id="successMessage">
+    <div class="success-icon">✅</div>
+    <div class="success-text">Enregistré !</div>
+  </div>
+  
+  <script>
+    let currentTriggerId = null;
+    let editMode = false;
+    
+    function updateIntensity() {
+      const value = document.getElementById('triggerIntensity').value;
+      document.getElementById('intensityDisplay').textContent = value;
+    }
+    
+    function updateLogIntensity() {
+      const value = document.getElementById('logIntensity').value;
+      document.getElementById('logIntensityDisplay').textContent = value;
+    }
+    
+    function loadTriggers() {
+      const triggers = JSON.parse(localStorage.getItem('mindflow_triggers') || '[]');
+      const list = document.getElementById('triggersList');
+      
+      document.getElementById('totalTriggers').textContent = triggers.length;
+      
+      let totalLogs = 0;
+      triggers.forEach(t => {
+        if (t.logs) totalLogs += t.logs.length;
+      });
+      document.getElementById('totalLogs').textContent = totalLogs;
+      
+      if (triggers.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <div class="empty-text">Aucun trigger identifié<br>Ajoute-en un avec le + en haut !</div>
+          </div>
+        `;
+        return;
+      }
+      
+      list.innerHTML = triggers.map(trigger => `
+        <div class="trigger-item" onclick="viewTrigger(${trigger.id})">
+          <div class="trigger-header">
+            <div class="trigger-name">${trigger.name}</div>
+            <div class="trigger-intensity">${trigger.intensity}/10</div>
+          </div>
+          <div class="trigger-category">📁 ${trigger.category}</div>
+          <div class="trigger-strategy">${trigger.strategy || 'Aucune stratégie définie'}</div>
+          <div class="trigger-stats">
+            <span>📝 ${trigger.logs ? trigger.logs.length : 0} déclenchement(s)</span>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function openAddModal() {
+      editMode = false;
+      currentTriggerId = null;
+      document.getElementById('modalTitleText').textContent = 'Ajouter un trigger';
+      document.getElementById('triggerName').value = '';
+      document.getElementById('triggerCategory').value = 'Situation';
+      document.getElementById('triggerIntensity').value = 5;
+      document.getElementById('intensityDisplay').textContent = 5;
+      document.getElementById('triggerStrategy').value = '';
+      document.getElementById('deleteTriggerBtn').style.display = 'none';
+      
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('triggerModal').classList.add('show');
+    }
+    
+    function viewTrigger(id) {
+      const triggers = JSON.parse(localStorage.getItem('mindflow_triggers') || '[]');
+      const trigger = triggers.find(t => t.id === id);
+      
+      if (!trigger) return;
+      
+      currentTriggerId = id;
+      
+      document.getElementById('viewTriggerName').textContent = trigger.name;
+      
+      let logsHtml = '';
+      if (trigger.logs && trigger.logs.length > 0) {
+        logsHtml = '<div style="margin-top: 20px;"><strong>Historique :</strong></div>';
+        trigger.logs.forEach(log => {
+          const date = new Date(log.date);
+          const dateStr = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+          logsHtml += `
+            <div class="log-item">
+              <div class="log-date">${dateStr} - Intensité: ${log.intensity}/10</div>
+              ${log.context ? `<div class="log-context">${log.context}</div>` : ''}
+            </div>
+          `;
+        });
+      }
+      
+      document.getElementById('viewTriggerContent').innerHTML = `
+        <div style="margin-bottom: 15px;">
+          <strong>Catégorie:</strong> ${trigger.category}<br>
+          <strong>Intensité moyenne:</strong> ${trigger.intensity}/10
+        </div>
+        <div style="margin-bottom: 15px;">
+          <strong>Ma stratégie:</strong><br>
+          ${trigger.strategy || '<em>Aucune stratégie définie</em>'}
+        </div>
+        ${logsHtml}
+      `;
+      
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('viewModal').classList.add('show');
+    }
+    
+    function editCurrentTrigger() {
+      const triggers = JSON.parse(localStorage.getItem('mindflow_triggers') || '[]');
+      const trigger = triggers.find(t => t.id === currentTriggerId);
+      
+      if (!trigger) return;
+      
+      editMode = true;
+      document.getElementById('modalTitleText').textContent = 'Modifier le trigger';
+      document.getElementById('triggerName').value = trigger.name;
+      document.getElementById('triggerCategory').value = trigger.category;
+      document.getElementById('triggerIntensity').value = trigger.intensity;
+      document.getElementById('intensityDisplay').textContent = trigger.intensity;
+      document.getElementById('triggerStrategy').value = trigger.strategy || '';
+      document.getElementById('deleteTriggerBtn').style.display = 'block';
+      
+      closeModal();
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('triggerModal').classList.add('show');
+    }
+    
+    function logCurrentTrigger() {
+      document.getElementById('logIntensity').value = 5;
+      document.getElementById('logIntensityDisplay').textContent = 5;
+      document.getElementById('logContext').value = '';
+      
+      closeModal();
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('logModal').classList.add('show');
+    }
+    
+    function saveTrigger() {
+      const name = document.getElementById('triggerName').value.trim();
+      const category = document.getElementById('triggerCategory').value;
+      const intensity = document.getElementById('triggerIntensity').value;
+      const strategy = document.getElementById('triggerStrategy').value.trim();
+      
+      if (!name) {
+        alert('Entre le nom du trigger ! 💚');
+        return;
+      }
+      
+      let triggers = JSON.parse(localStorage.getItem('mindflow_triggers') || '[]');
+      
+      if (editMode && currentTriggerId) {
+        const trigger = triggers.find(t => t.id === currentTriggerId);
+        if (trigger) {
+          trigger.name = name;
+          trigger.category = category;
+          trigger.intensity = parseInt(intensity);
+          trigger.strategy = strategy;
+        }
+      } else {
+        triggers.push({
+          id: Date.now(),
+          name: name,
+          category: category,
+          intensity: parseInt(intensity),
+          strategy: strategy,
+          logs: []
+        });
+      }
+      
+      localStorage.setItem('mindflow_triggers', JSON.stringify(triggers));
+      
+      closeModal();
+      showSuccess();
+      loadTriggers();
+    }
+    
+    function saveLog() {
+      const intensity = document.getElementById('logIntensity').value;
+      const context = document.getElementById('logContext').value.trim();
+      
+      let triggers = JSON.parse(localStorage.getItem('mindflow_triggers') || '[]');
+      const trigger = triggers.find(t => t.id === currentTriggerId);
+      
+      if (!trigger) return;
+      
+      if (!trigger.logs) trigger.logs = [];
+      
+      trigger.logs.unshift({
+        date: new Date().toISOString(),
+        intensity: parseInt(intensity),
+        context: context
+      });
+      
+      localStorage.setItem('mindflow_triggers', JSON.stringify(triggers));
+      
+      closeModal();
+      showSuccess();
+      loadTriggers();
+    }
+    
+    function deleteTrigger() {
+      if (!confirm('Supprimer ce trigger et tout son historique ?')) return;
+      
+      let triggers = JSON.parse(localStorage.getItem('mindflow_triggers') || '[]');
+      triggers = triggers.filter(t => t.id !== currentTriggerId);
+      localStorage.setItem('mindflow_triggers', JSON.stringify(triggers));
+      
+      closeModal();
+      loadTriggers();
+    }
+    
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('show');
+      document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('show'));
+      currentTriggerId = null;
+      editMode = false;
+    }
+    
+    function showSuccess() {
+      const msg = document.getElementById('successMessage');
+      msg.classList.add('show');
+      setTimeout(() => msg.classList.remove('show'), 1500);
+    }
+    
+    loadTriggers();
+  </script>
+</body>
+</html>
+```
+
+---
+
+## ✅ **MESSAGE DE COMMIT :**
+```
+Création module Triggers avec historique et stratégies
