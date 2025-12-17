@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>💚 MindFlow - Journal</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      min-height: 100vh;
+      padding: 15px;
+      padding-bottom: 100px;
+    }
+    
+    .container {
+      max-width: 450px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 5px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      background: white;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .back-btn {
+      font-size: 24px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    
+    .header-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #8B7EB8;
+    }
+    
+    .main-card {
+      background: white;
+      border-radius: 25px;
+      padding: 30px 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      font-size: 15px;
+      color: #8B7EB8;
+      margin-bottom: 25px;
+    }
+    
+    .journal-textarea {
+      width: 100%;
+      min-height: 200px;
+      padding: 20px;
+      border: 2px solid #E5E5E5;
+      border-radius: 15px;
+      font-size: 16px;
+      font-family: inherit;
+      resize: vertical;
+      outline: none;
+      transition: border 0.3s;
+      line-height: 1.6;
+    }
+    
+    .journal-textarea:focus {
+      border-color: #8B7EB8;
+    }
+    
+    .journal-textarea::placeholder {
+      color: #999;
+    }
+    
+    .word-count {
+      text-align: right;
+      font-size: 13px;
+      color: #888;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .save-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(139, 126, 184, 0.3);
+      transition: all 0.3s;
+    }
+    
+    .save-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .history-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .history-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 10px;
+    }
+    
+    .stats {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .stat-item {
+      flex: 1;
+      background: rgba(139, 126, 184, 0.08);
+      padding: 15px;
+      border-radius: 15px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 28px;
+      font-weight: bold;
+      color: #8B7EB8;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      font-size: 13px;
+      color: #666;
+    }
+    
+    .entries-list {
+      margin-top: 20px;
+    }
+    
+    .entry-item {
+      background: rgba(139, 126, 184, 0.05);
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 4px solid #8B7EB8;
+    }
+    
+    .entry-item:active {
+      background: rgba(139, 126, 184, 0.1);
+      transform: scale(0.98);
+    }
+    
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .entry-date {
+      font-size: 14px;
+      font-weight: 600;
+      color: #8B7EB8;
+    }
+    
+    .entry-time {
+      font-size: 12px;
+      color: #888;
+    }
+    
+    .entry-preview {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .entry-words {
+      font-size: 12px;
+      color: #999;
+      margin-top: 8px;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+    }
+    
+    .empty-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .empty-text {
+      font-size: 16px;
+    }
+    
+    .bottom-nav {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: 25px;
+      padding: 15px 25px;
+      display: flex;
+      gap: 35px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      z-index: 1000;
+      max-width: 350px;
+      width: calc(100% - 40px);
+      justify-content: center;
+    }
+    
+    .nav-item {
+      font-size: 26px;
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0.4;
+      text-decoration: none;
+    }
+    
+    .nav-item.active {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+    
+    .success-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      z-index: 2000;
+      display: none;
+    }
+    
+    .success-message.show {
+      display: block;
+      animation: popup 0.3s ease;
+    }
+    
+    @keyframes popup {
+      from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+    
+    .success-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .success-text {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 3000;
+      display: none;
+    }
+    
+    .modal-overlay.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 25px;
+      padding: 30px;
+      max-width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      z-index: 3001;
+      display: none;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .modal.show {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
+    
+    @keyframes slideUp {
+      from { transform: translate(-50%, -40%); opacity: 0; }
+      to { transform: translate(-50%, -50%); opacity: 1; }
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .modal-date {
+      font-size: 18px;
+      font-weight: bold;
+      color: #8B7EB8;
+    }
+    
+    .modal-close {
+      font-size: 28px;
+      cursor: pointer;
+      color: #888;
+    }
+    
+    .modal-content {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #2D2D3A;
+      white-space: pre-wrap;
+    }
+    
+    .delete-btn {
+      width: 100%;
+      padding: 12px;
+      background: #ff6b6b;
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: all 0.3s;
+    }
+    
+    .delete-btn:active {
+      transform: scale(0.98);
+      background: #ff5252;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <a href="index.html" class="back-btn">←</a>
+      <div class="header-title">Mon Journal</div>
+      <div style="width: 24px;"></div>
+    </div>
+    
+    <div class="main-card">
+      <div class="title">Écris ce que tu ressens</div>
+      <div class="subtitle">Libère tes pensées, sans jugement 💚</div>
+      
+      <textarea 
+        class="journal-textarea" 
+        id="journalText" 
+        placeholder="Aujourd'hui, je me sens...&#10;&#10;Ce qui s'est passé...&#10;&#10;Ce que j'ai appris...&#10;&#10;Mes pensées..."
+      ></textarea>
+      
+      <div class="word-count" id="wordCount">0 mots</div>
+      
+      <button class="save-btn" onclick="saveEntry()">💚 Enregistrer dans mon journal</button>
+    </div>
+    
+    <div class="history-card">
+      <div class="history-title">Mes entrées</div>
+      
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-value" id="totalEntries">0</div>
+          <div class="stat-label">Entrées totales</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="thisMonth">0</div>
+          <div class="stat-label">Ce mois-ci</div>
+        </div>
+      </div>
+      
+      <div class="entries-list" id="entriesList">
+        <div class="empty-state">
+          <div class="empty-icon">📝</div>
+          <div class="empty-text">Aucune entrée pour l'instant<br>Commence à écrire !</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">🏠</a>
+    <a href="mood.html" class="nav-item">😊</a>
+    <a href="journal.html" class="nav-item active">📝</a>
+    <a href="#" class="nav-item">💊</a>
+    <a href="#" class="nav-item">👤</a>
+  </div>
+  
+  <div class="success-message" id="successMessage">
+    <div class="success-icon">✅</div>
+    <div class="success-text">Entrée enregistrée !</div>
+  </div>
+  
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-date" id="modalDate"></div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    <div class="modal-content" id="modalContent"></div>
+    <button class="delete-btn" onclick="deleteEntry()">🗑️ Supprimer cette entrée</button>
+  </div>
+  
+  <script>
+    const textarea = document.getElementById('journalText');
+    const wordCount = document.getElementById('wordCount');
+    let currentEntryId = null;
+    
+    textarea.addEventListener('input', function() {
+      const text = this.value.trim();
+      const words = text ? text.split(/\s+/).length : 0;
+      wordCount.textContent = words + ' mot' + (words > 1 ? 's' : '');
+    });
+    
+    function saveEntry() {
+      const text = textarea.value.trim();
+      
+      if (!text) {
+        alert('Écris quelque chose avant d\'enregistrer ! 💚');
+        return;
+      }
+      
+      const entry = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        text: text,
+        words: text.split(/\s+/).length
+      };
+      
+      let entries = JSON.parse(localStorage.getItem('mindflow_journal') || '[]');
+      entries.unshift(entry);
+      localStorage.setItem('mindflow_journal', JSON.stringify(entries));
+      
+      textarea.value = '';
+      wordCount.textContent = '0 mot';
+      
+      const successMsg = document.getElementById('successMessage');
+      successMsg.classList.add('show');
+      setTimeout(() => {
+        successMsg.classList.remove('show');
+        loadEntries();
+      }, 1500);
+    }
+    
+    function loadEntries() {
+      const entries = JSON.parse(localStorage.getItem('mindflow_journal') || '[]');
+      const entriesList = document.getElementById('entriesList');
+      
+      document.getElementById('totalEntries').textContent = entries.length;
+      
+      const thisMonth = entries.filter(e => {
+        const entryDate = new Date(e.date);
+        const now = new Date();
+        return entryDate.getMonth() === now.getMonth() && 
+               entryDate.getFullYear() === now.getFullYear();
+      }).length;
+      document.getElementById('thisMonth').textContent = thisMonth;
+      
+      if (entries.length === 0) {
+        entriesList.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📝</div>
+            <div class="empty-text">Aucune entrée pour l'instant<br>Commence à écrire !</div>
+          </div>
+        `;
+        return;
+      }
+      
+      entriesList.innerHTML = entries.map(entry => {
+        const date = new Date(entry.date);
+        const dateStr = date.toLocaleDateString('fr-FR', { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+        const timeStr = date.toLocaleTimeString('fr-FR', { 
+          hour: '2-digit', 
+          minute: '2-digit' 
+        });
+        
+        return `
+          <div class="entry-item" onclick="openEntry(${entry.id})">
+            <div class="entry-header">
+              <div class="entry-date">${dateStr}</div>
+              <div class="entry-time">${timeStr}</div>
+            </div>
+            <div class="entry-preview">${entry.text}</div>
+            <div class="entry-words">${entry.words} mot${entry.words > 1 ? 's' : ''}</div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    function openEntry(id) {
+      const entries = JSON.parse(localStorage.getItem('mindflow_journal') || '[]');
+      const entry = entries.find(e => e.id === id);
+      
+      if (!entry) return;
+      
+      currentEntryId = id;
+      
+      const date = new Date(entry.date);
+      const dateStr = date.toLocaleDateString('fr-FR', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      
+      document.getElementById('modalDate').textContent = dateStr;
+      document.getElementById('modalContent').textContent = entry.text;
+      
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('modal').classList.add('show');
+    }
+    
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('show');
+      document.getElementById('modal').classList.remove('show');
+      currentEntryId = null;
+    }
+    
+    function deleteEntry() {
+      if (!currentEntryId) return;
+      
+      if (!confirm('Es-tu sûr(e) de vouloir supprimer cette entrée ?')) return;
+      
+      let entries = JSON.parse(localStorage.getItem('mindflow_journal') || '[]');
+      entries = entries.filter(e => e.id !== currentEntryId);
+      localStorage.setItem('mindflow_journal', JSON.stringify(entries));
+      
+      closeModal();
+      loadEntries();
+    }
+    
+    loadEntries();
+  </script>
+</body>
+</html>
+```
+
+---
+
+## ✅ **MESSAGE DE COMMIT :**
+```
+Création Journal avec sauvegarde et historique
