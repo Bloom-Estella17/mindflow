@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>😰 MindFlow - Anxiété/TAG</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      min-height: 100vh;
+      padding: 15px;
+      padding-bottom: 100px;
+    }
+    
+    .container {
+      max-width: 450px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 5px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      background: white;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .back-btn {
+      font-size: 24px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    
+    .header-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #f59e0b;
+    }
+    
+    .anxiety-level-card {
+      background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+      color: white;
+    }
+    
+    .anxiety-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .anxiety-display {
+      text-align: center;
+      font-size: 60px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+    
+    .anxiety-label {
+      text-align: center;
+      font-size: 18px;
+      opacity: 0.95;
+      margin-bottom: 20px;
+    }
+    
+    .log-anxiety-btn {
+      width: 100%;
+      padding: 15px;
+      background: rgba(255,255,255,0.25);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .log-anxiety-btn:active {
+      background: rgba(255,255,255,0.4);
+      transform: scale(0.98);
+    }
+    
+    .quick-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .quick-action-card {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .quick-action-card:active {
+      transform: scale(0.98);
+    }
+    
+    .quick-action-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+    
+    .quick-action-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: #2D2D3A;
+    }
+    
+    .stats-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    
+    .stat-item {
+      background: rgba(245, 158, 11, 0.08);
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #f59e0b;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      font-size: 13px;
+      color: #666;
+    }
+    
+    .section-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .section-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 20px;
+    }
+    
+    .exercise-item {
+      background: rgba(245, 158, 11, 0.05);
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 4px solid #f59e0b;
+    }
+    
+    .exercise-item:active {
+      background: rgba(245, 158, 11, 0.1);
+      transform: scale(0.98);
+    }
+    
+    .exercise-name {
+      font-size: 17px;
+      font-weight: bold;
+      color: #f59e0b;
+      margin-bottom: 5px;
+    }
+    
+    .exercise-desc {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.5;
+    }
+    
+    .panic-item {
+      background: rgba(239, 68, 68, 0.05);
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 12px;
+      border-left: 4px solid #ef4444;
+    }
+    
+    .panic-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .panic-intensity {
+      background: #ef4444;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    
+    .panic-date {
+      font-size: 13px;
+      color: #999;
+      margin-bottom: 8px;
+    }
+    
+    .panic-duration {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+    
+    .panic-trigger {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .log-item {
+      background: rgba(245, 158, 11, 0.05);
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 12px;
+      border-left: 4px solid #f59e0b;
+    }
+    
+    .log-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .log-situation {
+      font-size: 16px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+    
+    .log-level {
+      background: #f59e0b;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    
+    .log-date {
+      font-size: 13px;
+      color: #999;
+      margin-bottom: 8px;
+    }
+    
+    .log-strategy {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+    }
+    
+    .empty-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .empty-text {
+      font-size: 16px;
+    }
+    
+    .bottom-nav {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: 25px;
+      padding: 15px 25px;
+      display: flex;
+      gap: 35px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      z-index: 1000;
+      max-width: 350px;
+      width: calc(100% - 40px);
+      justify-content: center;
+    }
+    
+    .nav-item {
+      font-size: 26px;
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0.4;
+      text-decoration: none;
+    }
+    
+    .nav-item.active {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 3000;
+      display: none;
+    }
+    
+    .modal-overlay.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 25px;
+      padding: 30px;
+      max-width: 90%;
+      width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      z-index: 3001;
+      display: none;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .modal.show {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
+    
+    @keyframes slideUp {
+      from { transform: translate(-50%, -40%); opacity: 0; }
+      to { transform: translate(-50%, -50%); opacity: 1; }
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+    
+    .modal-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+    
+    .modal-close {
+      font-size: 28px;
+      cursor: pointer;
+      color: #888;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #2D2D3A;
+      margin-bottom: 8px;
+      display: block;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.3s;
+    }
+    
+    .form-input:focus {
+      border-color: #f59e0b;
+    }
+    
+    .form-textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px 15px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.3s;
+      resize: vertical;
+    }
+    
+    .form-textarea:focus {
+      border-color: #f59e0b;
+    }
+    
+    .intensity-slider {
+      width: 100%;
+      height: 8px;
+      border-radius: 5px;
+      outline: none;
+      -webkit-appearance: none;
+      background: linear-gradient(to right, #10b981 0%, #f59e0b 50%, #ef4444 100%);
+    }
+    
+    .intensity-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #f59e0b;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    
+    .intensity-slider::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #f59e0b;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    
+    .intensity-value {
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+      color: #f59e0b;
+      margin-bottom: 10px;
+    }
+    
+    .save-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.3s;
+    }
+    
+    .save-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .exercise-detail {
+      background: rgba(245, 158, 11, 0.05);
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+    
+    .exercise-steps {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .exercise-steps li {
+      padding: 12px 0;
+      padding-left: 30px;
+      position: relative;
+      font-size: 15px;
+      color: #666;
+      line-height: 1.6;
+    }
+    
+    .exercise-steps li:before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #f59e0b;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    
+    .success-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      z-index: 4000;
+      display: none;
+    }
+    
+    .success-message.show {
+      display: block;
+      animation: popup 0.3s ease;
+    }
+    
+    @keyframes popup {
+      from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+    
+    .success-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .success-text {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <a href="index.html" class="back-btn">←</a>
+      <div class="header-title">Anxiété/TAG</div>
+      <div style="width: 24px;"></div>
+    </div>
+    
+    <div class="anxiety-level-card">
+      <div class="anxiety-title">Mon niveau d'anxiété</div>
+      <div class="anxiety-display" id="currentAnxiety">-</div>
+      <div class="anxiety-label" id="anxietyLabel">Aucune donnée</div>
+      <button class="log-anxiety-btn" onclick="openAnxietyModal()">📝 Logger mon anxiété</button>
+    </div>
+    
+    <div class="quick-actions">
+      <div class="quick-action-card" onclick="openPanicModal()">
+        <div class="quick-action-icon">🚨</div>
+        <div class="quick-action-text">Attaque de panique</div>
+      </div>
+      <div class="quick-action-card" onclick="openExercisesModal()">
+        <div class="quick-action-icon">🧘</div>
+        <div class="quick-action-text">Exercices</div>
+      </div>
+    </div>
+    
+    <div class="stats-card">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value" id="totalLogs">0</div>
+          <div class="stat-label">Logs d'anxiété</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="totalPanics">0</div>
+          <div class="stat-label">Attaques de panique</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="section-title">Attaques de panique récentes</div>
+      <div id="panicList"></div>
+    </div>
+    
+    <div class="section-card">
+      <div class="section-title">Journal d'anxiété</div>
+      <div id="logsList"></div>
+    </div>
+  </div>
+  
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">🏠</a>
+    <a href="mood.html" class="nav-item">😊</a>
+    <a href="journal.html" class="nav-item">📝</a>
+    <a href="traitement.html" class="nav-item">💊</a>
+    <a href="profil.html" class="nav-item">👤</a>
+  </div>
+  
+  <!-- Anxiety Log Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+  <div class="modal" id="anxietyModal">
+    <div class="modal-header">
+      <div class="modal-title">Logger mon anxiété</div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Niveau d'anxiété</label>
+      <div class="intensity-value" id="anxietyDisplay">5</div>
+      <input type="range" class="intensity-slider" id="anxietyLevel" min="1" max="10" value="5" oninput="updateAnxiety()">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Situation</label>
+      <textarea class="form-textarea" id="anxietySituation" placeholder="Qu'est-ce qui t'anxiète ?"></textarea>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Stratégie utilisée (optionnel)</label>
+      <input type="text" class="form-input" id="anxietyStrategy" placeholder="Ex: Respiration, Distraction...">
+    </div>
+    
+    <button class="save-btn" onclick="saveAnxiety()">💚 Enregistrer</button>
+  </div>
+  
+  <!-- Panic Attack Modal -->
+  <div class="modal" id="panicModal">
+    <div class="modal-header">
+      <div class="modal-title">Attaque de panique</div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Intensité</label>
+      <div class="intensity-value" id="panicDisplay">8</div>
+      <input type="range" class="intensity-slider" id="panicIntensity" min="1" max="10" value="8" oninput="updatePanic()">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Durée (minutes)</label>
+      <input type="number" class="form-input" id="panicDuration" placeholder="Ex: 15" value="10">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Déclencheur</label>
+      <textarea class="form-textarea" id="panicTrigger" placeholder="Qu'est-ce qui a déclenché l'attaque ?"></textarea>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Symptômes</label>
+      <textarea class="form-textarea" id="panicSymptoms" placeholder="Ex: Palpitations, vertiges, souffle court..."></textarea>
+    </div>
+    
+    <button class="save-btn" onclick="savePanic()">💚 Enregistrer</button>
+  </div>
+  
+  <!-- Exercises Modal -->
+  <div class="modal" id="exercisesModal">
+    <div class="modal-header">
+      <div class="modal-title">Exercices anti-anxiété</div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div id="exercisesList"></div>
+  </div>
+  
+  <!-- Exercise Detail Modal -->
+  <div class="modal" id="exerciseDetailModal">
+    <div class="modal-header">
+      <div class="modal-title" id="exerciseDetailTitle"></div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div id="exerciseDetailContent"></div>
+  </div>
+  
+  <div class="success-message" id="successMessage">
+    <div class="success-icon">✅</div>
+    <div class="success-text">Enregistré !</div>
+  </div>
+  
+  <script>
+    const exercises = [
+      {
+        name: "Respiration 4-7-8",
+        desc: "Technique puissante de relaxation rapide",
+        steps: [
+          "Expire complètement par la bouche",
+          "Inspire par le nez pendant 4 secondes",
+          "Retiens ta respiration pendant 7 secondes",
+          "Expire lentement par la bouche pendant 8 secondes",
+          "Répète 4 cycles"
+        ]
+      },
+      {
+        name: "Ancrage 5-4-3-2-1",
+        desc: "Technique de grounding pour revenir au présent",
+        steps: [
+          "Nomme 5 choses que tu VOIS",
+          "Nomme 4 choses que tu peux TOUCHER",
+          "Nomme 3 sons que tu ENTENDS",
+          "Nomme 2 choses que tu peux SENTIR",
+          "Nomme 1 chose que tu peux GOÛTER"
+        ]
+      },
+      {
+        name: "Relaxation musculaire",
+        desc: "Relâcher les tensions physiques",
+        steps: [
+          "Contracte tes poings pendant 5 secondes, puis relâche",
+          "Contracte tes bras pendant 5 secondes, puis relâche",
+          "Hausse les épaules pendant 5 secondes, puis relâche",
+          "Contracte ton ventre pendant 5 secondes, puis relâche",
+          "Contracte tes jambes pendant 5 secondes, puis relâche",
+          "Remarque la différence entre tension et détente"
+        ]
+      },
+      {
+        name: "Visualisation sécurisante",
+        desc: "Créer un espace mental apaisant",
+        steps: [
+          "Ferme les yeux et respire profondément",
+          "Imagine un lieu où tu te sens en sécurité",
+          "Visualise les détails : couleurs, sons, odeurs",
+          "Ressens la sécurité et le calme de ce lieu",
+          "Reste dans cet espace aussi longtemps que nécessaire"
+        ]
+      }
+    ];
+    
+    function updateAnxiety() {
+      const value = document.getElementById('anxietyLevel').value;
+      document.getElementById('anxietyDisplay').textContent = value;
+    }
+    
+    function updatePanic() {
+      const value = document.getElementById('panicIntensity').value;
+      document.getElementById('panicDisplay').textContent = value;
+    }
+    
+    function loadAnxiety() {
+      updateCurrentAnxiety();
+      loadPanics();
+      loadLogs();
+      calculateStats();
+    }
+    
+    function updateCurrentAnxiety() {
+      const logs = JSON.parse(localStorage.getItem('mindflow_anxiety_logs') || '[]');
+      
+      if (logs.length === 0) {
+        document.getElementById('currentAnxiety').textContent = '-';
+        document.getElementById('anxietyLabel').textContent = 'Aucune donnée';
+        return;
+      }
+      
+      const latest = logs[0];
+      document.getElementById('currentAnxiety').textContent = latest.level;
+      
+      const labels = {
+        1: 'Très calme',
+        2: 'Calme',
+        3: 'Légèrement anxieux',
+        4: 'Un peu anxieux',
+        5: 'Moyennement anxieux',
+        6: 'Anxieux',
+        7: 'Très anxieux',
+        8: 'Très très anxieux',
+        9: 'Extrêmement anxieux',
+        10: 'Panique'
+      };
+      
+      document.getElementById('anxietyLabel').textContent = labels[latest.level] || '';
+    }
+    
+    function loadPanics() {
+      const panics = JSON.parse(localStorage.getItem('mindflow_panics') || '[]');
+      const list = document.getElementById('panicList');
+      
+      if (panics.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🚨</div>
+            <div class="empty-text">Aucune attaque de panique enregistrée</div>
+          </div>
+        `;
+        return;
+      }
+      
+      list.innerHTML = panics.slice(0, 5).map(panic => {
+        const date = new Date(panic.date);
+        const dateStr = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+        
+        return `
+          <div class="panic-item">
+            <div class="panic-header">
+              <div style="font-weight: bold; color: #ef4444;">Attaque de panique</div>
+              <div class="panic-intensity">${panic.intensity}/10</div>
+            </div>
+            <div class="panic-date">${dateStr}</div>
+            <div class="panic-duration">Durée: ${panic.duration} minutes</div>
+            ${panic.trigger ? `<div class="panic-trigger">Déclencheur: ${panic.trigger}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+    
+    function loadLogs() {
+      const logs = JSON.parse(localStorage.getItem('mindflow_anxiety_logs') || '[]');
+      const list = document.getElementById('logsList');
+      
+      if (logs.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">😰</div>
+            <div class="empty-text">Aucun log d'anxiété</div>
+          </div>
+        `;
+        return;
+      }
+      
+      list.innerHTML = logs.slice(0, 10).map(log => {
+        const date = new Date(log.date);
+        const dateStr = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+        
+        return `
+          <div class="log-item">
+            <div class="log-header">
+              <div class="log-situation">${log.situation.substring(0, 30)}${log.situation.length > 30 ? '...' : ''}</div>
+              <div class="log-level">${log.level}/10</div>
+            </div>
+            <div class="log-date">${dateStr}</div>
+            ${log.strategy ? `<div class="log-strategy">Stratégie: ${log.strategy}</div>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+    
+    function calculateStats() {
+      const logs = JSON.parse(localStorage.getItem('mindflow_anxiety_logs') || '[]');
+      const panics = JSON.parse(localStorage.getItem('mindflow_panics') || '[]');
+      
+      document.getElementById('totalLogs').textContent = logs.length;
+      document.getElementById('totalPanics').textContent = panics.length;
+    }
+    
+    function openAnxietyModal() {
+      document.getElementById('anxietyLevel').value = 5;
+      document.getElementById('anxietyDisplay').textContent = 5;
+      document.getElementById('anxietySituation').value = '';
+      document.getElementById('anxietyStrategy').value = '';
+      
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('anxietyModal').classList.add('show');
+    }
+    
+    function openPanicModal() {
+      document.getElementById('panicIntensity').value = 8;
+      document.getElementById('panicDisplay').textContent = 8;
+      document.getElementById('panicDuration').value = 10;
+      document.getElementById('panicTrigger').value = '';
+      document.getElementById('panicSymptoms').value = '';
+      
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('panicModal').classList.add('show');
+    }
+    
+    function openExercisesModal() {
+      const list = document.getElementById('exercisesList');
+      list.innerHTML = exercises.map((ex, index) => `
+        <div class="exercise-item" onclick="viewExercise(${index})">
+          <div class="exercise-name">${ex.name}</div>
+          <div class="exercise-desc">${ex.desc}</div>
+        </div>
+      `).join('');
+      
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('exercisesModal').classList.add('show');
+    }
+    
+    function viewExercise(index) {
+      const ex = exercises[index];
+      
+      document.getElementById('exerciseDetailTitle').textContent = ex.name;
+      
+      const steps = ex.steps.map(step => `<li>${step}</li>`).join('');
+      
+      document.getElementById('exerciseDetailContent').innerHTML = `
+        <div class="exercise-detail">
+          <p style="font-size: 15px; color: #666; margin-bottom: 20px;">${ex.desc}</p>
+          <ul class="exercise-steps">${steps}</ul>
+        </div>
+      `;
+      
+      closeModal();
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('exerciseDetailModal').classList.add('show');
+    }
+    
+    function saveAnxiety() {
+      const level = document.getElementById('anxietyLevel').value;
+      const situation = document.getElementById('anxietySituation').value.trim();
+      const strategy = document.getElementById('anxietyStrategy').value.trim();
+      
+      if (!situation) {
+        alert('Décris la situation ! 💚');
+        return;
+      }
+      
+      let logs = JSON.parse(localStorage.getItem('mindflow_anxiety_logs') || '[]');
+      
+      logs.unshift({
+        id: Date.now(),
+        level: parseInt(level),
+        situation: situation,
+        strategy: strategy,
+        date: new Date().toISOString()
+      });
+      
+      localStorage.setItem('mindflow_anxiety_logs', JSON.stringify(logs));
+      
+      closeModal();
+      showSuccess();
+      loadAnxiety();
+    }
+    
+    function savePanic() {
+      const intensity = document.getElementById('panicIntensity').value;
+      const duration = document.getElementById('panicDuration').value;
+      const trigger = document.getElementById('panicTrigger').value.trim();
+      const symptoms = document.getElementById('panicSymptoms').value.trim();
+      
+      if (!duration) {
+        alert('Entre la durée ! 💚');
+        return;
+      }
+      
+      let panics = JSON.parse(localStorage.getItem('mindflow_panics') || '[]');
+      
+      panics.unshift({
+        id: Date.now(),
+        intensity: parseInt(intensity),
+        duration: parseInt(duration),
+        trigger: trigger,
+        symptoms: symptoms,
+        date: new Date().toISOString()
+      });
+      
+      localStorage.setItem('mindflow_panics', JSON.stringify(panics));
+      
+      closeModal();
+      showSuccess();
+      loadAnxiety();
+    }
+    
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('show');
+      document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('show'));
+    }
+    
+    function showSuccess() {
+      const msg = document.getElementById('successMessage');
+      msg.classList.add('show');
+      setTimeout(() => msg.classList.remove('show'), 1500);
+    }
+    
+    loadAnxiety();
+  </script>
+</body>
+</html>
+```
+
+---
+
+## ✅ **MESSAGE DE COMMIT :**
+```
+Création module Anxiété/TAG avec exercices anti-anxiété
