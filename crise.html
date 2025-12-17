@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🚨 MindFlow - Plan de Crise</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      min-height: 100vh;
+      padding: 15px;
+      padding-bottom: 100px;
+    }
+    
+    .container {
+      max-width: 450px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 5px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      background: white;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .back-btn {
+      font-size: 24px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    
+    .header-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #ff6b6b;
+    }
+    
+    .emergency-card {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+      color: white;
+    }
+    
+    .emergency-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    
+    .emergency-subtitle {
+      font-size: 15px;
+      text-align: center;
+      margin-bottom: 20px;
+      opacity: 0.95;
+    }
+    
+    .emergency-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    
+    .emergency-btn {
+      background: rgba(255,255,255,0.25);
+      padding: 15px;
+      border-radius: 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .emergency-btn:active {
+      background: rgba(255,255,255,0.4);
+      transform: scale(0.98);
+    }
+    
+    .emergency-number {
+      font-size: 20px;
+      margin-top: 5px;
+    }
+    
+    .section-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .section-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+    
+    .add-btn {
+      font-size: 28px;
+      cursor: pointer;
+      color: #8B7EB8;
+    }
+    
+    .steps-container {
+      margin-bottom: 15px;
+    }
+    
+    .step-item {
+      background: rgba(255, 107, 107, 0.08);
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 12px;
+      border-left: 4px solid #ff6b6b;
+    }
+    
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 10px;
+    }
+    
+    .step-level {
+      font-size: 16px;
+      font-weight: bold;
+      color: #ff6b6b;
+    }
+    
+    .delete-icon {
+      font-size: 20px;
+      cursor: pointer;
+      color: #ff6b6b;
+    }
+    
+    .step-content {
+      font-size: 15px;
+      color: #2D2D3A;
+      line-height: 1.5;
+    }
+    
+    .signal-item {
+      background: rgba(139, 126, 184, 0.08);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .signal-text {
+      font-size: 15px;
+      color: #2D2D3A;
+    }
+    
+    .coping-item {
+      background: rgba(76, 175, 80, 0.08);
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 12px;
+      border-left: 4px solid #4CAF50;
+    }
+    
+    .coping-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #4CAF50;
+      margin-bottom: 8px;
+    }
+    
+    .coping-content {
+      font-size: 14px;
+      color: #2D2D3A;
+      line-height: 1.5;
+    }
+    
+    .grounding-card {
+      background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 15px;
+      box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+      color: white;
+    }
+    
+    .grounding-title {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .grounding-step {
+      background: rgba(255,255,255,0.2);
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 30px 20px;
+      color: #999;
+    }
+    
+    .empty-icon {
+      font-size: 50px;
+      margin-bottom: 10px;
+    }
+    
+    .empty-text {
+      font-size: 15px;
+    }
+    
+    .bottom-nav {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: 25px;
+      padding: 15px 25px;
+      display: flex;
+      gap: 35px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      z-index: 1000;
+      max-width: 350px;
+      width: calc(100% - 40px);
+      justify-content: center;
+    }
+    
+    .nav-item {
+      font-size: 26px;
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0.4;
+      text-decoration: none;
+    }
+    
+    .nav-item.active {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 3000;
+      display: none;
+    }
+    
+    .modal-overlay.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 25px;
+      padding: 30px;
+      max-width: 90%;
+      width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      z-index: 3001;
+      display: none;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .modal.show {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
+    
+    @keyframes slideUp {
+      from { transform: translate(-50%, -40%); opacity: 0; }
+      to { transform: translate(-50%, -50%); opacity: 1; }
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+    
+    .modal-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+    
+    .modal-close {
+      font-size: 28px;
+      cursor: pointer;
+      color: #888;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #2D2D3A;
+      margin-bottom: 8px;
+      display: block;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.3s;
+    }
+    
+    .form-input:focus {
+      border-color: #8B7EB8;
+    }
+    
+    .form-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 12px 15px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.3s;
+      resize: vertical;
+    }
+    
+    .form-textarea:focus {
+      border-color: #8B7EB8;
+    }
+    
+    .save-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.3s;
+    }
+    
+    .save-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .success-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      z-index: 4000;
+      display: none;
+    }
+    
+    .success-message.show {
+      display: block;
+      animation: popup 0.3s ease;
+    }
+    
+    @keyframes popup {
+      from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+    
+    .success-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .success-text {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <a href="index.html" class="back-btn">←</a>
+      <div class="header-title">Plan de Crise</div>
+      <div style="width: 24px;"></div>
+    </div>
+    
+    <div class="emergency-card">
+      <div class="emergency-title">🚨 Urgences</div>
+      <div class="emergency-subtitle">Aide immédiate disponible</div>
+      <div class="emergency-buttons">
+        <a href="tel:15" class="emergency-btn">
+          <div>SAMU</div>
+          <div class="emergency-number">15</div>
+        </a>
+        <a href="tel:3114" class="emergency-btn">
+          <div>Suicide</div>
+          <div class="emergency-number">3114</div>
+        </a>
+        <a href="tel:112" class="emergency-btn">
+          <div>Urgences</div>
+          <div class="emergency-number">112</div>
+        </a>
+        <a href="tel:0800858858" class="emergency-btn">
+          <div>Jeunes</div>
+          <div class="emergency-number">0800 858 858</div>
+        </a>
+      </div>
+    </div>
+    
+    <div class="grounding-card">
+      <div class="grounding-title">🧘 Technique 5-4-3-2-1</div>
+      <div class="grounding-step"><strong>5 choses</strong> que tu VOIS autour de toi</div>
+      <div class="grounding-step"><strong>4 choses</strong> que tu peux TOUCHER</div>
+      <div class="grounding-step"><strong>3 sons</strong> que tu ENTENDS</div>
+      <div class="grounding-step"><strong>2 choses</strong> que tu peux SENTIR</div>
+      <div class="grounding-step"><strong>1 chose</strong> que tu peux GOÛTER</div>
+    </div>
+    
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">Mes signaux d'alerte</div>
+        <div class="add-btn" onclick="openSignalModal()">+</div>
+      </div>
+      <div id="signalsList"></div>
+    </div>
+    
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">Mon plan d'action</div>
+        <div class="add-btn" onclick="openStepModal()">+</div>
+      </div>
+      <div id="stepsList"></div>
+    </div>
+    
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">Mes stratégies de coping</div>
+        <div class="add-btn" onclick="openCopingModal()">+</div>
+      </div>
+      <div id="copingList"></div>
+    </div>
+  </div>
+  
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">🏠</a>
+    <a href="mood.html" class="nav-item">😊</a>
+    <a href="journal.html" class="nav-item">📝</a>
+    <a href="traitement.html" class="nav-item">💊</a>
+    <a href="profil.html" class="nav-item">👤</a>
+  </div>
+  
+  <!-- Signal Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+  <div class="modal" id="signalModal">
+    <div class="modal-header">
+      <div class="modal-title">Ajouter un signal</div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Signal d'alerte</label>
+      <input type="text" class="form-input" id="signalText" placeholder="Ex: Je m'isole, je ne mange plus...">
+    </div>
+    
+    <button class="save-btn" onclick="saveSignal()">💚 Enregistrer</button>
+  </div>
+  
+  <!-- Step Modal -->
+  <div class="modal" id="stepModal">
+    <div class="modal-header">
+      <div class="modal-title">Ajouter une étape</div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Niveau de crise</label>
+      <input type="text" class="form-input" id="stepLevel" placeholder="Ex: Léger, Modéré, Sévère">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Action à prendre</label>
+      <textarea class="form-textarea" id="stepAction" placeholder="Que faire à ce niveau ?"></textarea>
+    </div>
+    
+    <button class="save-btn" onclick="saveStep()">💚 Enregistrer</button>
+  </div>
+  
+  <!-- Coping Modal -->
+  <div class="modal" id="copingModal">
+    <div class="modal-header">
+      <div class="modal-title">Ajouter une stratégie</div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Titre</label>
+      <input type="text" class="form-input" id="copingTitle" placeholder="Ex: Respiration, Musique...">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <textarea class="form-textarea" id="copingDesc" placeholder="Comment ça m'aide ?"></textarea>
+    </div>
+    
+    <button class="save-btn" onclick="saveCoping()">💚 Enregistrer</button>
+  </div>
+  
+  <div class="success-message" id="successMessage">
+    <div class="success-icon">✅</div>
+    <div class="success-text">Enregistré !</div>
+  </div>
+  
+  <script>
+    function loadCrisisData() {
+      loadSignals();
+      loadSteps();
+      loadCoping();
+    }
+    
+    function loadSignals() {
+      const signals = JSON.parse(localStorage.getItem('mindflow_crisis_signals') || '[]');
+      const list = document.getElementById('signalsList');
+      
+      if (signals.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">⚠️</div>
+            <div class="empty-text">Ajoute tes signaux d'alerte</div>
+          </div>
+        `;
+        return;
+      }
+      
+      list.innerHTML = signals.map(signal => `
+        <div class="signal-item">
+          <div class="signal-text">${signal.text}</div>
+          <div class="delete-icon" onclick="deleteSignal(${signal.id})">🗑️</div>
+        </div>
+      `).join('');
+    }
+    
+    function loadSteps() {
+      const steps = JSON.parse(localStorage.getItem('mindflow_crisis_steps') || '[]');
+      const list = document.getElementById('stepsList');
+      
+      if (steps.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <div class="empty-text">Crée ton plan d'action</div>
+          </div>
+        `;
+        return;
+      }
+      
+      list.innerHTML = steps.map(step => `
+        <div class="step-item">
+          <div class="step-header">
+            <div class="step-level">${step.level}</div>
+            <div class="delete-icon" onclick="deleteStep(${step.id})">🗑️</div>
+          </div>
+          <div class="step-content">${step.action}</div>
+        </div>
+      `).join('');
+    }
+    
+    function loadCoping() {
+      const coping = JSON.parse(localStorage.getItem('mindflow_crisis_coping') || '[]');
+      const list = document.getElementById('copingList');
+      
+      if (coping.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🛠️</div>
+            <div class="empty-text">Ajoute tes stratégies</div>
+          </div>
+        `;
+        return;
+      }
+      
+      list.innerHTML = coping.map(item => `
+        <div class="coping-item">
+          <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div class="coping-title">${item.title}</div>
+            <div class="delete-icon" onclick="deleteCoping(${item.id})">🗑️</div>
+          </div>
+          <div class="coping-content">${item.desc}</div>
+        </div>
+      `).join('');
+    }
+    
+    function openSignalModal() {
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('signalModal').classList.add('show');
+    }
+    
+    function openStepModal() {
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('stepModal').classList.add('show');
+    }
+    
+    function openCopingModal() {
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('copingModal').classList.add('show');
+    }
+    
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('show');
+      document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('show'));
+      document.getElementById('signalText').value = '';
+      document.getElementById('stepLevel').value = '';
+      document.getElementById('stepAction').value = '';
+      document.getElementById('copingTitle').value = '';
+      document.getElementById('copingDesc').value = '';
+    }
+    
+    function saveSignal() {
+      const text = document.getElementById('signalText').value.trim();
+      if (!text) {
+        alert('Entre un signal d\'alerte ! 💚');
+        return;
+      }
+      
+      const signals = JSON.parse(localStorage.getItem('mindflow_crisis_signals') || '[]');
+      signals.push({ id: Date.now(), text: text });
+      localStorage.setItem('mindflow_crisis_signals', JSON.stringify(signals));
+      
+      closeModal();
+      showSuccess();
+      loadSignals();
+    }
+    
+    function saveStep() {
+      const level = document.getElementById('stepLevel').value.trim();
+      const action = document.getElementById('stepAction').value.trim();
+      
+      if (!level || !action) {
+        alert('Remplis tous les champs ! 💚');
+        return;
+      }
+      
+      const steps = JSON.parse(localStorage.getItem('mindflow_crisis_steps') || '[]');
+      steps.push({ id: Date.now(), level: level, action: action });
+      localStorage.setItem('mindflow_crisis_steps', JSON.stringify(steps));
+      
+      closeModal();
+      showSuccess();
+      loadSteps();
+    }
+    
+    function saveCoping() {
+      const title = document.getElementById('copingTitle').value.trim();
+      const desc = document.getElementById('copingDesc').value.trim();
+      
+      if (!title || !desc) {
+        alert('Remplis tous les champs ! 💚');
+        return;
+      }
+      
+      const coping = JSON.parse(localStorage.getItem('mindflow_crisis_coping') || '[]');
+      coping.push({ id: Date.now(), title: title, desc: desc });
+      localStorage.setItem('mindflow_crisis_coping', JSON.stringify(coping));
+      
+      closeModal();
+      showSuccess();
+      loadCoping();
+    }
+    
+    function deleteSignal(id) {
+      if (!confirm('Supprimer ce signal ?')) return;
+      let signals = JSON.parse(localStorage.getItem('mindflow_crisis_signals') || '[]');
+      signals = signals.filter(s => s.id !== id);
+      localStorage.setItem('mindflow_crisis_signals', JSON.stringify(signals));
+      loadSignals();
+    }
+    
+    function deleteStep(id) {
+      if (!confirm('Supprimer cette étape ?')) return;
+      let steps = JSON.parse(localStorage.getItem('mindflow_crisis_steps') || '[]');
+      steps = steps.filter(s => s.id !== id);
+      localStorage.setItem('mindflow_crisis_steps', JSON.stringify(steps));
+      loadSteps();
+    }
+    
+    function deleteCoping(id) {
+      if (!confirm('Supprimer cette stratégie ?')) return;
+      let coping = JSON.parse(localStorage.getItem('mindflow_crisis_coping') || '[]');
+      coping = coping.filter(c => c.id !== id);
+      localStorage.setItem('mindflow_crisis_coping', JSON.stringify(coping));
+      loadCoping();
+    }
+    
+    function showSuccess() {
+      const msg = document.getElementById('successMessage');
+      msg.classList.add('show');
+      setTimeout(() => msg.classList.remove('show'), 1500);
+    }
+    
+    loadCrisisData();
+  </script>
+</body>
+</html>
+```
+
+---
+
+## ✅ **MESSAGE DE COMMIT :**
+```
+Création module Plan de Crise avec urgences et stratégies
