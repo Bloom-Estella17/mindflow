@@ -109,6 +109,7 @@
       margin-bottom: 10px;
       cursor: pointer;
       transition: all 0.2s;
+      text-decoration: none;
     }
     
     .menu-item:active {
@@ -161,6 +162,8 @@
       border-radius: 12px;
       margin-bottom: 10px;
       cursor: pointer;
+      text-decoration: none;
+      color: white;
     }
     
     .emergency-number:active {
@@ -403,17 +406,35 @@
     
     <div class="emergency-card">
       <div class="emergency-title">🚨 Urgences</div>
-      <a href="tel:15" class="emergency-number" style="text-decoration: none; color: white;">
+      <a href="tel:15" class="emergency-number">
         <span class="emergency-label">SAMU</span>
         <span class="emergency-phone">15</span>
       </a>
-      <a href="tel:3114" class="emergency-number" style="text-decoration: none; color: white;">
+      <a href="tel:3114" class="emergency-number">
         <span class="emergency-label">Prévention Suicide</span>
         <span class="emergency-phone">3114</span>
       </a>
-      <a href="tel:0800858858" class="emergency-number" style="text-decoration: none; color: white;">
+      <a href="tel:0800858858" class="emergency-number">
         <span class="emergency-label">Fil Santé Jeunes</span>
         <span class="emergency-phone">0800 858 858</span>
+      </a>
+    </div>
+    
+    <div class="section-card">
+      <div class="section-title">Mes modules spécialisés</div>
+      <a href="triggers.html" class="menu-item">
+        <div class="menu-left">
+          <div class="menu-icon">📋</div>
+          <div class="menu-text">Triggers</div>
+        </div>
+        <div class="menu-arrow">→</div>
+      </a>
+      <a href="alters.html" class="menu-item">
+        <div class="menu-left">
+          <div class="menu-icon">🎭</div>
+          <div class="menu-text">TDI/Alters</div>
+        </div>
+        <div class="menu-arrow">→</div>
       </a>
     </div>
     
@@ -560,7 +581,8 @@
         • Suivi d'humeur quotidien<br>
         • Journal personnel<br>
         • Gestion du traitement<br>
-        • Modules spécialisés (à venir)<br>
+        • Plan de crise<br>
+        • Modules spécialisés<br>
         <br>
         <strong>Confidentialité :</strong><br>
         Toutes tes données sont stockées localement sur ton appareil. Aucune donnée n'est envoyée à des serveurs externes.
@@ -661,6 +683,13 @@
       localStorage.removeItem('mindflow_journal');
       localStorage.removeItem('mindflow_meds');
       localStorage.removeItem('mindflow_profile');
+      localStorage.removeItem('mindflow_triggers');
+      localStorage.removeItem('mindflow_alters');
+      localStorage.removeItem('mindflow_switches');
+      localStorage.removeItem('mindflow_crisis_signals');
+      localStorage.removeItem('mindflow_crisis_steps');
+      localStorage.removeItem('mindflow_crisis_coping');
+      localStorage.removeItem('mindflow_crisis_contacts');
       
       showSuccess('Données effacées !');
       setTimeout(() => {
@@ -685,6 +714,8 @@
 
 ---
 
-## ✅ **MESSAGE DE COMMIT :**
+## ✅ **COMMIT !**
+
+**Message :**
 ```
-Création Profil avec urgences et export
+Profil - Ajout section Modules (Triggers + Alters)
