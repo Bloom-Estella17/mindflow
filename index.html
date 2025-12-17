@@ -168,11 +168,31 @@
       margin-bottom: 30px;
     }
     
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
     .section-title {
       font-size: 17px;
       font-weight: 600;
       color: #2D2D3A;
-      margin-bottom: 15px;
+    }
+    
+    .add-task-btn {
+      font-size: 24px;
+      cursor: pointer;
+      color: #8B7EB8;
+      background: none;
+      border: none;
+      padding: 5px;
+      transition: all 0.3s;
+    }
+    
+    .add-task-btn:active {
+      transform: scale(1.2);
     }
     
     .task-item {
@@ -184,6 +204,7 @@
       background: rgba(139, 126, 184, 0.06);
       border-radius: 15px;
       transition: all 0.2s;
+      cursor: pointer;
     }
     
     .task-item:active {
@@ -191,9 +212,23 @@
       transform: scale(0.98);
     }
     
-    .task-icon {
-      font-size: 22px;
-      min-width: 22px;
+    .task-checkbox {
+      min-width: 24px;
+      width: 24px;
+      height: 24px;
+      border: 3px solid #8B7EB8;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: white;
+    }
+    
+    .task-checkbox.checked {
+      background: #8B7EB8;
+      color: white;
     }
     
     .task-text {
@@ -205,6 +240,20 @@
     
     .task-done {
       opacity: 0.5;
+      text-decoration: line-through;
+    }
+    
+    .task-delete {
+      font-size: 20px;
+      color: #ff6b6b;
+      cursor: pointer;
+      padding: 5px;
+      opacity: 0;
+      transition: all 0.3s;
+    }
+    
+    .task-item:hover .task-delete {
+      opacity: 1;
     }
     
     .graph-section {
@@ -270,6 +319,104 @@
       transform: scale(1.25);
       opacity: 1;
     }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 3000;
+      display: none;
+    }
+    
+    .modal-overlay.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 25px;
+      padding: 30px;
+      max-width: 90%;
+      width: 400px;
+      z-index: 3001;
+      display: none;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .modal.show {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
+    
+    @keyframes slideUp {
+      from { transform: translate(-50%, -40%); opacity: 0; }
+      to { transform: translate(-50%, -50%); opacity: 1; }
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+    
+    .modal-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+    
+    .modal-close {
+      font-size: 28px;
+      cursor: pointer;
+      color: #888;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.3s;
+      margin-bottom: 20px;
+    }
+    
+    .form-input:focus {
+      border-color: #8B7EB8;
+    }
+    
+    .save-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .save-btn:active {
+      transform: scale(0.98);
+    }
   </style>
 </head>
 <body>
@@ -319,19 +466,11 @@
       </div>
       
       <div class="tasks-section">
-        <div class="section-title">Aujourd'hui :</div>
-        <div class="task-item task-done">
-          <div class="task-icon">✅</div>
-          <div class="task-text">Check-in du matin</div>
+        <div class="section-header">
+          <div class="section-title">Aujourd'hui :</div>
+          <button class="add-task-btn" onclick="openAddTask()">+</button>
         </div>
-        <div class="task-item">
-          <div class="task-icon">⏸</div>
-          <div class="task-text">Traitement 10h</div>
-        </div>
-        <div class="task-item">
-          <div class="task-icon">○</div>
-          <div class="task-text">Gratitude du soir</div>
-        </div>
+        <div id="tasksList"></div>
       </div>
       
       <div class="graph-section">
@@ -349,10 +488,109 @@
     <a href="profil.html" class="nav-item">👤</a>
   </div>
   
+  <!-- Add Task Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+  <div class="modal" id="addTaskModal">
+    <div class="modal-header">
+      <div class="modal-title">Nouvelle tâche</div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <input type="text" class="form-input" id="taskInput" placeholder="Ex: Méditation 10 min">
+    
+    <button class="save-btn" onclick="addTask()">💚 Ajouter</button>
+  </div>
+  
   <script>
+    const defaultTasks = [
+      { id: 'checkin', text: 'Check-in du matin', link: 'mood.html' },
+      { id: 'traitement', text: 'Traitement 10h', link: 'traitement.html' },
+      { id: 'gratitude', text: 'Gratitude du soir', link: 'journal.html' }
+    ];
+    
+    function initTasks() {
+      const today = new Date().toISOString().split('T')[0];
+      const savedDate = localStorage.getItem('mindflow_tasks_date');
+      
+      if (savedDate !== today) {
+        localStorage.setItem('mindflow_tasks_date', today);
+        const tasks = defaultTasks.map(t => ({ ...t, done: false }));
+        localStorage.setItem('mindflow_tasks', JSON.stringify(tasks));
+      }
+      
+      loadTasks();
+    }
+    
+    function loadTasks() {
+      const tasks = JSON.parse(localStorage.getItem('mindflow_tasks') || '[]');
+      const list = document.getElementById('tasksList');
+      
+      if (tasks.length === 0) {
+        const defaultTasksWithDone = defaultTasks.map(t => ({ ...t, done: false }));
+        localStorage.setItem('mindflow_tasks', JSON.stringify(defaultTasksWithDone));
+        loadTasks();
+        return;
+      }
+      
+      list.innerHTML = tasks.map((task, index) => `
+        <div class="task-item" onclick="toggleTask(${index})">
+          <div class="task-checkbox ${task.done ? 'checked' : ''}">
+            ${task.done ? '✓' : ''}
+          </div>
+          <div class="task-text ${task.done ? 'task-done' : ''}">${task.text}</div>
+          ${!task.id ? `<div class="task-delete" onclick="event.stopPropagation(); deleteTask(${index})">🗑️</div>` : ''}
+        </div>
+      `).join('');
+    }
+    
+    function toggleTask(index) {
+      const tasks = JSON.parse(localStorage.getItem('mindflow_tasks') || '[]');
+      tasks[index].done = !tasks[index].done;
+      localStorage.setItem('mindflow_tasks', JSON.stringify(tasks));
+      loadTasks();
+    }
+    
+    function openAddTask() {
+      document.getElementById('taskInput').value = '';
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('addTaskModal').classList.add('show');
+    }
+    
+    function addTask() {
+      const text = document.getElementById('taskInput').value.trim();
+      
+      if (!text) {
+        alert('Entre une tâche ! 💚');
+        return;
+      }
+      
+      const tasks = JSON.parse(localStorage.getItem('mindflow_tasks') || '[]');
+      tasks.push({ text: text, done: false });
+      localStorage.setItem('mindflow_tasks', JSON.stringify(tasks));
+      
+      closeModal();
+      loadTasks();
+    }
+    
+    function deleteTask(index) {
+      if (!confirm('Supprimer cette tâche ?')) return;
+      
+      const tasks = JSON.parse(localStorage.getItem('mindflow_tasks') || '[]');
+      tasks.splice(index, 1);
+      localStorage.setItem('mindflow_tasks', JSON.stringify(tasks));
+      loadTasks();
+    }
+    
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('show');
+      document.getElementById('addTaskModal').classList.remove('show');
+    }
+    
     function openLuna() {
       alert('Luna arrive bientôt ! 🌙\n\nL\'IA compagnon empathique sera intégré dans les prochaines versions.\n\nElle sera là pour toi 24/7 💚');
     }
+    
+    initTasks();
   </script>
 </body>
 </html>
@@ -360,8 +598,6 @@
 
 ---
 
-## ✅ **COMMIT !**
-
-**Message :**
+## ✅ **MESSAGE DE COMMIT :**
 ```
-Home - Retrait Triggers (sera dans Profil)
+Home - Système de tâches quotidiennes interactif + Reset auto
