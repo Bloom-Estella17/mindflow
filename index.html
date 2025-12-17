@@ -109,6 +109,7 @@
       justify-content: center;
       width: 60px;
       height: 60px;
+      text-decoration: none;
     }
     
     .mood-btn:active {
@@ -273,11 +274,11 @@
       <div class="mood-section">
         <div class="mood-question">Choisis ton humeur</div>
         <div class="mood-options">
-          <button class="mood-btn" onclick="selectMood('😊')">😊</button>
-          <button class="mood-btn" onclick="selectMood('😐')">😐</button>
-          <button class="mood-btn" onclick="selectMood('😔')">😔</button>
-          <button class="mood-btn" onclick="selectMood('😰')">😰</button>
-          <button class="mood-btn" onclick="selectMood('😡')">😡</button>
+          <a href="mood.html" class="mood-btn">😊</a>
+          <a href="mood.html" class="mood-btn">😐</a>
+          <a href="mood.html" class="mood-btn">😔</a>
+          <a href="mood.html" class="mood-btn">😰</a>
+          <a href="mood.html" class="mood-btn">😡</a>
         </div>
       </div>
       
@@ -321,20 +322,9 @@
   </div>
   
   <script>
-    function selectMood(mood) {
-      alert('Tu as sélectionné : ' + mood + '\n\nHumeur enregistrée ! 💚\n\n(Cette fonctionnalité sera développée prochainement)');
-    }
-    
     function openLuna() {
       alert('Luna arrive bientôt ! 🌙\n\nL\'IA compagnon empathique sera intégré dans les prochaines versions.\n\nElle sera là pour toi 24/7 💚');
     }
   </script>
 </body>
 </html>
-```
-
----
-
-## ✅ **MESSAGE DE COMMIT :**
-```
-Home Screen corrigé avec navigation fonctionnelle
