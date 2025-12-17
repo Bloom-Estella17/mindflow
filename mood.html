@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>💚 MindFlow - Mood Tracker</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      min-height: 100vh;
+      padding: 15px;
+      padding-bottom: 100px;
+    }
+    
+    .container {
+      max-width: 450px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 5px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      background: white;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .back-btn {
+      font-size: 24px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    
+    .header-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #8B7EB8;
+    }
+    
+    .main-card {
+      background: white;
+      border-radius: 25px;
+      padding: 30px 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    
+    .subtitle {
+      font-size: 15px;
+      color: #8B7EB8;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    
+    .mood-scale {
+      margin-bottom: 30px;
+    }
+    
+    .scale-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 13px;
+      color: #666;
+      padding: 0 5px;
+    }
+    
+    .mood-slider {
+      width: 100%;
+      height: 50px;
+      -webkit-appearance: none;
+      background: linear-gradient(to right, #ff4444 0%, #ffaa44 25%, #ffff44 50%, #aaffaa 75%, #44ff44 100%);
+      border-radius: 25px;
+      outline: none;
+      margin-bottom: 15px;
+    }
+    
+    .mood-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 40px;
+      height: 40px;
+      background: white;
+      cursor: pointer;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      border: 3px solid #8B7EB8;
+    }
+    
+    .mood-slider::-moz-range-thumb {
+      width: 40px;
+      height: 40px;
+      background: white;
+      cursor: pointer;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      border: 3px solid #8B7EB8;
+    }
+    
+    .mood-value {
+      text-align: center;
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    
+    .note-section {
+      margin-bottom: 25px;
+    }
+    
+    .section-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #2D2D3A;
+      margin-bottom: 10px;
+    }
+    
+    .note-input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #E5E5E5;
+      border-radius: 15px;
+      font-size: 15px;
+      font-family: inherit;
+      resize: vertical;
+      outline: none;
+      transition: border 0.3s;
+    }
+    
+    .note-input:focus {
+      border-color: #8B7EB8;
+    }
+    
+    .save-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(139, 126, 184, 0.3);
+      transition: all 0.3s;
+    }
+    
+    .save-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .history-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .history-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 20px;
+    }
+    
+    .graph-container {
+      background: rgba(168, 216, 234, 0.1);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .graph {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      height: 150px;
+      gap: 8px;
+    }
+    
+    .bar-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .bar {
+      width: 100%;
+      background: linear-gradient(to top, #8B7EB8, #B8A7D5);
+      border-radius: 8px 8px 0 0;
+      transition: all 0.3s;
+      min-height: 10px;
+    }
+    
+    .bar-label {
+      font-size: 11px;
+      color: #666;
+      font-weight: 600;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .stat-item {
+      background: rgba(139, 126, 184, 0.08);
+      padding: 15px;
+      border-radius: 15px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 28px;
+      font-weight: bold;
+      color: #8B7EB8;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      font-size: 13px;
+      color: #666;
+    }
+    
+    .history-list {
+      margin-top: 20px;
+    }
+    
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background: rgba(139, 126, 184, 0.05);
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+    
+    .history-date {
+      font-size: 14px;
+      color: #666;
+      font-weight: 600;
+    }
+    
+    .history-mood {
+      font-size: 24px;
+    }
+    
+    .history-note {
+      font-size: 13px;
+      color: #888;
+      margin-top: 5px;
+    }
+    
+    .bottom-nav {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: 25px;
+      padding: 15px 25px;
+      display: flex;
+      gap: 35px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      z-index: 1000;
+      max-width: 350px;
+      width: calc(100% - 40px);
+      justify-content: center;
+    }
+    
+    .nav-item {
+      font-size: 26px;
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0.4;
+      text-decoration: none;
+    }
+    
+    .nav-item.active {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+    
+    .success-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      z-index: 2000;
+      display: none;
+    }
+    
+    .success-message.show {
+      display: block;
+      animation: popup 0.3s ease;
+    }
+    
+    @keyframes popup {
+      from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+    
+    .success-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .success-text {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <a href="index.html" class="back-btn">←</a>
+      <div class="header-title">Mood Tracker</div>
+      <div style="width: 24px;"></div>
+    </div>
+    
+    <div class="main-card">
+      <div class="title">Comment te sens-tu ?</div>
+      <div class="subtitle">Note ton humeur du jour</div>
+      
+      <div class="mood-scale">
+        <div class="scale-label">
+          <span>😔 Très mal</span>
+          <span>😊 Super bien</span>
+        </div>
+        <input type="range" min="1" max="10" value="5" class="mood-slider" id="moodSlider">
+        <div class="mood-value" id="moodValue">😐 5/10</div>
+      </div>
+      
+      <div class="note-section">
+        <div class="section-label">Qu'est-ce qui influence ton humeur ? (optionnel)</div>
+        <textarea class="note-input" id="moodNote" rows="3" placeholder="Ex: Belle journée ensoleillée, stress au travail, bonne nouvelle..."></textarea>
+      </div>
+      
+      <button class="save-btn" onclick="saveMood()">💚 Enregistrer mon humeur</button>
+    </div>
+    
+    <div class="history-card">
+      <div class="history-title">Cette semaine</div>
+      
+      <div class="graph-container">
+        <div class="graph" id="graph"></div>
+      </div>
+      
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-value" id="avgMood">-</div>
+          <div class="stat-label">Humeur moyenne</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="bestDay">-</div>
+          <div class="stat-label">Meilleur jour</div>
+        </div>
+      </div>
+      
+      <div class="history-list" id="historyList"></div>
+    </div>
+  </div>
+  
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">🏠</a>
+    <a href="mood.html" class="nav-item active">😊</a>
+    <div class="nav-item">📝</div>
+    <div class="nav-item">💊</div>
+    <div class="nav-item">👤</div>
+  </div>
+  
+  <div class="success-message" id="successMessage">
+    <div class="success-icon">✅</div>
+    <div class="success-text">Humeur enregistrée !</div>
+  </div>
+  
+  <script>
+    const moodEmojis = {
+      1: '😭', 2: '😢', 3: '😔', 4: '😕', 5: '😐',
+      6: '🙂', 7: '😊', 8: '😄', 9: '😁', 10: '🤩'
+    };
+    
+    const slider = document.getElementById('moodSlider');
+    const moodValue = document.getElementById('moodValue');
+    
+    slider.addEventListener('input', function() {
+      const value = this.value;
+      moodValue.textContent = moodEmojis[value] + ' ' + value + '/10';
+    });
+    
+    function saveMood() {
+      const mood = slider.value;
+      const note = document.getElementById('moodNote').value;
+      const today = new Date().toISOString().split('T')[0];
+      
+      let moods = JSON.parse(localStorage.getItem('mindflow_moods') || '[]');
+      
+      const existingIndex = moods.findIndex(m => m.date === today);
+      if (existingIndex !== -1) {
+        moods[existingIndex] = { date: today, mood: parseInt(mood), note: note };
+      } else {
+        moods.push({ date: today, mood: parseInt(mood), note: note });
+      }
+      
+      moods.sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      localStorage.setItem('mindflow_moods', JSON.stringify(moods));
+      
+      const successMsg = document.getElementById('successMessage');
+      successMsg.classList.add('show');
+      setTimeout(() => {
+        successMsg.classList.remove('show');
+        loadHistory();
+      }, 1500);
+    }
+    
+    function loadHistory() {
+      const moods = JSON.parse(localStorage.getItem('mindflow_moods') || '[]');
+      const last7Days = moods.slice(0, 7);
+      
+      const graph = document.getElementById('graph');
+      graph.innerHTML = '';
+      
+      const days = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+      const today = new Date();
+      
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(date.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+        const dayName = days[date.getDay()];
+        
+        const moodData = last7Days.find(m => m.date === dateStr);
+        const moodValue = moodData ? moodData.mood : 0;
+        
+        const barWrapper = document.createElement('div');
+        barWrapper.className = 'bar-wrapper';
+        
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        bar.style.height = moodValue > 0 ? (moodValue * 10) + '%' : '5px';
+        
+        const label = document.createElement('div');
+        label.className = 'bar-label';
+        label.textContent = dayName;
+        
+        barWrapper.appendChild(bar);
+        barWrapper.appendChild(label);
+        graph.appendChild(barWrapper);
+      }
+      
+      if (last7Days.length > 0) {
+        const sum = last7Days.reduce((acc, m) => acc + m.mood, 0);
+        const avg = (sum / last7Days.length).toFixed(1);
+        document.getElementById('avgMood').textContent = avg + '/10';
+        
+        const best = last7Days.reduce((max, m) => m.mood > max.mood ? m : max);
+        const bestDate = new Date(best.date);
+        document.getElementById('bestDay').textContent = days[bestDate.getDay()];
+      }
+      
+      const historyList = document.getElementById('historyList');
+      historyList.innerHTML = '';
+      
+      last7Days.forEach(mood => {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        
+        const date = new Date(mood.date);
+        const dateStr = date.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+        
+        item.innerHTML = `
+          <div>
+            <div class="history-date">${dateStr}</div>
+            ${mood.note ? `<div class="history-note">${mood.note}</div>` : ''}
+          </div>
+          <div class="history-mood">${moodEmojis[mood.mood]} ${mood.mood}/10</div>
+        `;
+        
+        historyList.appendChild(item);
+      });
+    }
+    
+    loadHistory();
+  </script>
+</body>
+</html>
+```
+
+---
+
+## ✅ **MAINTENANT :**
+
+**Message de commit :**
+```
+Création MoodTracker avec graphique et historique
