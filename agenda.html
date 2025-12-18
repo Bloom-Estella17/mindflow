@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>📅 MindFlow - Agenda</title>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      min-height: 100vh;
+      padding: 15px;
+      padding-bottom: 100px;
+    }
+    
+    .container {
+      max-width: 450px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 5px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      background: white;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .back-btn {
+      font-size: 24px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    
+    .header-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #8B7EB8;
+    }
+    
+    .add-btn {
+      font-size: 28px;
+      cursor: pointer;
+      color: #8B7EB8;
+      transition: all 0.3s;
+    }
+    
+    .add-btn:active {
+      transform: scale(1.2);
+    }
+    
+    .quick-add-card {
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(139, 126, 184, 0.3);
+      color: white;
+    }
+    
+    .quick-add-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .quick-add-btn {
+      width: 100%;
+      padding: 15px;
+      background: rgba(255,255,255,0.25);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .quick-add-btn:active {
+      background: rgba(255,255,255,0.4);
+      transform: scale(0.98);
+    }
+    
+    .stats-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    
+    .stat-item {
+      background: rgba(139, 126, 184, 0.08);
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #8B7EB8;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      font-size: 13px;
+      color: #666;
+    }
+    
+    .section-card {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .section-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 20px;
+    }
+    
+    .rdv-item {
+      background: rgba(139, 126, 184, 0.05);
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 12px;
+      border-left: 4px solid;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .rdv-item:active {
+      transform: scale(0.98);
+      background: rgba(139, 126, 184, 0.1);
+    }
+    
+    .rdv-type-psy { border-left-color: #8B7EB8; }
+    .rdv-type-medecin { border-left-color: #3b82f6; }
+    .rdv-type-activite { border-left-color: #10b981; }
+    .rdv-type-autre { border-left-color: #f59e0b; }
+    
+    .rdv-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    
+    .rdv-title {
+      font-size: 17px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 5px;
+    }
+    
+    .rdv-type-badge {
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+    }
+    
+    .badge-psy { background: #8B7EB8; }
+    .badge-medecin { background: #3b82f6; }
+    .badge-activite { background: #10b981; }
+    .badge-autre { background: #f59e0b; }
+    
+    .rdv-datetime {
+      font-size: 15px;
+      color: #666;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .rdv-note {
+      font-size: 14px;
+      color: #888;
+      margin-top: 8px;
+      font-style: italic;
+    }
+    
+    .rdv-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    
+    .rdv-action-btn {
+      flex: 1;
+      padding: 8px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .rdv-edit {
+      background: rgba(139, 126, 184, 0.15);
+      color: #8B7EB8;
+    }
+    
+    .rdv-delete {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+    }
+    
+    .rdv-action-btn:active {
+      transform: scale(0.95);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+    }
+    
+    .empty-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .empty-text {
+      font-size: 16px;
+    }
+    
+    .today-indicator {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+    
+    .tomorrow-indicator {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+    
+    .bottom-nav {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: 25px;
+      padding: 15px 25px;
+      display: flex;
+      gap: 35px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      z-index: 1000;
+      max-width: 350px;
+      width: calc(100% - 40px);
+      justify-content: center;
+    }
+    
+    .nav-item {
+      font-size: 26px;
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0.4;
+      text-decoration: none;
+    }
+    
+    .nav-item.active {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 3000;
+      display: none;
+    }
+    
+    .modal-overlay.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 25px;
+      padding: 30px;
+      max-width: 90%;
+      width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      z-index: 3001;
+      display: none;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .modal.show {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
+    
+    @keyframes slideUp {
+      from { transform: translate(-50%, -40%); opacity: 0; }
+      to { transform: translate(-50%, -50%); opacity: 1; }
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+    
+    .modal-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+    
+    .modal-close {
+      font-size: 28px;
+      cursor: pointer;
+      color: #888;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #2D2D3A;
+      margin-bottom: 8px;
+      display: block;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.3s;
+    }
+    
+    .form-input:focus {
+      border-color: #8B7EB8;
+    }
+    
+    .form-select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.3s;
+      background: white;
+    }
+    
+    .form-select:focus {
+      border-color: #8B7EB8;
+    }
+    
+    .form-textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px 15px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.3s;
+      resize: vertical;
+    }
+    
+    .form-textarea:focus {
+      border-color: #8B7EB8;
+    }
+    
+    .save-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.3s;
+    }
+    
+    .save-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .success-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      z-index: 4000;
+      display: none;
+    }
+    
+    .success-message.show {
+      display: block;
+      animation: popup 0.3s ease;
+    }
+    
+    @keyframes popup {
+      from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+    
+    .success-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .success-text {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <a href="index.html" class="back-btn">←</a>
+      <div class="header-title">Agenda Bien-être</div>
+      <div class="add-btn" onclick="openModal()">+</div>
+    </div>
+    
+    <div class="quick-add-card">
+      <div class="quick-add-title">Ajouter un rendez-vous</div>
+      <button class="quick-add-btn" onclick="openModal()">📅 Nouveau RDV</button>
+    </div>
+    
+    <div class="stats-card">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value" id="totalRdv">0</div>
+          <div class="stat-label">Rendez-vous</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="nextRdv">-</div>
+          <div class="stat-label">Prochain RDV</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section-card">
+      <div class="section-title">Prochains rendez-vous</div>
+      <div id="rdvList"></div>
+    </div>
+  </div>
+  
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">🏠</a>
+    <a href="mood.html" class="nav-item">😊</a>
+    <a href="journal.html" class="nav-item">📝</a>
+    <a href="traitement.html" class="nav-item">💊</a>
+    <a href="profil.html" class="nav-item">👤</a>
+  </div>
+  
+  <!-- Add/Edit RDV Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+  <div class="modal" id="rdvModal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Nouveau rendez-vous</div>
+      <div class="modal-close" onclick="closeModal()">×</div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Type de rendez-vous</label>
+      <select class="form-select" id="rdvType">
+        <option value="psy">Psychologue / Psychiatre</option>
+        <option value="medecin">Médecin généraliste</option>
+        <option value="activite">Activité bien-être</option>
+        <option value="autre">Autre</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Titre</label>
+      <input type="text" class="form-input" id="rdvTitle" placeholder="Ex: Séance psy, Yoga...">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Date</label>
+      <input type="date" class="form-input" id="rdvDate">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Heure</label>
+      <input type="time" class="form-input" id="rdvTime">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label">Notes (optionnel)</label>
+      <textarea class="form-textarea" id="rdvNote" placeholder="Adresse, préparation, questions à poser..."></textarea>
+    </div>
+    
+    <button class="save-btn" onclick="saveRdv()">💚 Enregistrer</button>
+  </div>
+  
+  <div class="success-message" id="successMessage">
+    <div class="success-icon">✅</div>
+    <div class="success-text">Rendez-vous enregistré !</div>
+  </div>
+  
+  <script>
+    let editingRdvId = null;
+    
+    const typeLabels = {
+      psy: 'Psy',
+      medecin: 'Médecin',
+      activite: 'Activité',
+      autre: 'Autre'
+    };
+    
+    function loadAgenda() {
+      const rdvs = JSON.parse(localStorage.getItem('mindflow_agenda') || '[]');
+      
+      // Sort by date
+      rdvs.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
+      
+      updateStats(rdvs);
+      displayRdvs(rdvs);
+    }
+    
+    function updateStats(rdvs) {
+      const now = new Date();
+      const futureRdvs = rdvs.filter(r => new Date(r.datetime) >= now);
+      
+      document.getElementById('totalRdv').textContent = futureRdvs.length;
+      
+      if (futureRdvs.length > 0) {
+        const next = new Date(futureRdvs[0].datetime);
+        const days = Math.floor((next - now) / (1000 * 60 * 60 * 24));
+        
+        if (days === 0) {
+          document.getElementById('nextRdv').textContent = 'Aujourd\'hui';
+        } else if (days === 1) {
+          document.getElementById('nextRdv').textContent = 'Demain';
+        } else {
+          document.getElementById('nextRdv').textContent = days + 'j';
+        }
+      } else {
+        document.getElementById('nextRdv').textContent = '-';
+      }
+    }
+    
+    function displayRdvs(rdvs) {
+      const list = document.getElementById('rdvList');
+      const now = new Date();
+      const futureRdvs = rdvs.filter(r => new Date(r.datetime) >= now);
+      
+      if (futureRdvs.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📅</div>
+            <div class="empty-text">Aucun rendez-vous prévu</div>
+          </div>
+        `;
+        return;
+      }
+      
+      list.innerHTML = futureRdvs.map(rdv => {
+        const date = new Date(rdv.datetime);
+        const dateStr = date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+        const timeStr = date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+        
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const rdvDate = new Date(date);
+        rdvDate.setHours(0, 0, 0, 0);
+        
+        let indicator = '';
+        if (rdvDate.getTime() === today.getTime()) {
+          indicator = '<span class="today-indicator">AUJOURD\'HUI</span>';
+        } else if (rdvDate.getTime() === tomorrow.getTime()) {
+          indicator = '<span class="tomorrow-indicator">DEMAIN</span>';
+        }
+        
+        return `
+          <div class="rdv-item rdv-type-${rdv.type}">
+            <div class="rdv-header">
+              <div>
+                <div class="rdv-title">${rdv.title}</div>
+                <span class="rdv-type-badge badge-${rdv.type}">${typeLabels[rdv.type]}</span>
+              </div>
+            </div>
+            <div class="rdv-datetime">
+              📅 ${dateStr} ${indicator}
+            </div>
+            <div class="rdv-datetime">
+              🕐 ${timeStr}
+            </div>
+            ${rdv.note ? `<div class="rdv-note">${rdv.note}</div>` : ''}
+            <div class="rdv-actions">
+              <button class="rdv-action-btn rdv-edit" onclick="editRdv(${rdv.id})">✏️ Modifier</button>
+              <button class="rdv-action-btn rdv-delete" onclick="deleteRdv(${rdv.id})">🗑️ Supprimer</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    function openModal(id = null) {
+      editingRdvId = id;
+      
+      if (id) {
+        const rdvs = JSON.parse(localStorage.getItem('mindflow_agenda') || '[]');
+        const rdv = rdvs.find(r => r.id === id);
+        
+        if (rdv) {
+          document.getElementById('modalTitle').textContent = 'Modifier le rendez-vous';
+          document.getElementById('rdvType').value = rdv.type;
+          document.getElementById('rdvTitle').value = rdv.title;
+          
+          const date = new Date(rdv.datetime);
+          document.getElementById('rdvDate').value = date.toISOString().split('T')[0];
+          document.getElementById('rdvTime').value = date.toTimeString().slice(0, 5);
+          document.getElementById('rdvNote').value = rdv.note || '';
+        }
+      } else {
+        document.getElementById('modalTitle').textContent = 'Nouveau rendez-vous';
+        document.getElementById('rdvType').value = 'psy';
+        document.getElementById('rdvTitle').value = '';
+        document.getElementById('rdvDate').value = '';
+        document.getElementById('rdvTime').value = '';
+        document.getElementById('rdvNote').value = '';
+      }
+      
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('rdvModal').classList.add('show');
+    }
+    
+    function saveRdv() {
+      const type = document.getElementById('rdvType').value;
+      const title = document.getElementById('rdvTitle').value.trim();
+      const date = document.getElementById('rdvDate').value;
+      const time = document.getElementById('rdvTime').value;
+      const note = document.getElementById('rdvNote').value.trim();
+      
+      if (!title || !date || !time) {
+        alert('Remplis tous les champs obligatoires ! 💚');
+        return;
+      }
+      
+      const datetime = new Date(`${date}T${time}`);
+      
+      let rdvs = JSON.parse(localStorage.getItem('mindflow_agenda') || '[]');
+      
+      if (editingRdvId) {
+        const index = rdvs.findIndex(r => r.id === editingRdvId);
+        if (index >= 0) {
+          rdvs[index] = {
+            ...rdvs[index],
+            type,
+            title,
+            datetime: datetime.toISOString(),
+            note
+          };
+        }
+      } else {
+        rdvs.push({
+          id: Date.now(),
+          type,
+          title,
+          datetime: datetime.toISOString(),
+          note
+        });
+      }
+      
+      localStorage.setItem('mindflow_agenda', JSON.stringify(rdvs));
+      
+      closeModal();
+      showSuccess();
+      loadAgenda();
+    }
+    
+    function editRdv(id) {
+      openModal(id);
+    }
+    
+    function deleteRdv(id) {
+      if (!confirm('Supprimer ce rendez-vous ?')) return;
+      
+      let rdvs = JSON.parse(localStorage.getItem('mindflow_agenda') || '[]');
+      rdvs = rdvs.filter(r => r.id !== id);
+      localStorage.setItem('mindflow_agenda', JSON.stringify(rdvs));
+      
+      loadAgenda();
+    }
+    
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('show');
+      document.getElementById('rdvModal').classList.remove('show');
+      editingRdvId = null;
+    }
+    
+    function showSuccess() {
+      const msg = document.getElementById('successMessage');
+      msg.classList.add('show');
+      setTimeout(() => msg.classList.remove('show'), 1500);
+    }
+    
+    loadAgenda();
+  </script>
+</body>
+</html>
+```
+
+---
+
+## ✅ **COMMIT MESSAGE :**
+```
+Création module Agenda Bien-être avec RDV et rappels
