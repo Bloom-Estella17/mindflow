@@ -457,6 +457,13 @@
         </div>
         <div class="menu-arrow">→</div>
       </a>
+      <a href="agenda.html" class="menu-item">
+        <div class="menu-left">
+          <div class="menu-icon">📅</div>
+          <div class="menu-text">Agenda Bien-être</div>
+        </div>
+        <div class="menu-arrow">→</div>
+      </a>
     </div>
     
     <div class="section-card">
@@ -616,6 +623,7 @@
         • Plan de crise<br>
         • Modules spécialisés<br>
         • Bibliothèque DSM-5<br>
+        • Agenda bien-être<br>
         <br>
         <strong>Confidentialité :</strong><br>
         Toutes tes données sont stockées localement sur ton appareil. Aucune donnée n'est envoyée à des serveurs externes.
@@ -729,6 +737,7 @@
       localStorage.removeItem('mindflow_panics');
       localStorage.removeItem('mindflow_tasks');
       localStorage.removeItem('mindflow_tasks_date');
+      localStorage.removeItem('mindflow_agenda');
       
       showSuccess('Données effacées !');
       setTimeout(() => {
@@ -755,4 +764,4 @@
 
 ## ✅ **COMMIT MESSAGE :**
 ```
-Profil - Ajout section Ressources DSM-5
+Profil - Ajout module Agenda Bien-être
