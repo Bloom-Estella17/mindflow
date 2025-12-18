@@ -4,22 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>💚 MindFlow</title>
-  <title>💚 MindFlow</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#8B7EB8">
-  
-  <style>
-```
-
----
-
-**GO ! AJOUTE LES 2 LIGNES ! 💪**
-
-**COMMIT !**
-
-**Message :**
-```
-Home - Ajout manifest PWA
   
   <style>
     * {
@@ -33,9 +19,8 @@ Home - Ajout manifest PWA
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
       min-height: 100vh;
-      padding: 10px;
+      padding: 15px;
       padding-bottom: 100px;
-      overflow-x: hidden;
     }
     
     .container {
@@ -57,18 +42,27 @@ Home - Ajout manifest PWA
     }
     
     .logo {
-      font-size: 22px;
-      font-weight: bold;
-      color: #8B7EB8;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #8B7EB8;
     }
     
     .icons {
       display: flex;
-      gap: 15px;
-      font-size: 22px;
+      gap: 20px;
+      font-size: 24px;
+    }
+    
+    .icons a {
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+    
+    .icons a:active {
+      transform: scale(1.2);
     }
     
     .main-card {
@@ -77,18 +71,19 @@ Home - Ajout manifest PWA
       padding: 30px 25px;
       margin-bottom: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      text-align: center;
     }
     
     .greeting {
-      font-size: 26px;
+      font-size: 32px;
       font-weight: bold;
       color: #2D2D3A;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
     
     .subtitle {
-      font-size: 15px;
-      color: #8B7EB8;
+      font-size: 16px;
+      color: #888;
       margin-bottom: 30px;
     }
     
@@ -97,215 +92,230 @@ Home - Ajout manifest PWA
     }
     
     .mood-question {
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 600;
       color: #2D2D3A;
       margin-bottom: 20px;
-      text-align: center;
     }
     
     .mood-options {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 5px;
-      padding: 0 10px;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
     }
     
-   .mood-btn {
-  font-size: 38px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0;
-  border-radius: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 60px;
-  height: 60px;
-  text-decoration: none;
-  line-height: 1;
-}
-```
-
----
-
-## ✅ **COMMIT !**
-
-**Message :**
-```
-Home - Fix alignement emojis mobile
+    .mood-btn {
+      font-size: 38px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 0;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      text-decoration: none;
+      line-height: 1;
+    }
+    
+    .mood-btn:hover {
+      transform: scale(1.15);
     }
     
     .mood-btn:active {
-      transform: scale(1.3);
-      background: rgba(139, 126, 184, 0.15);
+      transform: scale(0.95);
     }
     
     .quick-access {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 15px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
     
-    .quick-card {
+    .luna-card, .quick-card {
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      padding: 25px 20px;
       border-radius: 20px;
-      padding: 20px;
-      color: white;
+      text-align: left;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(139, 126, 184, 0.3);
+      color: white;
       text-decoration: none;
       display: block;
-      min-height: 110px;
     }
     
-    .quick-card:active {
-      transform: scale(0.98);
-    }
-    
-    .luna-card {
-      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
-      box-shadow: 0 8px 20px rgba(139, 126, 184, 0.3);
-    }
-    
-    .crise-card {
+    .quick-card.crisis {
       background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
-      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    }
+    
+    .luna-card:active, .quick-card:active {
+      transform: scale(0.97);
+    }
+    
+    .quick-icon {
+      font-size: 28px;
+      margin-bottom: 10px;
     }
     
     .quick-title {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: bold;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      margin-bottom: 5px;
     }
     
-    .quick-subtitle {
+    .quick-desc {
       font-size: 13px;
       opacity: 0.95;
       line-height: 1.4;
     }
     
     .tasks-section {
-      margin-bottom: 30px;
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     }
     
     .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
     
     .section-title {
-      font-size: 17px;
-      font-weight: 600;
+      font-size: 20px;
+      font-weight: bold;
       color: #2D2D3A;
     }
     
     .add-task-btn {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      color: white;
+      border: none;
       font-size: 24px;
       cursor: pointer;
-      color: #8B7EB8;
-      background: none;
-      border: none;
-      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: all 0.3s;
     }
     
     .add-task-btn:active {
-      transform: scale(1.2);
+      transform: scale(0.9);
     }
     
     .task-item {
       display: flex;
       align-items: center;
-      gap: 15px;
-      padding: 18px;
+      gap: 12px;
+      padding: 15px;
+      background: rgba(139, 126, 184, 0.05);
+      border-radius: 12px;
       margin-bottom: 10px;
-      background: rgba(139, 126, 184, 0.06);
-      border-radius: 15px;
-      transition: all 0.2s;
       cursor: pointer;
+      transition: all 0.2s;
     }
     
     .task-item:active {
-      background: rgba(139, 126, 184, 0.12);
-      transform: scale(0.98);
+      background: rgba(139, 126, 184, 0.1);
     }
     
     .task-checkbox {
-      min-width: 24px;
       width: 24px;
       height: 24px;
-      border: 3px solid #8B7EB8;
-      border-radius: 8px;
+      border: 2px solid #8B7EB8;
+      border-radius: 6px;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
       transition: all 0.3s;
-      background: white;
     }
     
-    .task-checkbox.checked {
+    .task-item.done .task-checkbox {
       background: #8B7EB8;
+    }
+    
+    .task-checkbox::after {
+      content: '✓';
       color: white;
+      font-size: 16px;
+      font-weight: bold;
+      display: none;
+    }
+    
+    .task-item.done .task-checkbox::after {
+      display: block;
     }
     
     .task-text {
       flex: 1;
       font-size: 15px;
       color: #2D2D3A;
-      font-weight: 500;
-    }
-    
-    .task-done {
-      opacity: 0.5;
-      text-decoration: line-through;
-    }
-    
-    .task-delete {
-      font-size: 20px;
-      color: #ff6b6b;
-      cursor: pointer;
-      padding: 5px;
-      opacity: 0;
       transition: all 0.3s;
     }
     
+    .task-item.done .task-text {
+      text-decoration: line-through;
+      opacity: 0.5;
+    }
+    
+    .task-delete {
+      opacity: 0;
+      transition: all 0.3s;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    
     .task-item:hover .task-delete {
-      opacity: 1;
+      opacity: 0.6;
+    }
+    
+    .task-delete:hover {
+      opacity: 1 !important;
     }
     
     .graph-section {
-      background: rgba(168, 216, 234, 0.12);
-      border-radius: 20px;
-      padding: 20px;
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     }
     
     .graph-title {
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 20px;
+      font-weight: bold;
       color: #2D2D3A;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       text-align: center;
     }
     
     .graph-placeholder {
-      height: 100px;
-      background: white;
-      border-radius: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #8B7EB8;
-      font-size: 40px;
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+    }
+    
+    .graph-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .graph-text {
+      font-size: 15px;
     }
     
     .bottom-nav {
@@ -330,10 +340,6 @@ Home - Fix alignement emojis mobile
       cursor: pointer;
       transition: all 0.3s;
       opacity: 0.4;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 5px;
       text-decoration: none;
     }
     
@@ -343,8 +349,7 @@ Home - Fix alignement emojis mobile
     }
     
     .nav-item:active {
-      transform: scale(1.25);
-      opacity: 1;
+      transform: scale(0.9);
     }
     
     .modal-overlay {
@@ -354,7 +359,7 @@ Home - Fix alignement emojis mobile
       right: 0;
       bottom: 0;
       background: rgba(0,0,0,0.5);
-      z-index: 3000;
+      z-index: 2000;
       display: none;
     }
     
@@ -378,7 +383,7 @@ Home - Fix alignement emojis mobile
       padding: 30px;
       max-width: 90%;
       width: 400px;
-      z-index: 3001;
+      z-index: 2001;
       display: none;
       box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     }
@@ -412,16 +417,27 @@ Home - Fix alignement emojis mobile
       color: #888;
     }
     
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #2D2D3A;
+      margin-bottom: 8px;
+      display: block;
+    }
+    
     .form-input {
       width: 100%;
-      padding: 15px;
+      padding: 12px 15px;
       border: 2px solid #E5E5E5;
       border-radius: 12px;
       font-size: 15px;
       font-family: inherit;
       outline: none;
       transition: border 0.3s;
-      margin-bottom: 20px;
     }
     
     .form-input:focus {
@@ -454,23 +470,17 @@ Home - Fix alignement emojis mobile
         <span>MindFlow</span>
       </div>
       <div class="icons">
-        <a href="agenda.html" style="text-decoration: none;">🔔</a>
-        <a href="profil.html" style="text-decoration: none;">👤</a>
+        <a href="agenda.html">🔔</a>
+        <a href="profil.html">👤</a>
       </div>
     </div>
-
+    
     <div class="main-card">
       <div class="greeting">Bonjour ! 🌙</div>
       <div class="subtitle">Comment te sens-tu aujourd'hui ?</div>
-```
-
----
-
-## ✅ **COMMIT !**
-
-**Message :**
-```
-Home - Fix position header
+      
+      <div class="mood-section">
+        <div class="mood-question">Choisis ton humeur</div>
         <div class="mood-options">
           <a href="mood.html" class="mood-btn">😊</a>
           <a href="mood.html" class="mood-btn">😐</a>
@@ -479,36 +489,35 @@ Home - Fix position header
           <a href="mood.html" class="mood-btn">😡</a>
         </div>
       </div>
-      
-      <div class="quick-access">
-        <div class="luna-card quick-card" onclick="openLuna()">
-          <div class="quick-title">
-            <span>💬</span>
-            <span>Luna</span>
-          </div>
-          <div class="quick-subtitle">Compagnon IA empathique 24/7</div>
-        </div>
-        
-        <a href="crise.html" class="crise-card quick-card">
-          <div class="quick-title">
-            <span>🚨</span>
-            <span>Crise</span>
-          </div>
-          <div class="quick-subtitle">Urgences et stratégies rapides</div>
-        </a>
+    </div>
+    
+    <div class="quick-access">
+      <div class="luna-card">
+        <div class="quick-icon">💬</div>
+        <div class="quick-title">Luna</div>
+        <div class="quick-desc">Compagnon IA empathique 24/7</div>
       </div>
       
-      <div class="tasks-section">
-        <div class="section-header">
-          <div class="section-title">Aujourd'hui :</div>
-          <button class="add-task-btn" onclick="openAddTask()">+</button>
-        </div>
-        <div id="tasksList"></div>
+      <a href="crise.html" class="quick-card crisis">
+        <div class="quick-icon">🚨</div>
+        <div class="quick-title">Crise</div>
+        <div class="quick-desc">Urgences et stratégies rapides</div>
+      </a>
+    </div>
+    
+    <div class="tasks-section">
+      <div class="section-header">
+        <div class="section-title">Aujourd'hui :</div>
+        <button class="add-task-btn" onclick="openAddTask()">+</button>
       </div>
-      
-      <div class="graph-section">
-        <div class="graph-title">Cette semaine</div>
-        <div class="graph-placeholder">📊</div>
+      <div id="tasksList"></div>
+    </div>
+    
+    <div class="graph-section">
+      <div class="graph-title">Cette semaine</div>
+      <div class="graph-placeholder">
+        <div class="graph-icon">📊</div>
+        <div class="graph-text">Tes statistiques apparaîtront ici</div>
       </div>
     </div>
   </div>
@@ -529,89 +538,69 @@ Home - Fix position header
       <div class="modal-close" onclick="closeModal()">×</div>
     </div>
     
-    <input type="text" class="form-input" id="taskInput" placeholder="Ex: Méditation 10 min">
+    <div class="form-group">
+      <label class="form-label">Nom de la tâche</label>
+      <input type="text" class="form-input" id="taskInput" placeholder="Ex: Méditation 10 min">
+    </div>
     
     <button class="save-btn" onclick="addTask()">💚 Ajouter</button>
   </div>
   
   <script>
+    // Tasks management
     const defaultTasks = [
       { id: 'checkin', text: 'Check-in du matin', link: 'mood.html' },
       { id: 'traitement', text: 'Traitement 10h', link: 'traitement.html' },
       { id: 'gratitude', text: 'Gratitude du soir', link: 'journal.html' }
     ];
     
-    function initTasks() {
+    function loadTasks() {
       const today = new Date().toISOString().split('T')[0];
       const savedDate = localStorage.getItem('mindflow_tasks_date');
       
+      let tasks = JSON.parse(localStorage.getItem('mindflow_tasks') || '[]');
+      
+      // Reset if new day
       if (savedDate !== today) {
-        localStorage.setItem('mindflow_tasks_date', today);
-        const tasks = defaultTasks.map(t => ({ ...t, done: false }));
+        tasks = defaultTasks.map(t => ({ ...t, done: false }));
         localStorage.setItem('mindflow_tasks', JSON.stringify(tasks));
+        localStorage.setItem('mindflow_tasks_date', today);
       }
       
-      loadTasks();
+      displayTasks(tasks);
     }
     
-    function loadTasks() {
-      const tasks = JSON.parse(localStorage.getItem('mindflow_tasks') || '[]');
+    function displayTasks(tasks) {
       const list = document.getElementById('tasksList');
-      
-      if (tasks.length === 0) {
-        const defaultTasksWithDone = defaultTasks.map(t => ({ ...t, done: false }));
-        localStorage.setItem('mindflow_tasks', JSON.stringify(defaultTasksWithDone));
-        loadTasks();
-        return;
-      }
-      
       list.innerHTML = tasks.map((task, index) => `
-        <div class="task-item" onclick="toggleTask(${index})">
-          <div class="task-checkbox ${task.done ? 'checked' : ''}">
-            ${task.done ? '✓' : ''}
-          </div>
-          <div class="task-text ${task.done ? 'task-done' : ''}">${task.text}</div>
-          ${!task.id ? `<div class="task-delete" onclick="event.stopPropagation(); deleteTask(${index})">🗑️</div>` : ''}
+        <div class="task-item ${task.done ? 'done' : ''}" onclick="toggleTask(${index})">
+          <div class="task-checkbox"></div>
+          <div class="task-text">${task.text}</div>
+          ${!task.id ? `<span class="task-delete" onclick="event.stopPropagation(); deleteTask(${index})">🗑️</span>` : ''}
         </div>
       `).join('');
     }
     
     function toggleTask(index) {
-      const tasks = JSON.parse(localStorage.getItem('mindflow_tasks') || '[]');
+      let tasks = JSON.parse(localStorage.getItem('mindflow_tasks') || '[]');
       tasks[index].done = !tasks[index].done;
       localStorage.setItem('mindflow_tasks', JSON.stringify(tasks));
-      loadTasks();
-    }
-    
-    function openAddTask() {
-      document.getElementById('taskInput').value = '';
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('addTaskModal').classList.add('show');
-    }
-    
-    function addTask() {
-      const text = document.getElementById('taskInput').value.trim();
-      
-      if (!text) {
-        alert('Entre une tâche ! 💚');
-        return;
-      }
-      
-      const tasks = JSON.parse(localStorage.getItem('mindflow_tasks') || '[]');
-      tasks.push({ text: text, done: false });
-      localStorage.setItem('mindflow_tasks', JSON.stringify(tasks));
-      
-      closeModal();
-      loadTasks();
+      displayTasks(tasks);
     }
     
     function deleteTask(index) {
       if (!confirm('Supprimer cette tâche ?')) return;
-      
-      const tasks = JSON.parse(localStorage.getItem('mindflow_tasks') || '[]');
+      let tasks = JSON.parse(localStorage.getItem('mindflow_tasks') || '[]');
       tasks.splice(index, 1);
       localStorage.setItem('mindflow_tasks', JSON.stringify(tasks));
-      loadTasks();
+      displayTasks(tasks);
+    }
+    
+    function openAddTask() {
+      document.getElementById('modalOverlay').classList.add('show');
+      document.getElementById('addTaskModal').classList.add('show');
+      document.getElementById('taskInput').value = '';
+      document.getElementById('taskInput').focus();
     }
     
     function closeModal() {
@@ -619,11 +608,23 @@ Home - Fix position header
       document.getElementById('addTaskModal').classList.remove('show');
     }
     
-    function openLuna() {
-      alert('Luna arrive bientôt ! 🌙\n\nL\'IA compagnon empathique sera intégré dans les prochaines versions.\n\nElle sera là pour toi 24/7 💚');
+    function addTask() {
+      const text = document.getElementById('taskInput').value.trim();
+      if (!text) {
+        alert('Entre un nom de tâche ! 💚');
+        return;
+      }
+      
+      let tasks = JSON.parse(localStorage.getItem('mindflow_tasks') || '[]');
+      tasks.push({ text, done: false });
+      localStorage.setItem('mindflow_tasks', JSON.stringify(tasks));
+      
+      closeModal();
+      displayTasks(tasks);
     }
     
-    initTasks();
+    // Load on start
+    loadTasks();
   </script>
   <script src="luna-bubble.js"></script>
 </body>
@@ -632,6 +633,8 @@ Home - Fix position header
 
 ---
 
-## ✅ **MESSAGE DE COMMIT :**
+## ✅ **COMMIT !**
+
+**Message :**
 ```
-Home - Système de tâches quotidiennes interactif + Reset auto
+Home - Reset complet avec code propre
