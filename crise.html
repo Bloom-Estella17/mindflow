@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>🚨 MindFlow - Plan de Crise</title>
+  <title>🚨 MindFlow - Crise</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ef4444">
   
   <style>
     * {
@@ -13,9 +15,23 @@
       -webkit-tap-highlight-color: transparent;
     }
     
+    :root {
+      --danger: #ef4444;
+      --danger-light: #fca5a5;
+      --primary: #8B7EB8;
+      --text-dark: #2D2D3A;
+      --text-gray: #666;
+      --shadow-sm: 0 4px 20px rgba(0,0,0,0.08);
+      --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 25px;
+      --transition: all 0.3s ease;
+    }
+    
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      background: linear-gradient(135deg, #ef4444 0%, #fca5a5 100%);
       min-height: 100vh;
       padding: 15px;
       padding-bottom: 100px;
@@ -34,249 +50,164 @@
       align-items: center;
       padding: 20px 25px;
       background: white;
-      border-radius: 20px;
+      border-radius: var(--radius-md);
       margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      box-shadow: var(--shadow-sm);
     }
     
     .back-btn {
       font-size: 24px;
       cursor: pointer;
       text-decoration: none;
+      transition: var(--transition);
     }
     
     .header-title {
       font-size: 20px;
       font-weight: bold;
-      color: #ff6b6b;
+      color: var(--danger);
     }
     
+    .header-placeholder { width: 24px; }
+    
     .emergency-card {
-      background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
-      border-radius: 25px;
+      background: white;
+      border-radius: var(--radius-lg);
       padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
-      color: white;
+      margin-bottom: 15px;
+      box-shadow: var(--shadow-sm);
+      border-left: 5px solid var(--danger);
     }
     
     .emergency-title {
-      font-size: 24px;
+      font-size: 18px;
       font-weight: bold;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-    
-    .emergency-subtitle {
-      font-size: 15px;
-      text-align: center;
-      margin-bottom: 20px;
-      opacity: 0.95;
-    }
-    
-    .emergency-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      color: var(--text-dark);
+      margin-bottom: 15px;
     }
     
     .emergency-btn {
-      background: rgba(255,255,255,0.25);
+      width: 100%;
       padding: 15px;
-      border-radius: 15px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s;
-      text-decoration: none;
+      background: var(--danger);
       color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 16px;
       font-weight: bold;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      display: block;
+      text-align: center;
     }
     
     .emergency-btn:active {
-      background: rgba(255,255,255,0.4);
       transform: scale(0.98);
-    }
-    
-    .emergency-number {
-      font-size: 20px;
-      margin-top: 5px;
-    }
-    
-    .contact-item {
-      background: rgba(139, 126, 184, 0.08);
-      border-radius: 15px;
-      padding: 18px;
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .contact-info {
-      flex: 1;
-    }
-    
-    .contact-name {
-      font-size: 16px;
-      font-weight: bold;
-      color: #2D2D3A;
-      margin-bottom: 4px;
-    }
-    
-    .contact-phone {
-      font-size: 14px;
-      color: #8B7EB8;
-    }
-    
-    .contact-actions {
-      display: flex;
-      gap: 10px;
-    }
-    
-    .call-btn {
-      font-size: 24px;
-      text-decoration: none;
-      cursor: pointer;
     }
     
     .section-card {
       background: white;
-      border-radius: 25px;
+      border-radius: var(--radius-lg);
       padding: 25px;
       margin-bottom: 15px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      box-shadow: var(--shadow-sm);
     }
     
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
+    .section-number {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      background: var(--danger);
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 30px;
+      font-weight: bold;
+      margin-right: 10px;
     }
     
     .section-title {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
-      color: #2D2D3A;
-    }
-    
-    .add-btn {
-      font-size: 28px;
-      cursor: pointer;
-      color: #8B7EB8;
-    }
-    
-    .steps-container {
+      color: var(--text-dark);
       margin-bottom: 15px;
     }
     
-    .step-item {
-      background: rgba(255, 107, 107, 0.08);
-      border-radius: 15px;
-      padding: 18px;
-      margin-bottom: 12px;
-      border-left: 4px solid #ff6b6b;
+    .input-group {
+      margin-bottom: 15px;
     }
     
-    .step-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: start;
-      margin-bottom: 10px;
+    .input-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-gray);
+      margin-bottom: 8px;
+      display: block;
     }
     
-    .step-level {
-      font-size: 16px;
-      font-weight: bold;
-      color: #ff6b6b;
-    }
-    
-    .delete-icon {
-      font-size: 20px;
-      cursor: pointer;
-      color: #ff6b6b;
-    }
-    
-    .step-content {
+    .input-text, .input-textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #E5E5E5;
+      border-radius: var(--radius-sm);
       font-size: 15px;
-      color: #2D2D3A;
-      line-height: 1.5;
+      font-family: inherit;
+      outline: none;
+      transition: var(--transition);
     }
     
-    .signal-item {
-      background: rgba(139, 126, 184, 0.08);
-      border-radius: 12px;
-      padding: 15px;
-      margin-bottom: 10px;
+    .input-text:focus, .input-textarea:focus {
+      border-color: var(--danger);
+    }
+    
+    .input-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .contact-list {
+      list-style: none;
+    }
+    
+    .contact-item {
+      background: rgba(239, 68, 68, 0.05);
+      padding: 12px 15px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     
-    .signal-text {
-      font-size: 15px;
-      color: #2D2D3A;
+    .contact-name {
+      font-weight: 600;
+      color: var(--text-dark);
     }
     
-    .coping-item {
-      background: rgba(76, 175, 80, 0.08);
-      border-radius: 15px;
-      padding: 18px;
-      margin-bottom: 12px;
-      border-left: 4px solid #4CAF50;
+    .contact-phone {
+      color: var(--danger);
+      font-weight: 600;
+      text-decoration: none;
     }
     
-    .coping-title {
-      font-size: 16px;
-      font-weight: bold;
-      color: #4CAF50;
-      margin-bottom: 8px;
-    }
-    
-    .coping-content {
-      font-size: 14px;
-      color: #2D2D3A;
-      line-height: 1.5;
-    }
-    
-    .grounding-card {
-      background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
-      border-radius: 25px;
-      padding: 25px;
-      margin-bottom: 15px;
-      box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
-      color: white;
-    }
-    
-    .grounding-title {
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 15px;
-      text-align: center;
-    }
-    
-    .grounding-step {
-      background: rgba(255,255,255,0.2);
+    .save-btn {
+      width: 100%;
       padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 10px;
-      font-size: 15px;
-      line-height: 1.6;
+      background: linear-gradient(135deg, var(--primary) 0%, #B8A7D5 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: var(--transition);
     }
     
-    .empty-state {
-      text-align: center;
-      padding: 30px 20px;
-      color: #999;
-    }
-    
-    .empty-icon {
-      font-size: 50px;
-      margin-bottom: 10px;
-    }
-    
-    .empty-text {
-      font-size: 15px;
+    .save-btn:active {
+      transform: scale(0.98);
     }
     
     .bottom-nav {
@@ -285,11 +216,11 @@
       left: 50%;
       transform: translateX(-50%);
       background: white;
-      border-radius: 25px;
+      border-radius: var(--radius-lg);
       padding: 15px 25px;
       display: flex;
       gap: 35px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      box-shadow: var(--shadow-md);
       z-index: 1000;
       max-width: 350px;
       width: calc(100% - 40px);
@@ -299,7 +230,7 @@
     .nav-item {
       font-size: 26px;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: var(--transition);
       opacity: 0.4;
       text-decoration: none;
     }
@@ -308,170 +239,6 @@
       opacity: 1;
       transform: scale(1.15);
     }
-    
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 3000;
-      display: none;
-    }
-    
-    .modal-overlay.show {
-      display: block;
-      animation: fadeIn 0.3s ease;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    .modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      border-radius: 25px;
-      padding: 30px;
-      max-width: 90%;
-      width: 400px;
-      max-height: 80vh;
-      overflow-y: auto;
-      z-index: 3001;
-      display: none;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    }
-    
-    .modal.show {
-      display: block;
-      animation: slideUp 0.3s ease;
-    }
-    
-    @keyframes slideUp {
-      from { transform: translate(-50%, -40%); opacity: 0; }
-      to { transform: translate(-50%, -50%); opacity: 1; }
-    }
-    
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-    }
-    
-    .modal-title {
-      font-size: 22px;
-      font-weight: bold;
-      color: #2D2D3A;
-    }
-    
-    .modal-close {
-      font-size: 28px;
-      cursor: pointer;
-      color: #888;
-    }
-    
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    .form-label {
-      font-size: 15px;
-      font-weight: 600;
-      color: #2D2D3A;
-      margin-bottom: 8px;
-      display: block;
-    }
-    
-    .form-input {
-      width: 100%;
-      padding: 12px 15px;
-      border: 2px solid #E5E5E5;
-      border-radius: 12px;
-      font-size: 15px;
-      font-family: inherit;
-      outline: none;
-      transition: border 0.3s;
-    }
-    
-    .form-input:focus {
-      border-color: #8B7EB8;
-    }
-    
-    .form-textarea {
-      width: 100%;
-      min-height: 100px;
-      padding: 12px 15px;
-      border: 2px solid #E5E5E5;
-      border-radius: 12px;
-      font-size: 15px;
-      font-family: inherit;
-      outline: none;
-      transition: border 0.3s;
-      resize: vertical;
-    }
-    
-    .form-textarea:focus {
-      border-color: #8B7EB8;
-    }
-    
-    .save-btn {
-      width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
-      color: white;
-      border: none;
-      border-radius: 15px;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: all 0.3s;
-    }
-    
-    .save-btn:active {
-      transform: scale(0.98);
-    }
-    
-    .success-message {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      padding: 30px 40px;
-      border-radius: 20px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-      text-align: center;
-      z-index: 4000;
-      display: none;
-    }
-    
-    .success-message.show {
-      display: block;
-      animation: popup 0.3s ease;
-    }
-    
-    @keyframes popup {
-      from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
-      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    }
-    
-    .success-icon {
-      font-size: 60px;
-      margin-bottom: 15px;
-    }
-    
-    .success-text {
-      font-size: 20px;
-      font-weight: bold;
-      color: #2D2D3A;
-    }
   </style>
 </head>
 <body>
@@ -479,72 +246,87 @@
     <div class="header">
       <a href="index.html" class="back-btn">←</a>
       <div class="header-title">Plan de Crise</div>
-      <div style="width: 24px;"></div>
+      <div class="header-placeholder"></div>
     </div>
     
     <div class="emergency-card">
-      <div class="emergency-title">🚨 Urgences</div>
-      <div class="emergency-subtitle">Aide immédiate disponible</div>
-      <div class="emergency-buttons">
-        <a href="tel:15" class="emergency-btn">
-          <div>SAMU</div>
-          <div class="emergency-number">15</div>
-        </a>
-        <a href="tel:3114" class="emergency-btn">
-          <div>Suicide</div>
-          <div class="emergency-number">3114</div>
-        </a>
-        <a href="tel:112" class="emergency-btn">
-          <div>Urgences</div>
-          <div class="emergency-number">112</div>
-        </a>
-        <a href="tel:0800858858" class="emergency-btn">
-          <div>Jeunes</div>
-          <div class="emergency-number">0800 858 858</div>
-        </a>
-      </div>
-    </div>
-    
-    <div class="grounding-card">
-      <div class="grounding-title">🧘 Technique 5-4-3-2-1</div>
-      <div class="grounding-step"><strong>5 choses</strong> que tu VOIS autour de toi</div>
-      <div class="grounding-step"><strong>4 choses</strong> que tu peux TOUCHER</div>
-      <div class="grounding-step"><strong>3 sons</strong> que tu ENTENDS</div>
-      <div class="grounding-step"><strong>2 choses</strong> que tu peux SENTIR</div>
-      <div class="grounding-step"><strong>1 chose</strong> que tu peux GOÛTER</div>
+      <div class="emergency-title">🚨 Numéros d'urgence</div>
+      <a href="tel:15" class="emergency-btn">📞 SAMU - 15</a>
+      <a href="tel:3114" class="emergency-btn">💚 Prévention Suicide - 3114</a>
+      <a href="tel:0140095095" class="emergency-btn">☎️ SOS Amitié - 09 72 39 40 50</a>
     </div>
     
     <div class="section-card">
-      <div class="section-header">
-        <div class="section-title">📱 Mes contacts de confiance</div>
-        <div class="add-btn" onclick="openContactModal()">+</div>
+      <div class="section-title">
+        <span class="section-number">1</span>
+        Signes avant-coureurs
       </div>
-      <div id="contactsList"></div>
+      <div class="input-group">
+        <label class="input-label">Quels signes m'alertent qu'une crise arrive ?</label>
+        <textarea 
+          class="input-textarea" 
+          id="signes"
+          placeholder="Ex: Insomnie, pensées noires, isolement, irritabilité..."
+        ></textarea>
+      </div>
     </div>
     
     <div class="section-card">
-      <div class="section-header">
-        <div class="section-title">Mes signaux d'alerte</div>
-        <div class="add-btn" onclick="openSignalModal()">+</div>
+      <div class="section-title">
+        <span class="section-number">2</span>
+        Stratégies apaisantes
       </div>
-      <div id="signalsList"></div>
+      <div class="input-group">
+        <label class="input-label">Ce qui m'aide à me calmer :</label>
+        <textarea 
+          class="input-textarea" 
+          id="strategies"
+          placeholder="Ex: Respiration, musique, marche, appeler quelqu'un..."
+        ></textarea>
+      </div>
     </div>
     
     <div class="section-card">
-      <div class="section-header">
-        <div class="section-title">Mon plan d'action</div>
-        <div class="add-btn" onclick="openStepModal()">+</div>
+      <div class="section-title">
+        <span class="section-number">3</span>
+        Personnes de confiance
       </div>
-      <div id="stepsList"></div>
+      <ul class="contact-list">
+        <li class="contact-item">
+          <span class="contact-name">Urgences psychiatriques</span>
+          <a href="tel:15" class="contact-phone">15</a>
+        </li>
+        <li class="contact-item">
+          <span class="contact-name">3114 Prévention</span>
+          <a href="tel:3114" class="contact-phone">3114</a>
+        </li>
+      </ul>
+      <div class="input-group">
+        <label class="input-label">Mes contacts de confiance :</label>
+        <textarea 
+          class="input-textarea" 
+          id="contacts"
+          placeholder="Nom - Téléphone&#10;Ex: Marie - 06 12 34 56 78&#10;    Psy - 01 23 45 67 89"
+        ></textarea>
+      </div>
     </div>
     
     <div class="section-card">
-      <div class="section-header">
-        <div class="section-title">Mes stratégies de coping</div>
-        <div class="add-btn" onclick="openCopingModal()">+</div>
+      <div class="section-title">
+        <span class="section-number">4</span>
+        Lieux sécurisants
       </div>
-      <div id="copingList"></div>
+      <div class="input-group">
+        <label class="input-label">Où puis-je aller si je ne me sens pas en sécurité ?</label>
+        <textarea 
+          class="input-textarea" 
+          id="lieux"
+          placeholder="Ex: Urgences de l'hôpital X, chez un ami, centre de crise..."
+        ></textarea>
+      </div>
     </div>
+    
+    <button class="save-btn" onclick="criseManager.save()">💚 Enregistrer mon plan</button>
   </div>
   
   <div class="bottom-nav">
@@ -555,353 +337,41 @@
     <a href="profil.html" class="nav-item">👤</a>
   </div>
   
-  <!-- Contact Modal -->
-  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
-  <div class="modal" id="contactModal">
-    <div class="modal-header">
-      <div class="modal-title">Ajouter un contact</div>
-      <div class="modal-close" onclick="closeModal()">×</div>
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Nom / Relation</label>
-      <input type="text" class="form-input" id="contactName" placeholder="Ex: Maman, Marie, Dr. Dupont">
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Numéro de téléphone</label>
-      <input type="tel" class="form-input" id="contactPhone" placeholder="Ex: 06 12 34 56 78">
-    </div>
-    
-    <button class="save-btn" onclick="saveContact()">💚 Enregistrer</button>
-  </div>
-  
-  <!-- Signal Modal -->
-  <div class="modal" id="signalModal">
-    <div class="modal-header">
-      <div class="modal-title">Ajouter un signal</div>
-      <div class="modal-close" onclick="closeModal()">×</div>
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Signal d'alerte</label>
-      <input type="text" class="form-input" id="signalText" placeholder="Ex: Je m'isole, je ne mange plus...">
-    </div>
-    
-    <button class="save-btn" onclick="saveSignal()">💚 Enregistrer</button>
-  </div>
-  
-  <!-- Step Modal -->
-  <div class="modal" id="stepModal">
-    <div class="modal-header">
-      <div class="modal-title">Ajouter une étape</div>
-      <div class="modal-close" onclick="closeModal()">×</div>
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Niveau de crise</label>
-      <input type="text" class="form-input" id="stepLevel" placeholder="Ex: Léger, Modéré, Sévère">
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Action à prendre</label>
-      <textarea class="form-textarea" id="stepAction" placeholder="Que faire à ce niveau ?"></textarea>
-    </div>
-    
-    <button class="save-btn" onclick="saveStep()">💚 Enregistrer</button>
-  </div>
-  
-  <!-- Coping Modal -->
-  <div class="modal" id="copingModal">
-    <div class="modal-header">
-      <div class="modal-title">Ajouter une stratégie</div>
-      <div class="modal-close" onclick="closeModal()">×</div>
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Titre</label>
-      <input type="text" class="form-input" id="copingTitle" placeholder="Ex: Respiration, Musique...">
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Description</label>
-      <textarea class="form-textarea" id="copingDesc" placeholder="Comment ça m'aide ?"></textarea>
-    </div>
-    
-    <button class="save-btn" onclick="saveCoping()">💚 Enregistrer</button>
-  </div>
-  
-  <div class="success-message" id="successMessage">
-    <div class="success-icon">✅</div>
-    <div class="success-text">Enregistré !</div>
-  </div>
-  
   <script>
-    function loadCrisisData() {
-      loadContacts();
-      loadSignals();
-      loadSteps();
-      loadCoping();
-    }
+    const STORAGE_KEY = 'mindflow_crise';
     
-    function loadContacts() {
-      const contacts = JSON.parse(localStorage.getItem('mindflow_crisis_contacts') || '[]');
-      const list = document.getElementById('contactsList');
+    const criseManager = {
+      init() {
+        this.loadData();
+      },
       
-      if (contacts.length === 0) {
-        list.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">📱</div>
-            <div class="empty-text">Ajoute tes contacts de confiance</div>
-          </div>
-        `;
-        return;
+      loadData() {
+        const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        
+        document.getElementById('signes').value = data.signes || '';
+        document.getElementById('strategies').value = data.strategies || '';
+        document.getElementById('contacts').value = data.contacts || '';
+        document.getElementById('lieux').value = data.lieux || '';
+      },
+      
+      save() {
+        const data = {
+          signes: document.getElementById('signes').value.trim(),
+          strategies: document.getElementById('strategies').value.trim(),
+          contacts: document.getElementById('contacts').value.trim(),
+          lieux: document.getElementById('lieux').value.trim(),
+          lastUpdate: Date.now()
+        };
+        
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        
+        alert('✅ Ton plan de crise est enregistré !\n\nIl sera toujours accessible en cas d\'urgence. 💚');
       }
-      
-      list.innerHTML = contacts.map(contact => `
-        <div class="contact-item">
-          <div class="contact-info">
-            <div class="contact-name">${contact.name}</div>
-            <div class="contact-phone">${contact.phone}</div>
-          </div>
-          <div class="contact-actions">
-            <a href="tel:${contact.phone.replace(/\s/g, '')}" class="call-btn">📞</a>
-            <div class="delete-icon" onclick="deleteContact(${contact.id})">🗑️</div>
-          </div>
-        </div>
-      `).join('');
-    }
+    };
     
-    function loadSignals() {
-      const signals = JSON.parse(localStorage.getItem('mindflow_crisis_signals') || '[]');
-      const list = document.getElementById('signalsList');
-      
-      if (signals.length === 0) {
-        list.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">⚠️</div>
-            <div class="empty-text">Ajoute tes signaux d'alerte</div>
-          </div>
-        `;
-        return;
-      }
-      
-      list.innerHTML = signals.map(signal => `
-        <div class="signal-item">
-          <div class="signal-text">${signal.text}</div>
-          <div class="delete-icon" onclick="deleteSignal(${signal.id})">🗑️</div>
-        </div>
-      `).join('');
-    }
-    
-    function loadSteps() {
-      const steps = JSON.parse(localStorage.getItem('mindflow_crisis_steps') || '[]');
-      const list = document.getElementById('stepsList');
-      
-      if (steps.length === 0) {
-        list.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">📋</div>
-            <div class="empty-text">Crée ton plan d'action</div>
-          </div>
-        `;
-        return;
-      }
-      
-      list.innerHTML = steps.map(step => `
-        <div class="step-item">
-          <div class="step-header">
-            <div class="step-level">${step.level}</div>
-            <div class="delete-icon" onclick="deleteStep(${step.id})">🗑️</div>
-          </div>
-          <div class="step-content">${step.action}</div>
-        </div>
-      `).join('');
-    }
-    
-    function loadCoping() {
-      const coping = JSON.parse(localStorage.getItem('mindflow_crisis_coping') || '[]');
-      const list = document.getElementById('copingList');
-      
-      if (coping.length === 0) {
-        list.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">🛠️</div>
-            <div class="empty-text">Ajoute tes stratégies</div>
-          </div>
-        `;
-        return;
-      }
-      
-      list.innerHTML = coping.map(item => `
-        <div class="coping-item">
-          <div style="display: flex; justify-content: space-between; align-items: start;">
-            <div class="coping-title">${item.title}</div>
-            <div class="delete-icon" onclick="deleteCoping(${item.id})">🗑️</div>
-          </div>
-          <div class="coping-content">${item.desc}</div>
-        </div>
-      `).join('');
-    }
-    
-    function openContactModal() {
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('contactModal').classList.add('show');
-    }
-    
-    function openSignalModal() {
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('signalModal').classList.add('show');
-    }
-    
-    function openStepModal() {
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('stepModal').classList.add('show');
-    }
-    
-    function openCopingModal() {
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('copingModal').classList.add('show');
-    }
-    
-    function closeModal() {
-      document.getElementById('modalOverlay').classList.remove('show');
-      document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('show'));
-      document.getElementById('contactName').value = '';
-      document.getElementById('contactPhone').value = '';
-      document.getElementById('signalText').value = '';
-      document.getElementById('stepLevel').value = '';
-      document.getElementById('stepAction').value = '';
-      document.getElementById('copingTitle').value = '';
-      document.getElementById('copingDesc').value = '';
-    }
-    
-    function saveContact() {
-      const name = document.getElementById('contactName').value.trim();
-      const phone = document.getElementById('contactPhone').value.trim();
-      
-      if (!name || !phone) {
-        alert('Remplis tous les champs ! 💚');
-        return;
-      }
-      
-      const contacts = JSON.parse(localStorage.getItem('mindflow_crisis_contacts') || '[]');
-      contacts.push({ id: Date.now(), name: name, phone: phone });
-      localStorage.setItem('mindflow_crisis_contacts', JSON.stringify(contacts));
-      
-      closeModal();
-      showSuccess();
-      loadContacts();
-    }
-    
-    function saveSignal() {
-      const text = document.getElementById('signalText').value.trim();
-      if (!text) {
-        alert('Entre un signal d\'alerte ! 💚');
-        return;
-      }
-      
-      const signals = JSON.parse(localStorage.getItem('mindflow_crisis_signals') || '[]');
-      signals.push({ id: Date.now(), text: text });
-      localStorage.setItem('mindflow_crisis_signals', JSON.stringify(signals));
-      
-      closeModal();
-      showSuccess();
-      loadSignals();
-    }
-    
-    function saveStep() {
-      const level = document.getElementById('stepLevel').value.trim();
-      const action = document.getElementById('stepAction').value.trim();
-      
-      if (!level || !action) {
-        alert('Remplis tous les champs ! 💚');
-        return;
-      }
-      
-      const steps = JSON.parse(localStorage.getItem('mindflow_crisis_steps') || '[]');
-      steps.push({ id: Date.now(), level: level, action: action });
-      localStorage.setItem('mindflow_crisis_steps', JSON.stringify(steps));
-      
-      closeModal();
-      showSuccess();
-      loadSteps();
-    }
-    
-    function saveCoping() {
-      const title = document.getElementById('copingTitle').value.trim();
-      const desc = document.getElementById('copingDesc').value.trim();
-      
-      if (!title || !desc) {
-        alert('Remplis tous les champs ! 💚');
-        return;
-      }
-      
-      const coping = JSON.parse(localStorage.getItem('mindflow_crisis_coping') || '[]');
-      coping.push({ id: Date.now(), title: title, desc: desc });
-      localStorage.setItem('mindflow_crisis_coping', JSON.stringify(coping));
-      
-      closeModal();
-      showSuccess();
-      loadCoping();
-    }
-    
-    function deleteContact(id) {
-      if (!confirm('Supprimer ce contact ?')) return;
-      let contacts = JSON.parse(localStorage.getItem('mindflow_crisis_contacts') || '[]');
-      contacts = contacts.filter(c => c.id !== id);
-      localStorage.setItem('mindflow_crisis_contacts', JSON.stringify(contacts));
-      loadContacts();
-    }
-    
-    function deleteSignal(id) {
-      if (!confirm('Supprimer ce signal ?')) return;
-      let signals = JSON.parse(localStorage.getItem('mindflow_crisis_signals') || '[]');
-      signals = signals.filter(s => s.id !== id);
-      localStorage.setItem('mindflow_crisis_signals', JSON.stringify(signals));
-      loadSignals();
-    }
-    
-    function deleteStep(id) {
-      if (!confirm('Supprimer cette étape ?')) return;
-      let steps = JSON.parse(localStorage.getItem('mindflow_crisis_steps') || '[]');
-      steps = steps.filter(s => s.id !== id);
-      localStorage.setItem('mindflow_crisis_steps', JSON.stringify(steps));
-      loadSteps();
-    }
-    
-    function deleteCoping(id) {
-      if (!confirm('Supprimer cette stratégie ?')) return;
-      let coping = JSON.parse(localStorage.getItem('mindflow_crisis_coping') || '[]');
-      coping = coping.filter(c => c.id !== id);
-      localStorage.setItem('mindflow_crisis_coping', JSON.stringify(coping));
-      loadCoping();
-    }
-    
-    function showSuccess() {
-      const msg = document.getElementById('successMessage');
-      msg.classList.add('show');
-      setTimeout(() => msg.classList.remove('show'), 1500);
-    }
-    
-    loadCrisisData();
+    document.addEventListener('DOMContentLoaded', () => {
+      criseManager.init();
+    });
   </script>
-  <script src="luna-bubble.js"></script>
-```
-
-**5️⃣ Commit !**
-
-**Message :**
-```
-Crise - Ajout bulle Luna
 </body>
 </html>
-```
-
----
-
-## ✅ **COMMIT !**
-
-**Message :**
-```
-Ajout section contacts de confiance dans Plan de Crise
