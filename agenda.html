@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>📅 MindFlow - Agenda</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#8B7EB8">
   
   <style>
     * {
@@ -13,9 +15,30 @@
       -webkit-tap-highlight-color: transparent;
     }
     
+    :root {
+      --primary: #8B7EB8;
+      --primary-light: #B8A7D5;
+      --secondary: #A8D8EA;
+      --text-dark: #2D2D3A;
+      --text-gray: #666;
+      --text-light: #888;
+      --bg-card: rgba(139, 126, 184, 0.05);
+      --shadow-sm: 0 4px 20px rgba(0,0,0,0.08);
+      --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 25px;
+      --transition: all 0.3s ease;
+      
+      --type-psy: #8B7EB8;
+      --type-medecin: #3b82f6;
+      --type-activite: #10b981;
+      --type-autre: #f59e0b;
+    }
+    
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
       min-height: 100vh;
       padding: 15px;
       padding-bottom: 100px;
@@ -34,28 +57,33 @@
       align-items: center;
       padding: 20px 25px;
       background: white;
-      border-radius: 20px;
+      border-radius: var(--radius-md);
       margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      box-shadow: var(--shadow-sm);
     }
     
     .back-btn {
       font-size: 24px;
       cursor: pointer;
       text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .back-btn:active {
+      transform: scale(1.2);
     }
     
     .header-title {
       font-size: 20px;
       font-weight: bold;
-      color: #8B7EB8;
+      color: var(--primary);
     }
     
     .add-btn {
       font-size: 28px;
       cursor: pointer;
-      color: #8B7EB8;
-      transition: all 0.3s;
+      color: var(--primary);
+      transition: var(--transition);
     }
     
     .add-btn:active {
@@ -63,186 +91,188 @@
     }
     
     .quick-add-card {
-      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
-      border-radius: 25px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-radius: var(--radius-lg);
       padding: 25px;
       margin-bottom: 20px;
-      box-shadow: 0 8px 20px rgba(139, 126, 184, 0.3);
+      box-shadow: 0 4px 20px rgba(139, 126, 184, 0.3);
       color: white;
-    }
-    
-    .quick-add-title {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 15px;
       text-align: center;
-    }
-    
-    .quick-add-btn {
-      width: 100%;
-      padding: 15px;
-      background: rgba(255,255,255,0.25);
-      color: white;
-      border: none;
-      border-radius: 15px;
-      font-size: 17px;
-      font-weight: bold;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: var(--transition);
     }
     
-    .quick-add-btn:active {
-      background: rgba(255,255,255,0.4);
+    .quick-add-card:active {
       transform: scale(0.98);
     }
     
-    .stats-card {
-      background: white;
-      border-radius: 25px;
-      padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    .quick-add-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+    
+    .quick-add-text {
+      font-size: 18px;
+      font-weight: bold;
     }
     
     .stats-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, 1fr);
       gap: 15px;
+      margin-bottom: 20px;
     }
     
     .stat-item {
-      background: rgba(139, 126, 184, 0.08);
+      background: white;
       padding: 20px;
-      border-radius: 15px;
+      border-radius: var(--radius-md);
       text-align: center;
+      box-shadow: var(--shadow-sm);
     }
     
     .stat-value {
       font-size: 32px;
       font-weight: bold;
-      color: #8B7EB8;
+      color: var(--primary);
       margin-bottom: 5px;
     }
     
     .stat-label {
       font-size: 13px;
-      color: #666;
+      color: var(--text-gray);
     }
     
-    .section-card {
+    .appointments-card {
       background: white;
-      border-radius: 25px;
+      border-radius: var(--radius-lg);
       padding: 25px;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
     }
     
-    .section-title {
+    .card-title {
       font-size: 20px;
       font-weight: bold;
-      color: #2D2D3A;
+      color: var(--text-dark);
       margin-bottom: 20px;
     }
     
-    .rdv-item {
-      background: rgba(139, 126, 184, 0.05);
-      border-radius: 15px;
-      padding: 18px;
-      margin-bottom: 12px;
-      border-left: 4px solid;
-      position: relative;
-      cursor: pointer;
-      transition: all 0.2s;
+    .appointment-list {
+      list-style: none;
     }
     
-    .rdv-item:active {
+    .appointment-item {
+      background: var(--bg-card);
+      padding: 18px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+      border-left: 4px solid var(--primary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .appointment-item:active {
       transform: scale(0.98);
       background: rgba(139, 126, 184, 0.1);
     }
     
-    .rdv-type-psy { border-left-color: #8B7EB8; }
-    .rdv-type-medecin { border-left-color: #3b82f6; }
-    .rdv-type-activite { border-left-color: #10b981; }
-    .rdv-type-autre { border-left-color: #f59e0b; }
+    .appointment-item.type-psy {
+      border-left-color: var(--type-psy);
+    }
     
-    .rdv-header {
+    .appointment-item.type-medecin {
+      border-left-color: var(--type-medecin);
+    }
+    
+    .appointment-item.type-activite {
+      border-left-color: var(--type-activite);
+    }
+    
+    .appointment-item.type-autre {
+      border-left-color: var(--type-autre);
+    }
+    
+    .appointment-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     
-    .rdv-title {
+    .appointment-title {
       font-size: 17px;
       font-weight: bold;
-      color: #2D2D3A;
-      margin-bottom: 5px;
+      color: var(--text-dark);
+      flex: 1;
     }
     
-    .rdv-type-badge {
+    .appointment-badge {
       padding: 4px 10px;
-      border-radius: 8px;
-      font-size: 12px;
+      border-radius: 12px;
+      font-size: 11px;
       font-weight: 600;
       color: white;
     }
     
-    .badge-psy { background: #8B7EB8; }
-    .badge-medecin { background: #3b82f6; }
-    .badge-activite { background: #10b981; }
-    .badge-autre { background: #f59e0b; }
-    
-    .rdv-datetime {
-      font-size: 15px;
-      color: #666;
-      margin-bottom: 5px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .badge-today {
+      background: #10b981;
     }
     
-    .rdv-note {
+    .badge-tomorrow {
+      background: #f59e0b;
+    }
+    
+    .badge-future {
+      background: var(--primary);
+    }
+    
+    .appointment-datetime {
       font-size: 14px;
-      color: #888;
-      margin-top: 8px;
+      color: var(--text-gray);
+      margin-bottom: 5px;
+    }
+    
+    .appointment-note {
+      font-size: 13px;
+      color: var(--text-light);
       font-style: italic;
     }
     
-    .rdv-actions {
+    .appointment-actions {
       display: flex;
       gap: 10px;
-      margin-top: 12px;
+      margin-top: 10px;
     }
     
-    .rdv-action-btn {
-      flex: 1;
-      padding: 8px;
+    .action-btn {
+      padding: 8px 15px;
       border: none;
       border-radius: 8px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: var(--transition);
     }
     
-    .rdv-edit {
+    .action-btn.edit {
       background: rgba(139, 126, 184, 0.15);
-      color: #8B7EB8;
+      color: var(--primary);
     }
     
-    .rdv-delete {
+    .action-btn.delete {
       background: rgba(239, 68, 68, 0.15);
       color: #ef4444;
     }
     
-    .rdv-action-btn:active {
+    .action-btn:active {
       transform: scale(0.95);
     }
     
     .empty-state {
       text-align: center;
       padding: 40px 20px;
-      color: #999;
+      color: var(--text-light);
     }
     
     .empty-icon {
@@ -251,67 +281,14 @@
     }
     
     .empty-text {
-      font-size: 16px;
-    }
-    
-    .today-indicator {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      color: white;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: bold;
-      margin-left: 8px;
-    }
-    
-    .tomorrow-indicator {
-      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-      color: white;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: bold;
-      margin-left: 8px;
-    }
-    
-    .bottom-nav {
-      position: fixed;
-      bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: white;
-      border-radius: 25px;
-      padding: 15px 25px;
-      display: flex;
-      gap: 35px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-      z-index: 1000;
-      max-width: 350px;
-      width: calc(100% - 40px);
-      justify-content: center;
-    }
-    
-    .nav-item {
-      font-size: 26px;
-      cursor: pointer;
-      transition: all 0.3s;
-      opacity: 0.4;
-      text-decoration: none;
-    }
-    
-    .nav-item.active {
-      opacity: 1;
-      transform: scale(1.15);
+      font-size: 15px;
     }
     
     .modal-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       background: rgba(0,0,0,0.5);
-      z-index: 3000;
+      z-index: 2000;
       display: none;
     }
     
@@ -331,13 +308,13 @@
       left: 50%;
       transform: translate(-50%, -50%);
       background: white;
-      border-radius: 25px;
+      border-radius: var(--radius-lg);
       padding: 30px;
       max-width: 90%;
       width: 400px;
       max-height: 80vh;
       overflow-y: auto;
-      z-index: 3001;
+      z-index: 2001;
       display: none;
       box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     }
@@ -348,8 +325,14 @@
     }
     
     @keyframes slideUp {
-      from { transform: translate(-50%, -40%); opacity: 0; }
-      to { transform: translate(-50%, -50%); opacity: 1; }
+      from {
+        transform: translate(-50%, -40%);
+        opacity: 0;
+      }
+      to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+      }
     }
     
     .modal-header {
@@ -362,13 +345,13 @@
     .modal-title {
       font-size: 22px;
       font-weight: bold;
-      color: #2D2D3A;
+      color: var(--text-dark);
     }
     
     .modal-close {
       font-size: 28px;
       cursor: pointer;
-      color: #888;
+      color: var(--text-light);
     }
     
     .form-group {
@@ -378,110 +361,84 @@
     .form-label {
       font-size: 15px;
       font-weight: 600;
-      color: #2D2D3A;
+      color: var(--text-dark);
       margin-bottom: 8px;
       display: block;
     }
     
-    .form-input {
+    .form-input,
+    .form-select,
+    .form-textarea {
       width: 100%;
       padding: 12px 15px;
       border: 2px solid #E5E5E5;
-      border-radius: 12px;
+      border-radius: var(--radius-sm);
       font-size: 15px;
       font-family: inherit;
       outline: none;
-      transition: border 0.3s;
+      transition: var(--transition);
     }
     
-    .form-input:focus {
-      border-color: #8B7EB8;
-    }
-    
-    .form-select {
-      width: 100%;
-      padding: 12px 15px;
-      border: 2px solid #E5E5E5;
-      border-radius: 12px;
-      font-size: 15px;
-      font-family: inherit;
-      outline: none;
-      transition: border 0.3s;
-      background: white;
-    }
-    
-    .form-select:focus {
-      border-color: #8B7EB8;
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--primary);
     }
     
     .form-textarea {
-      width: 100%;
-      min-height: 80px;
-      padding: 12px 15px;
-      border: 2px solid #E5E5E5;
-      border-radius: 12px;
-      font-size: 15px;
-      font-family: inherit;
-      outline: none;
-      transition: border 0.3s;
       resize: vertical;
-    }
-    
-    .form-textarea:focus {
-      border-color: #8B7EB8;
+      min-height: 80px;
     }
     
     .save-btn {
       width: 100%;
       padding: 15px;
-      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
       color: white;
       border: none;
       border-radius: 15px;
       font-size: 17px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 10px;
-      transition: all 0.3s;
+      transition: var(--transition);
     }
     
     .save-btn:active {
       transform: scale(0.98);
     }
     
-    .success-message {
+    .bottom-nav {
       position: fixed;
-      top: 50%;
+      bottom: 15px;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translateX(-50%);
       background: white;
-      padding: 30px 40px;
-      border-radius: 20px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-      text-align: center;
-      z-index: 4000;
-      display: none;
+      border-radius: var(--radius-lg);
+      padding: 15px 25px;
+      display: flex;
+      gap: 35px;
+      box-shadow: var(--shadow-md);
+      z-index: 1000;
+      max-width: 350px;
+      width: calc(100% - 40px);
+      justify-content: center;
     }
     
-    .success-message.show {
-      display: block;
-      animation: popup 0.3s ease;
+    .nav-item {
+      font-size: 26px;
+      cursor: pointer;
+      transition: var(--transition);
+      opacity: 0.4;
+      text-decoration: none;
     }
     
-    @keyframes popup {
-      from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
-      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    .nav-item.active {
+      opacity: 1;
+      transform: scale(1.15);
     }
     
-    .success-icon {
-      font-size: 60px;
-      margin-bottom: 15px;
-    }
-    
-    .success-text {
-      font-size: 20px;
-      font-weight: bold;
-      color: #2D2D3A;
+    .nav-item:active {
+      transform: scale(0.9);
     }
   </style>
 </head>
@@ -490,30 +447,28 @@
     <div class="header">
       <a href="index.html" class="back-btn">←</a>
       <div class="header-title">Agenda Bien-être</div>
-      <div class="add-btn" onclick="openModal()">+</div>
+      <div class="add-btn" onclick="agendaManager.openModal()">+</div>
     </div>
     
-    <div class="quick-add-card">
-      <div class="quick-add-title">Ajouter un rendez-vous</div>
-      <button class="quick-add-btn" onclick="openModal()">📅 Nouveau RDV</button>
+    <div class="quick-add-card" onclick="agendaManager.openModal()">
+      <div class="quick-add-icon">📅</div>
+      <div class="quick-add-text">Ajouter un rendez-vous</div>
     </div>
     
-    <div class="stats-card">
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-value" id="totalRdv">0</div>
-          <div class="stat-label">Rendez-vous</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value" id="nextRdv">-</div>
-          <div class="stat-label">Prochain RDV</div>
-        </div>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-value" id="totalCount">0</div>
+        <div class="stat-label">RDV à venir</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="nextDays">-</div>
+        <div class="stat-label">Prochain RDV</div>
       </div>
     </div>
     
-    <div class="section-card">
-      <div class="section-title">Prochains rendez-vous</div>
-      <div id="rdvList"></div>
+    <div class="appointments-card">
+      <div class="card-title">Mes rendez-vous</div>
+      <ul class="appointment-list" id="appointmentList"></ul>
     </div>
   </div>
   
@@ -525,17 +480,16 @@
     <a href="profil.html" class="nav-item">👤</a>
   </div>
   
-  <!-- Add/Edit RDV Modal -->
-  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
-  <div class="modal" id="rdvModal">
+  <div class="modal-overlay" id="modalOverlay" onclick="agendaManager.closeModal()"></div>
+  <div class="modal" id="appointmentModal">
     <div class="modal-header">
       <div class="modal-title" id="modalTitle">Nouveau rendez-vous</div>
-      <div class="modal-close" onclick="closeModal()">×</div>
+      <div class="modal-close" onclick="agendaManager.closeModal()">×</div>
     </div>
     
     <div class="form-group">
       <label class="form-label">Type de rendez-vous</label>
-      <select class="form-select" id="rdvType">
+      <select class="form-select" id="appointmentType">
         <option value="psy">Psychologue / Psychiatre</option>
         <option value="medecin">Médecin généraliste</option>
         <option value="activite">Activité bien-être</option>
@@ -545,248 +499,238 @@
     
     <div class="form-group">
       <label class="form-label">Titre</label>
-      <input type="text" class="form-input" id="rdvTitle" placeholder="Ex: Séance psy, Yoga...">
+      <input type="text" class="form-input" id="appointmentTitle" placeholder="Ex: Séance psy">
     </div>
     
     <div class="form-group">
       <label class="form-label">Date</label>
-      <input type="date" class="form-input" id="rdvDate">
+      <input type="date" class="form-input" id="appointmentDate">
     </div>
     
     <div class="form-group">
       <label class="form-label">Heure</label>
-      <input type="time" class="form-input" id="rdvTime">
+      <input type="time" class="form-input" id="appointmentTime">
     </div>
     
     <div class="form-group">
-      <label class="form-label">Notes (optionnel)</label>
-      <textarea class="form-textarea" id="rdvNote" placeholder="Adresse, préparation, questions à poser..."></textarea>
+      <label class="form-label">Note (optionnel)</label>
+      <textarea class="form-textarea" id="appointmentNote" placeholder="Sujets à aborder, questions..."></textarea>
     </div>
     
-    <button class="save-btn" onclick="saveRdv()">💚 Enregistrer</button>
-  </div>
-  
-  <div class="success-message" id="successMessage">
-    <div class="success-icon">✅</div>
-    <div class="success-text">Rendez-vous enregistré !</div>
+    <button class="save-btn" onclick="agendaManager.save()">💚 Enregistrer</button>
   </div>
   
   <script>
-    let editingRdvId = null;
+    const STORAGE_KEY = 'mindflow_agenda';
     
-    const typeLabels = {
-      psy: 'Psy',
-      medecin: 'Médecin',
-      activite: 'Activité',
-      autre: 'Autre'
-    };
-    
-    function loadAgenda() {
-      const rdvs = JSON.parse(localStorage.getItem('mindflow_agenda') || '[]');
+    const agendaManager = {
+      appointments: [],
+      editingId: null,
       
-      // Sort by date
-      rdvs.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
+      init() {
+        this.loadData();
+        this.render();
+        this.updateStats();
+        this.setMinDate();
+      },
       
-      updateStats(rdvs);
-      displayRdvs(rdvs);
-    }
-    
-    function updateStats(rdvs) {
-      const now = new Date();
-      const futureRdvs = rdvs.filter(r => new Date(r.datetime) >= now);
+      loadData() {
+        this.appointments = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        this.appointments.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
+      },
       
-      document.getElementById('totalRdv').textContent = futureRdvs.length;
+      saveData() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.appointments));
+      },
       
-      if (futureRdvs.length > 0) {
-        const next = new Date(futureRdvs[0].datetime);
-        const days = Math.floor((next - now) / (1000 * 60 * 60 * 24));
+      setMinDate() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('appointmentDate').min = today;
+      },
+      
+      render() {
+        const list = document.getElementById('appointmentList');
+        const futureAppointments = this.getFutureAppointments();
         
-        if (days === 0) {
-          document.getElementById('nextRdv').textContent = 'Aujourd\'hui';
-        } else if (days === 1) {
-          document.getElementById('nextRdv').textContent = 'Demain';
-        } else {
-          document.getElementById('nextRdv').textContent = days + 'j';
+        if (futureAppointments.length === 0) {
+          list.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">📅</div>
+              <div class="empty-text">Aucun rendez-vous prévu<br>Clique sur + pour en ajouter !</div>
+            </div>
+          `;
+          return;
         }
-      } else {
-        document.getElementById('nextRdv').textContent = '-';
-      }
-    }
-    
-    function displayRdvs(rdvs) {
-      const list = document.getElementById('rdvList');
-      const now = new Date();
-      const futureRdvs = rdvs.filter(r => new Date(r.datetime) >= now);
-      
-      if (futureRdvs.length === 0) {
-        list.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">📅</div>
-            <div class="empty-text">Aucun rendez-vous prévu</div>
-          </div>
-        `;
-        return;
-      }
-      
-      list.innerHTML = futureRdvs.map(rdv => {
-        const date = new Date(rdv.datetime);
-        const dateStr = date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
-        const timeStr = date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
         
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        list.innerHTML = futureAppointments.map(apt => {
+          const datetime = new Date(apt.datetime);
+          const badge = this.getTimeBadge(datetime);
+          
+          return `
+            <li class="appointment-item type-${apt.type}">
+              <div class="appointment-header">
+                <div class="appointment-title">${apt.title}</div>
+                ${badge ? `<span class="appointment-badge badge-${badge.type}">${badge.text}</span>` : ''}
+              </div>
+              <div class="appointment-datetime">
+                📅 ${datetime.toLocaleDateString('fr-FR', { 
+                  weekday: 'long', 
+                  day: 'numeric', 
+                  month: 'long' 
+                })} à ${datetime.toLocaleTimeString('fr-FR', { 
+                  hour: '2-digit', 
+                  minute: '2-digit' 
+                })}
+              </div>
+              ${apt.note ? `<div class="appointment-note">${apt.note}</div>` : ''}
+              <div class="appointment-actions">
+                <button class="action-btn edit" onclick="agendaManager.edit(${apt.id})">✏️ Modifier</button>
+                <button class="action-btn delete" onclick="agendaManager.delete(${apt.id})">🗑️ Supprimer</button>
+              </div>
+            </li>
+          `;
+        }).join('');
+      },
+      
+      getFutureAppointments() {
+        const now = new Date();
+        return this.appointments.filter(apt => new Date(apt.datetime) >= now);
+      },
+      
+      getTimeBadge(datetime) {
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
-        const rdvDate = new Date(date);
-        rdvDate.setHours(0, 0, 0, 0);
+        const aptDate = new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate());
         
-        let indicator = '';
-        if (rdvDate.getTime() === today.getTime()) {
-          indicator = '<span class="today-indicator">AUJOURD\'HUI</span>';
-        } else if (rdvDate.getTime() === tomorrow.getTime()) {
-          indicator = '<span class="tomorrow-indicator">DEMAIN</span>';
+        if (aptDate.getTime() === today.getTime()) {
+          return { type: 'today', text: 'Aujourd\'hui' };
+        } else if (aptDate.getTime() === tomorrow.getTime()) {
+          return { type: 'tomorrow', text: 'Demain' };
         }
         
-        return `
-          <div class="rdv-item rdv-type-${rdv.type}">
-            <div class="rdv-header">
-              <div>
-                <div class="rdv-title">${rdv.title}</div>
-                <span class="rdv-type-badge badge-${rdv.type}">${typeLabels[rdv.type]}</span>
-              </div>
-            </div>
-            <div class="rdv-datetime">
-              📅 ${dateStr} ${indicator}
-            </div>
-            <div class="rdv-datetime">
-              🕐 ${timeStr}
-            </div>
-            ${rdv.note ? `<div class="rdv-note">${rdv.note}</div>` : ''}
-            <div class="rdv-actions">
-              <button class="rdv-action-btn rdv-edit" onclick="editRdv(${rdv.id})">✏️ Modifier</button>
-              <button class="rdv-action-btn rdv-delete" onclick="deleteRdv(${rdv.id})">🗑️ Supprimer</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-    
-    function openModal(id = null) {
-      editingRdvId = id;
-      
-      if (id) {
-        const rdvs = JSON.parse(localStorage.getItem('mindflow_agenda') || '[]');
-        const rdv = rdvs.find(r => r.id === id);
+        const daysUntil = Math.ceil((aptDate - today) / (1000 * 60 * 60 * 24));
+        if (daysUntil <= 7) {
+          return { type: 'future', text: `${daysUntil}j` };
+        }
         
-        if (rdv) {
-          document.getElementById('modalTitle').textContent = 'Modifier le rendez-vous';
-          document.getElementById('rdvType').value = rdv.type;
-          document.getElementById('rdvTitle').value = rdv.title;
+        return null;
+      },
+      
+      updateStats() {
+        const futureAppointments = this.getFutureAppointments();
+        document.getElementById('totalCount').textContent = futureAppointments.length;
+        
+        if (futureAppointments.length > 0) {
+          const next = new Date(futureAppointments[0].datetime);
+          const now = new Date();
+          const daysUntil = Math.ceil((next - now) / (1000 * 60 * 60 * 24));
           
-          const date = new Date(rdv.datetime);
-          document.getElementById('rdvDate').value = date.toISOString().split('T')[0];
-          document.getElementById('rdvTime').value = date.toTimeString().slice(0, 5);
-          document.getElementById('rdvNote').value = rdv.note || '';
+          if (daysUntil === 0) {
+            document.getElementById('nextDays').textContent = 'Aujourd\'hui';
+          } else if (daysUntil === 1) {
+            document.getElementById('nextDays').textContent = 'Demain';
+          } else {
+            document.getElementById('nextDays').textContent = `${daysUntil}j`;
+          }
+        } else {
+          document.getElementById('nextDays').textContent = '-';
         }
-      } else {
-        document.getElementById('modalTitle').textContent = 'Nouveau rendez-vous';
-        document.getElementById('rdvType').value = 'psy';
-        document.getElementById('rdvTitle').value = '';
-        document.getElementById('rdvDate').value = '';
-        document.getElementById('rdvTime').value = '';
-        document.getElementById('rdvNote').value = '';
-      }
+      },
       
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('rdvModal').classList.add('show');
-    }
-    
-    function saveRdv() {
-      const type = document.getElementById('rdvType').value;
-      const title = document.getElementById('rdvTitle').value.trim();
-      const date = document.getElementById('rdvDate').value;
-      const time = document.getElementById('rdvTime').value;
-      const note = document.getElementById('rdvNote').value.trim();
+      openModal(id = null) {
+        this.editingId = id;
+        
+        if (id) {
+          const apt = this.appointments.find(a => a.id === id);
+          if (apt) {
+            document.getElementById('modalTitle').textContent = 'Modifier le rendez-vous';
+            const datetime = new Date(apt.datetime);
+            document.getElementById('appointmentType').value = apt.type;
+            document.getElementById('appointmentTitle').value = apt.title;
+            document.getElementById('appointmentDate').value = datetime.toISOString().split('T')[0];
+            document.getElementById('appointmentTime').value = datetime.toTimeString().slice(0, 5);
+            document.getElementById('appointmentNote').value = apt.note || '';
+          }
+        } else {
+          document.getElementById('modalTitle').textContent = 'Nouveau rendez-vous';
+          document.getElementById('appointmentType').value = 'psy';
+          document.getElementById('appointmentTitle').value = '';
+          document.getElementById('appointmentDate').value = '';
+          document.getElementById('appointmentTime').value = '';
+          document.getElementById('appointmentNote').value = '';
+        }
+        
+        document.getElementById('modalOverlay').classList.add('show');
+        document.getElementById('appointmentModal').classList.add('show');
+      },
       
-      if (!title || !date || !time) {
-        alert('Remplis tous les champs obligatoires ! 💚');
-        return;
-      }
+      closeModal() {
+        document.getElementById('modalOverlay').classList.remove('show');
+        document.getElementById('appointmentModal').classList.remove('show');
+        this.editingId = null;
+      },
       
-      const datetime = new Date(`${date}T${time}`);
-      
-      let rdvs = JSON.parse(localStorage.getItem('mindflow_agenda') || '[]');
-      
-      if (editingRdvId) {
-        const index = rdvs.findIndex(r => r.id === editingRdvId);
-        if (index >= 0) {
-          rdvs[index] = {
-            ...rdvs[index],
+      save() {
+        const type = document.getElementById('appointmentType').value;
+        const title = document.getElementById('appointmentTitle').value.trim();
+        const date = document.getElementById('appointmentDate').value;
+        const time = document.getElementById('appointmentTime').value;
+        const note = document.getElementById('appointmentNote').value.trim();
+        
+        if (!title || !date || !time) {
+          alert('Remplis au moins le titre, la date et l\'heure ! 💚');
+          return;
+        }
+        
+        const datetime = `${date}T${time}`;
+        
+        if (this.editingId) {
+          const index = this.appointments.findIndex(a => a.id === this.editingId);
+          if (index > -1) {
+            this.appointments[index] = {
+              ...this.appointments[index],
+              type,
+              title,
+              datetime,
+              note
+            };
+          }
+        } else {
+          this.appointments.push({
+            id: Date.now(),
             type,
             title,
-            datetime: datetime.toISOString(),
+            datetime,
             note
-          };
+          });
         }
-      } else {
-        rdvs.push({
-          id: Date.now(),
-          type,
-          title,
-          datetime: datetime.toISOString(),
-          note
-        });
+        
+        this.appointments.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
+        this.saveData();
+        this.closeModal();
+        this.render();
+        this.updateStats();
+      },
+      
+      edit(id) {
+        this.openModal(id);
+      },
+      
+      delete(id) {
+        if (!confirm('Supprimer ce rendez-vous ?')) return;
+        
+        this.appointments = this.appointments.filter(a => a.id !== id);
+        this.saveData();
+        this.render();
+        this.updateStats();
       }
-      
-      localStorage.setItem('mindflow_agenda', JSON.stringify(rdvs));
-      
-      closeModal();
-      showSuccess();
-      loadAgenda();
-    }
+    };
     
-    function editRdv(id) {
-      openModal(id);
-    }
-    
-    function deleteRdv(id) {
-      if (!confirm('Supprimer ce rendez-vous ?')) return;
-      
-      let rdvs = JSON.parse(localStorage.getItem('mindflow_agenda') || '[]');
-      rdvs = rdvs.filter(r => r.id !== id);
-      localStorage.setItem('mindflow_agenda', JSON.stringify(rdvs));
-      
-      loadAgenda();
-    }
-    
-    function closeModal() {
-      document.getElementById('modalOverlay').classList.remove('show');
-      document.getElementById('rdvModal').classList.remove('show');
-      editingRdvId = null;
-    }
-    
-    function showSuccess() {
-      const msg = document.getElementById('successMessage');
-      msg.classList.add('show');
-      setTimeout(() => msg.classList.remove('show'), 1500);
-    }
-    
-    loadAgenda();
+    document.addEventListener('DOMContentLoaded', () => {
+      agendaManager.init();
+    });
   </script>
-  <script src="luna-bubble.js"></script>
-```
-
-**5️⃣ Commit !**
-
-**Message :**
-```
-Agenda - Ajout bulle Luna
 </body>
 </html>
-```
-
----
-
-## ✅ **COMMIT MESSAGE :**
-```
-Création module Agenda Bien-être avec RDV et rappels
