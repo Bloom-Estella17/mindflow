@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>💚 MindFlow - Profil</title>
+  <title>👤 MindFlow - Profil</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#8B7EB8">
   
   <style>
     * {
@@ -13,9 +15,25 @@
       -webkit-tap-highlight-color: transparent;
     }
     
+    :root {
+      --primary: #8B7EB8;
+      --primary-light: #B8A7D5;
+      --secondary: #A8D8EA;
+      --text-dark: #2D2D3A;
+      --text-gray: #666;
+      --text-light: #888;
+      --bg-card: rgba(139, 126, 184, 0.05);
+      --shadow-sm: 0 4px 20px rgba(0,0,0,0.08);
+      --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 25px;
+      --transition: all 0.3s ease;
+    }
+    
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
       min-height: 100vh;
       padding: 15px;
       padding-bottom: 100px;
@@ -34,157 +52,172 @@
       align-items: center;
       padding: 20px 25px;
       background: white;
-      border-radius: 20px;
+      border-radius: var(--radius-md);
       margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      box-shadow: var(--shadow-sm);
     }
     
     .back-btn {
       font-size: 24px;
       cursor: pointer;
       text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .back-btn:active {
+      transform: scale(1.2);
     }
     
     .header-title {
       font-size: 20px;
       font-weight: bold;
-      color: #8B7EB8;
+      color: var(--primary);
+    }
+    
+    .header-placeholder {
+      width: 24px;
     }
     
     .profile-card {
       background: white;
-      border-radius: 25px;
+      border-radius: var(--radius-lg);
       padding: 30px 25px;
       margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      box-shadow: var(--shadow-sm);
       text-align: center;
     }
     
-    .avatar {
-      width: 100px;
-      height: 100px;
-      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 50px;
-      margin: 0 auto 20px;
+    .profile-icon {
+      font-size: 80px;
+      margin-bottom: 15px;
     }
     
-    .profile-name {
+    .profile-greeting {
       font-size: 24px;
       font-weight: bold;
-      color: #2D2D3A;
+      color: var(--text-dark);
       margin-bottom: 8px;
     }
     
-    .profile-email {
-      font-size: 15px;
-      color: #8B7EB8;
+    .profile-subtitle {
+      font-size: 14px;
+      color: var(--text-light);
     }
     
     .section-card {
       background: white;
-      border-radius: 25px;
-      padding: 25px;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      border-radius: var(--radius-lg);
+      padding: 20px 25px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
     }
     
     .section-title {
       font-size: 18px;
       font-weight: bold;
-      color: #2D2D3A;
-      margin-bottom: 18px;
+      color: var(--text-dark);
+      margin-bottom: 15px;
+    }
+    
+    .menu-list {
+      list-style: none;
     }
     
     .menu-item {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 15px;
       padding: 15px;
-      background: rgba(139, 126, 184, 0.05);
-      border-radius: 12px;
+      background: var(--bg-card);
+      border-radius: var(--radius-sm);
       margin-bottom: 10px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: var(--transition);
       text-decoration: none;
+      color: inherit;
     }
     
     .menu-item:active {
-      background: rgba(139, 126, 184, 0.12);
       transform: scale(0.98);
-    }
-    
-    .menu-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      background: rgba(139, 126, 184, 0.1);
     }
     
     .menu-icon {
-      font-size: 22px;
+      font-size: 24px;
+      width: 30px;
+      text-align: center;
     }
     
     .menu-text {
-      font-size: 16px;
-      color: #2D2D3A;
+      flex: 1;
+      font-size: 15px;
       font-weight: 500;
+      color: var(--text-dark);
     }
     
     .menu-arrow {
       font-size: 18px;
-      color: #999;
+      color: var(--text-light);
     }
     
-    .emergency-card {
-      background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
-      border-radius: 25px;
+    .about-card {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-radius: var(--radius-lg);
       padding: 25px;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(139, 126, 184, 0.3);
       color: white;
     }
     
-    .emergency-title {
+    .about-title {
       font-size: 20px;
       font-weight: bold;
       margin-bottom: 15px;
     }
     
-    .emergency-number {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(255,255,255,0.2);
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      text-decoration: none;
-      color: white;
+    .about-text {
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 12px;
     }
     
-    .emergency-number:active {
-      background: rgba(255,255,255,0.3);
-    }
-    
-    .emergency-label {
-      font-size: 15px;
+    .about-version {
+      font-size: 13px;
+      opacity: 0.8;
       font-weight: 600;
     }
     
-    .emergency-phone {
-      font-size: 18px;
-      font-weight: bold;
+    .danger-zone {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 20px 25px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+      border: 2px solid #fee2e2;
     }
     
-    .version-info {
-      text-align: center;
-      padding: 20px;
-      color: rgba(255,255,255,0.8);
-      font-size: 14px;
+    .danger-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #ef4444;
+      margin-bottom: 12px;
+    }
+    
+    .danger-btn {
+      width: 100%;
+      padding: 12px;
+      background: #ef4444;
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .danger-btn:active {
+      transform: scale(0.98);
     }
     
     .bottom-nav {
@@ -193,11 +226,11 @@
       left: 50%;
       transform: translateX(-50%);
       background: white;
-      border-radius: 25px;
+      border-radius: var(--radius-lg);
       padding: 15px 25px;
       display: flex;
       gap: 35px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      box-shadow: var(--shadow-md);
       z-index: 1000;
       max-width: 350px;
       width: calc(100% - 40px);
@@ -207,7 +240,7 @@
     .nav-item {
       font-size: 26px;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: var(--transition);
       opacity: 0.4;
       text-decoration: none;
     }
@@ -217,176 +250,8 @@
       transform: scale(1.15);
     }
     
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 3000;
-      display: none;
-    }
-    
-    .modal-overlay.show {
-      display: block;
-      animation: fadeIn 0.3s ease;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    .modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      border-radius: 25px;
-      padding: 30px;
-      max-width: 90%;
-      width: 400px;
-      max-height: 80vh;
-      overflow-y: auto;
-      z-index: 3001;
-      display: none;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    }
-    
-    .modal.show {
-      display: block;
-      animation: slideUp 0.3s ease;
-    }
-    
-    @keyframes slideUp {
-      from { transform: translate(-50%, -40%); opacity: 0; }
-      to { transform: translate(-50%, -50%); opacity: 1; }
-    }
-    
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-    }
-    
-    .modal-title {
-      font-size: 22px;
-      font-weight: bold;
-      color: #2D2D3A;
-    }
-    
-    .modal-close {
-      font-size: 28px;
-      cursor: pointer;
-      color: #888;
-    }
-    
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    .form-label {
-      font-size: 15px;
-      font-weight: 600;
-      color: #2D2D3A;
-      margin-bottom: 8px;
-      display: block;
-    }
-    
-    .form-input {
-      width: 100%;
-      padding: 12px 15px;
-      border: 2px solid #E5E5E5;
-      border-radius: 12px;
-      font-size: 15px;
-      font-family: inherit;
-      outline: none;
-      transition: border 0.3s;
-    }
-    
-    .form-input:focus {
-      border-color: #8B7EB8;
-    }
-    
-    .save-btn {
-      width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
-      color: white;
-      border: none;
-      border-radius: 15px;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: all 0.3s;
-    }
-    
-    .save-btn:active {
-      transform: scale(0.98);
-    }
-    
-    .export-btn {
-      width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
-      color: white;
-      border: none;
-      border-radius: 15px;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: all 0.3s;
-    }
-    
-    .export-btn:active {
-      transform: scale(0.98);
-    }
-    
-    .info-text {
-      font-size: 14px;
-      color: #666;
-      line-height: 1.6;
-      margin-bottom: 15px;
-    }
-    
-    .success-message {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      padding: 30px 40px;
-      border-radius: 20px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-      text-align: center;
-      z-index: 4000;
-      display: none;
-    }
-    
-    .success-message.show {
-      display: block;
-      animation: popup 0.3s ease;
-    }
-    
-    @keyframes popup {
-      from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
-      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    }
-    
-    .success-icon {
-      font-size: 60px;
-      margin-bottom: 15px;
-    }
-    
-    .success-text {
-      font-size: 20px;
-      font-weight: bold;
-      color: #2D2D3A;
+    .nav-item:active {
+      transform: scale(0.9);
     }
   </style>
 </head>
@@ -395,138 +260,107 @@
     <div class="header">
       <a href="index.html" class="back-btn">←</a>
       <div class="header-title">Mon Profil</div>
-      <div style="width: 24px;"></div>
+      <div class="header-placeholder"></div>
     </div>
     
     <div class="profile-card">
-      <div class="avatar">👤</div>
-      <div class="profile-name" id="profileName">Mon Profil</div>
-      <div class="profile-email" id="profileEmail">Personnalise ton profil</div>
-    </div>
-    
-    <div class="emergency-card">
-      <div class="emergency-title">🚨 Urgences</div>
-      <a href="tel:15" class="emergency-number">
-        <span class="emergency-label">SAMU</span>
-        <span class="emergency-phone">15</span>
-      </a>
-      <a href="tel:3114" class="emergency-number">
-        <span class="emergency-label">Prévention Suicide</span>
-        <span class="emergency-phone">3114</span>
-      </a>
-      <a href="tel:0800858858" class="emergency-number">
-        <span class="emergency-label">Fil Santé Jeunes</span>
-        <span class="emergency-phone">0800 858 858</span>
-      </a>
+      <div class="profile-icon">💚</div>
+      <div class="profile-greeting">Bonjour !</div>
+      <div class="profile-subtitle">Bienvenue sur MindFlow</div>
     </div>
     
     <div class="section-card">
-      <div class="section-title">Mes modules spécialisés</div>
-      <a href="triggers.html" class="menu-item">
-        <div class="menu-left">
-          <div class="menu-icon">📋</div>
-          <div class="menu-text">Triggers</div>
-        </div>
-        <div class="menu-arrow">→</div>
-      </a>
-      <a href="alters.html" class="menu-item">
-        <div class="menu-left">
-          <div class="menu-icon">🎭</div>
-          <div class="menu-text">TDI/Alters</div>
-        </div>
-        <div class="menu-arrow">→</div>
-      </a>
-      <a href="cycles.html" class="menu-item">
-        <div class="menu-left">
-          <div class="menu-icon">🌊</div>
-          <div class="menu-text">Cycles (Bipolarité)</div>
-        </div>
-        <div class="menu-arrow">→</div>
-      </a>
-      <a href="borderline.html" class="menu-item">
-        <div class="menu-left">
-          <div class="menu-icon">💔</div>
-          <div class="menu-text">Borderline (DBT)</div>
-        </div>
-        <div class="menu-arrow">→</div>
-      </a>
-      <a href="anxiete.html" class="menu-item">
-        <div class="menu-left">
-          <div class="menu-icon">😰</div>
-          <div class="menu-text">Anxiété/TAG</div>
-        </div>
-        <div class="menu-arrow">→</div>
-      </a>
-      <a href="agenda.html" class="menu-item">
-        <div class="menu-left">
-          <div class="menu-icon">📅</div>
-          <div class="menu-text">Agenda Bien-être</div>
-        </div>
-        <div class="menu-arrow">→</div>
-      </a>
+      <div class="section-title">Suivi quotidien</div>
+      <ul class="menu-list">
+        <a href="mood.html" class="menu-item">
+          <span class="menu-icon">😊</span>
+          <span class="menu-text">Humeur du jour</span>
+          <span class="menu-arrow">›</span>
+        </a>
+        <a href="journal.html" class="menu-item">
+          <span class="menu-icon">📝</span>
+          <span class="menu-text">Journal intime</span>
+          <span class="menu-arrow">›</span>
+        </a>
+        <a href="traitement.html" class="menu-item">
+          <span class="menu-icon">💊</span>
+          <span class="menu-text">Traitement médical</span>
+          <span class="menu-arrow">›</span>
+        </a>
+        <a href="agenda.html" class="menu-item">
+          <span class="menu-icon">📅</span>
+          <span class="menu-text">Agenda bien-être</span>
+          <span class="menu-arrow">›</span>
+        </a>
+      </ul>
     </div>
     
     <div class="section-card">
-      <div class="section-title">Ressources & Santé</div>
-      <a href="ressources.html" class="menu-item">
-        <div class="menu-left">
-          <div class="menu-icon">📚</div>
-          <div class="menu-text">Bibliothèque DSM-5</div>
-        </div>
-        <div class="menu-arrow">→</div>
-      </a>
+      <div class="section-title">Outils d'urgence</div>
+      <ul class="menu-list">
+        <a href="crise.html" class="menu-item">
+          <span class="menu-icon">🚨</span>
+          <span class="menu-text">Plan de crise</span>
+          <span class="menu-arrow">›</span>
+        </a>
+        <a href="triggers.html" class="menu-item">
+          <span class="menu-icon">⚡</span>
+          <span class="menu-text">Gestion des triggers</span>
+          <span class="menu-arrow">›</span>
+        </a>
+      </ul>
     </div>
     
     <div class="section-card">
-      <div class="section-title">Mon compte</div>
-      <div class="menu-item" onclick="openProfileModal()">
-        <div class="menu-left">
-          <div class="menu-icon">👤</div>
-          <div class="menu-text">Mes informations</div>
-        </div>
-        <div class="menu-arrow">→</div>
-      </div>
-      <div class="menu-item" onclick="openConditionsModal()">
-        <div class="menu-left">
-          <div class="menu-icon">🧠</div>
-          <div class="menu-text">Mes conditions</div>
-        </div>
-        <div class="menu-arrow">→</div>
-      </div>
+      <div class="section-title">Modules spécialisés</div>
+      <ul class="menu-list">
+        <a href="alters.html" class="menu-item">
+          <span class="menu-icon">🎭</span>
+          <span class="menu-text">TDI / Alters</span>
+          <span class="menu-arrow">›</span>
+        </a>
+        <a href="cycles.html" class="menu-item">
+          <span class="menu-icon">🔄</span>
+          <span class="menu-text">Cycles bipolaires</span>
+          <span class="menu-arrow">›</span>
+        </a>
+        <a href="borderline.html" class="menu-item">
+          <span class="menu-icon">💔</span>
+          <span class="menu-text">Borderline / TPL</span>
+          <span class="menu-arrow">›</span>
+        </a>
+        <a href="anxiete.html" class="menu-item">
+          <span class="menu-icon">😰</span>
+          <span class="menu-text">Anxiété / Crises</span>
+          <span class="menu-arrow">›</span>
+        </a>
+      </ul>
     </div>
     
     <div class="section-card">
-      <div class="section-title">Données</div>
-      <div class="menu-item" onclick="openExportModal()">
-        <div class="menu-left">
-          <div class="menu-icon">📄</div>
-          <div class="menu-text">Export PDF</div>
-        </div>
-        <div class="menu-arrow">→</div>
-      </div>
-      <div class="menu-item" onclick="clearData()">
-        <div class="menu-left">
-          <div class="menu-icon">🗑️</div>
-          <div class="menu-text">Effacer mes données</div>
-        </div>
-        <div class="menu-arrow">→</div>
-      </div>
+      <div class="section-title">Ressources</div>
+      <ul class="menu-list">
+        <a href="ressources.html" class="menu-item">
+          <span class="menu-icon">📚</span>
+          <span class="menu-text">Documentation DSM-5</span>
+          <span class="menu-arrow">›</span>
+        </a>
+      </ul>
     </div>
     
-    <div class="section-card">
-      <div class="section-title">À propos</div>
-      <div class="menu-item" onclick="openAboutModal()">
-        <div class="menu-left">
-          <div class="menu-icon">ℹ️</div>
-          <div class="menu-text">À propos de MindFlow</div>
-        </div>
-        <div class="menu-arrow">→</div>
+    <div class="about-card">
+      <div class="about-title">À propos de MindFlow</div>
+      <div class="about-text">
+        MindFlow est ton compagnon de santé mentale. Suivi d'humeur, journal intime, gestion de traitement, plan de crise, agenda bien-être et modules spécialisés pour les troubles de l'humeur.
       </div>
+      <div class="about-version">Version 1.0 - Décembre 2024</div>
     </div>
     
-    <div class="version-info">
-      MindFlow v1.0 Beta<br>
-      Créé avec 💚 par Laura
+    <div class="danger-zone">
+      <div class="danger-title">⚠️ Zone dangereuse</div>
+      <button class="danger-btn" onclick="profilManager.clearData()">
+        🗑️ Effacer toutes mes données
+      </button>
     </div>
   </div>
   
@@ -538,238 +372,45 @@
     <a href="profil.html" class="nav-item active">👤</a>
   </div>
   
-  <!-- Profile Modal -->
-  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
-  <div class="modal" id="profileModal">
-    <div class="modal-header">
-      <div class="modal-title">Mes informations</div>
-      <div class="modal-close" onclick="closeModal()">×</div>
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Prénom</label>
-      <input type="text" class="form-input" id="firstName" placeholder="Ton prénom">
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Âge</label>
-      <input type="number" class="form-input" id="age" placeholder="Ton âge">
-    </div>
-    
-    <button class="save-btn" onclick="saveProfile()">💚 Enregistrer</button>
-  </div>
-  
-  <!-- Conditions Modal -->
-  <div class="modal" id="conditionsModal">
-    <div class="modal-header">
-      <div class="modal-title">Mes conditions</div>
-      <div class="modal-close" onclick="closeModal()">×</div>
-    </div>
-    
-    <div class="info-text">
-      Sélectionne les conditions que tu souhaites suivre dans MindFlow. Cela permettra de personnaliser ton expérience.
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Conditions (séparées par des virgules)</label>
-      <input type="text" class="form-input" id="conditions" placeholder="Ex: TDI, Dépression, Anxiété">
-    </div>
-    
-    <button class="save-btn" onclick="saveConditions()">💚 Enregistrer</button>
-  </div>
-  
-  <!-- Export Modal -->
-  <div class="modal" id="exportModal">
-    <div class="modal-header">
-      <div class="modal-title">Export PDF</div>
-      <div class="modal-close" onclick="closeModal()">×</div>
-    </div>
-    
-    <div class="info-text">
-      Exporte un rapport complet de tes données MindFlow pour le partager avec ton thérapeute ou pour ton suivi personnel.
-    </div>
-    
-    <div class="info-text">
-      📊 Inclus :<br>
-      • Graphiques d'humeur<br>
-      • Historique journal<br>
-      • Suivi traitement<br>
-      • Statistiques globales
-    </div>
-    
-    <button class="export-btn" onclick="exportPDF()">📄 Générer le PDF</button>
-  </div>
-  
-  <!-- About Modal -->
-  <div class="modal" id="aboutModal">
-    <div class="modal-header">
-      <div class="modal-title">À propos</div>
-      <div class="modal-close" onclick="closeModal()">×</div>
-    </div>
-    
-    <div class="info-text" style="text-align: center;">
-      <div style="font-size: 60px; margin-bottom: 20px;">💚</div>
-      <div style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">MindFlow</div>
-      <div style="font-size: 16px; margin-bottom: 20px;">Version 1.0 Beta</div>
-      
-      <div style="text-align: left; margin-top: 30px;">
-        <strong>Mission :</strong><br>
-        Accompagner les personnes vivant avec des troubles de santé mentale dans leur quotidien avec bienveillance et empathie.
-        <br><br>
-        <strong>Fonctionnalités :</strong><br>
-        • Suivi d'humeur quotidien<br>
-        • Journal personnel<br>
-        • Gestion du traitement<br>
-        • Plan de crise<br>
-        • Modules spécialisés<br>
-        • Bibliothèque DSM-5<br>
-        • Agenda bien-être<br>
-        <br>
-        <strong>Confidentialité :</strong><br>
-        Toutes tes données sont stockées localement sur ton appareil. Aucune donnée n'est envoyée à des serveurs externes.
-        <br><br>
-        <div style="text-align: center; margin-top: 20px; color: #8B7EB8;">
-          Créé avec 💚 par Laura
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <div class="success-message" id="successMessage">
-    <div class="success-icon">✅</div>
-    <div class="success-text" id="successText">Enregistré !</div>
-  </div>
-  
   <script>
-    function loadProfile() {
-      const profile = JSON.parse(localStorage.getItem('mindflow_profile') || '{}');
-      
-      if (profile.firstName) {
-        document.getElementById('profileName').textContent = profile.firstName;
-        document.getElementById('firstName').value = profile.firstName;
-      }
-      
-      if (profile.age) {
-        document.getElementById('age').value = profile.age;
-      }
-      
-      if (profile.conditions) {
-        document.getElementById('conditions').value = profile.conditions;
-        document.getElementById('profileEmail').textContent = profile.conditions;
-      }
-    }
-    
-    function openProfileModal() {
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('profileModal').classList.add('show');
-    }
-    
-    function openConditionsModal() {
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('conditionsModal').classList.add('show');
-    }
-    
-    function openExportModal() {
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('exportModal').classList.add('show');
-    }
-    
-    function openAboutModal() {
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('aboutModal').classList.add('show');
-    }
-    
-    function closeModal() {
-      document.getElementById('modalOverlay').classList.remove('show');
-      document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('show'));
-    }
-    
-    function saveProfile() {
-      const firstName = document.getElementById('firstName').value.trim();
-      const age = document.getElementById('age').value.trim();
-      
-      let profile = JSON.parse(localStorage.getItem('mindflow_profile') || '{}');
-      profile.firstName = firstName;
-      profile.age = age;
-      localStorage.setItem('mindflow_profile', JSON.stringify(profile));
-      
-      closeModal();
-      showSuccess('Profil enregistré !');
-      loadProfile();
-    }
-    
-    function saveConditions() {
-      const conditions = document.getElementById('conditions').value.trim();
-      
-      let profile = JSON.parse(localStorage.getItem('mindflow_profile') || '{}');
-      profile.conditions = conditions;
-      localStorage.setItem('mindflow_profile', JSON.stringify(profile));
-      
-      closeModal();
-      showSuccess('Conditions enregistrées !');
-      loadProfile();
-    }
-    
-    function exportPDF() {
-      alert('Export PDF sera disponible prochainement ! 📄\n\nCette fonctionnalité générera un rapport complet de tes données MindFlow.');
-      closeModal();
-    }
-    
-    function clearData() {
-      if (!confirm('⚠️ Es-tu sûr(e) de vouloir effacer TOUTES tes données ?\n\nCette action est irréversible !')) return;
-      
-      if (!confirm('Dernière confirmation : Toutes tes humeurs, entrées de journal, et médicaments seront supprimés. Continuer ?')) return;
-      
-      localStorage.removeItem('mindflow_moods');
-      localStorage.removeItem('mindflow_journal');
-      localStorage.removeItem('mindflow_meds');
-      localStorage.removeItem('mindflow_profile');
-      localStorage.removeItem('mindflow_triggers');
-      localStorage.removeItem('mindflow_alters');
-      localStorage.removeItem('mindflow_switches');
-      localStorage.removeItem('mindflow_crisis_signals');
-      localStorage.removeItem('mindflow_crisis_steps');
-      localStorage.removeItem('mindflow_crisis_coping');
-      localStorage.removeItem('mindflow_crisis_contacts');
-      localStorage.removeItem('mindflow_cycles');
-      localStorage.removeItem('mindflow_dbt_logs');
-      localStorage.removeItem('mindflow_anxiety_logs');
-      localStorage.removeItem('mindflow_panics');
-      localStorage.removeItem('mindflow_tasks');
-      localStorage.removeItem('mindflow_tasks_date');
-      localStorage.removeItem('mindflow_agenda');
-      
-      showSuccess('Données effacées !');
-      setTimeout(() => {
+    const profilManager = {
+      clearData() {
+        const confirmation = confirm(
+          '⚠️ ATTENTION !\n\n' +
+          'Tu vas supprimer TOUTES tes données :\n' +
+          '• Humeurs\n' +
+          '• Journal\n' +
+          '• Traitements\n' +
+          '• Rendez-vous\n' +
+          '• Plan de crise\n' +
+          '• Tous les modules\n\n' +
+          'Cette action est IRRÉVERSIBLE !\n\n' +
+          'Es-tu vraiment sûr(e) ?'
+        );
+        
+        if (!confirmation) return;
+        
+        const doubleConfirm = confirm(
+          '🚨 DERNIÈRE CONFIRMATION !\n\n' +
+          'Toutes tes données vont être perdues définitivement.\n\n' +
+          'Confirmes-tu la suppression ?'
+        );
+        
+        if (!doubleConfirm) return;
+        
+        // Clear all localStorage data
+        const keys = Object.keys(localStorage);
+        keys.forEach(key => {
+          if (key.startsWith('mindflow_')) {
+            localStorage.removeItem(key);
+          }
+        });
+        
+        alert('✅ Toutes tes données ont été supprimées.\n\nTu vas être redirigé vers l\'accueil.');
+        
         window.location.href = 'index.html';
-      }, 1500);
-    }
-    
-    function showSuccess(text) {
-      document.getElementById('successText').textContent = text;
-      const successMsg = document.getElementById('successMessage');
-      successMsg.classList.add('show');
-      setTimeout(() => {
-        successMsg.classList.remove('show');
-      }, 2000);
-    }
-    
-    loadProfile();
+      }
+    };
   </script>
-  <script src="luna-bubble.js"></script>
-```
-
-**5️⃣ Commit !**
-
-**Message :**
-```
-Profil - Ajout bulle Luna
 </body>
 </html>
-```
-
----
-
-## ✅ **COMMIT MESSAGE :**
-```
-Profil - Ajout module Agenda Bien-être
