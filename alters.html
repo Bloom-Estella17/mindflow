@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>🎭 MindFlow - Système/Alters</title>
+  <title>🎭 MindFlow - TDI/Alters</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#8B7EB8">
   
   <style>
     * {
@@ -13,9 +15,25 @@
       -webkit-tap-highlight-color: transparent;
     }
     
+    :root {
+      --primary: #8B7EB8;
+      --primary-light: #B8A7D5;
+      --secondary: #A8D8EA;
+      --text-dark: #2D2D3A;
+      --text-gray: #666;
+      --text-light: #888;
+      --bg-card: rgba(139, 126, 184, 0.05);
+      --shadow-sm: 0 4px 20px rgba(0,0,0,0.08);
+      --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 25px;
+      --transition: all 0.3s ease;
+    }
+    
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
       min-height: 100vh;
       padding: 15px;
       padding-bottom: 100px;
@@ -34,215 +52,206 @@
       align-items: center;
       padding: 20px 25px;
       background: white;
-      border-radius: 20px;
+      border-radius: var(--radius-md);
       margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      box-shadow: var(--shadow-sm);
     }
     
     .back-btn {
       font-size: 24px;
       cursor: pointer;
       text-decoration: none;
+      transition: var(--transition);
     }
     
     .header-title {
       font-size: 20px;
       font-weight: bold;
-      color: #8B7EB8;
+      color: var(--primary);
     }
     
-    .add-btn-header {
+    .add-btn {
       font-size: 28px;
       cursor: pointer;
-      color: #8B7EB8;
+      color: var(--primary);
+      transition: var(--transition);
     }
     
-    .fronting-card {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 25px;
+    .card {
+      background: white;
+      border-radius: var(--radius-lg);
       padding: 25px;
       margin-bottom: 20px;
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .card-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 20px;
+    }
+    
+    .quick-switch {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-radius: var(--radius-lg);
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(139, 126, 184, 0.3);
       color: white;
     }
     
-    .fronting-title {
+    .quick-title {
       font-size: 18px;
       font-weight: bold;
       margin-bottom: 15px;
-      opacity: 0.9;
     }
     
-    .fronting-display {
+    .alter-select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-family: inherit;
       background: rgba(255,255,255,0.2);
-      padding: 20px;
-      border-radius: 15px;
-      text-align: center;
+      color: white;
+      outline: none;
+      margin-bottom: 15px;
     }
     
-    .fronting-name {
-      font-size: 28px;
-      font-weight: bold;
-      margin-bottom: 5px;
+    .alter-select option {
+      color: var(--text-dark);
     }
     
-    .fronting-time {
-      font-size: 14px;
-      opacity: 0.9;
-    }
-    
-    .switch-btn {
+    .quick-btn {
       width: 100%;
       padding: 12px;
-      background: rgba(255,255,255,0.25);
-      color: white;
+      background: white;
+      color: var(--primary);
       border: none;
-      border-radius: 12px;
+      border-radius: var(--radius-sm);
       font-size: 15px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 15px;
-      transition: all 0.3s;
+      transition: var(--transition);
     }
     
-    .switch-btn:active {
-      background: rgba(255,255,255,0.4);
+    .quick-btn:active {
       transform: scale(0.98);
     }
     
-    .stats-card {
-      background: white;
-      border-radius: 25px;
-      padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    }
-    
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-    }
-    
-    .stat-item {
-      background: rgba(139, 126, 184, 0.08);
-      padding: 20px;
-      border-radius: 15px;
-      text-align: center;
-    }
-    
-    .stat-value {
-      font-size: 32px;
-      font-weight: bold;
-      color: #8B7EB8;
-      margin-bottom: 5px;
-    }
-    
-    .stat-label {
-      font-size: 13px;
-      color: #666;
-    }
-    
-    .section-card {
-      background: white;
-      border-radius: 25px;
-      padding: 25px;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    }
-    
-    .section-title {
-      font-size: 20px;
-      font-weight: bold;
-      color: #2D2D3A;
-      margin-bottom: 20px;
+    .alter-list {
+      list-style: none;
     }
     
     .alter-item {
-      background: rgba(139, 126, 184, 0.05);
-      border-radius: 15px;
+      background: var(--bg-card);
       padding: 18px;
+      border-radius: var(--radius-sm);
       margin-bottom: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
+      border-left: 4px solid var(--primary);
+    }
+    
+    .alter-header {
       display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    
-    .alter-item:active {
-      background: rgba(139, 126, 184, 0.1);
-      transform: scale(0.98);
-    }
-    
-    .alter-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      flex-shrink: 0;
-    }
-    
-    .alter-info {
-      flex: 1;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
     }
     
     .alter-name {
-      font-size: 17px;
+      font-size: 18px;
       font-weight: bold;
-      color: #2D2D3A;
-      margin-bottom: 4px;
+      color: var(--text-dark);
     }
     
-    .alter-details {
-      font-size: 14px;
-      color: #666;
+    .alter-age {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-top: 3px;
     }
     
     .alter-role {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--primary);
+      color: white;
+    }
+    
+    .alter-desc {
+      font-size: 14px;
+      color: var(--text-gray);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    
+    .alter-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .action-btn {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 8px;
       font-size: 13px;
-      color: #8B7EB8;
-      margin-top: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .action-btn.edit {
+      background: rgba(139, 126, 184, 0.15);
+      color: var(--primary);
+    }
+    
+    .action-btn.delete {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+    }
+    
+    .switch-list {
+      list-style: none;
     }
     
     .switch-item {
-      background: rgba(102, 126, 234, 0.08);
-      border-radius: 12px;
+      background: var(--bg-card);
       padding: 15px;
+      border-radius: var(--radius-sm);
       margin-bottom: 10px;
-      border-left: 4px solid #667eea;
     }
     
     .switch-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
     }
     
-    .switch-name {
+    .switch-alter {
       font-size: 16px;
       font-weight: bold;
-      color: #667eea;
+      color: var(--primary);
     }
     
-    .switch-date {
-      font-size: 13px;
-      color: #999;
+    .switch-time {
+      font-size: 12px;
+      color: var(--text-light);
     }
     
-    .switch-duration {
+    .switch-note {
       font-size: 13px;
-      color: #666;
+      color: var(--text-gray);
+      font-style: italic;
     }
     
     .empty-state {
       text-align: center;
       padding: 40px 20px;
-      color: #999;
+      color: var(--text-light);
     }
     
     .empty-icon {
@@ -250,59 +259,16 @@
       margin-bottom: 15px;
     }
     
-    .empty-text {
-      font-size: 16px;
-    }
-    
-    .bottom-nav {
-      position: fixed;
-      bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: white;
-      border-radius: 25px;
-      padding: 15px 25px;
-      display: flex;
-      gap: 35px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-      z-index: 1000;
-      max-width: 350px;
-      width: calc(100% - 40px);
-      justify-content: center;
-    }
-    
-    .nav-item {
-      font-size: 26px;
-      cursor: pointer;
-      transition: all 0.3s;
-      opacity: 0.4;
-      text-decoration: none;
-    }
-    
-    .nav-item.active {
-      opacity: 1;
-      transform: scale(1.15);
-    }
-    
     .modal-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       background: rgba(0,0,0,0.5);
-      z-index: 3000;
+      z-index: 2000;
       display: none;
     }
     
     .modal-overlay.show {
       display: block;
-      animation: fadeIn 0.3s ease;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
     }
     
     .modal {
@@ -311,25 +277,19 @@
       left: 50%;
       transform: translate(-50%, -50%);
       background: white;
-      border-radius: 25px;
+      border-radius: var(--radius-lg);
       padding: 30px;
       max-width: 90%;
       width: 400px;
       max-height: 80vh;
       overflow-y: auto;
-      z-index: 3001;
+      z-index: 2001;
       display: none;
       box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     }
     
     .modal.show {
       display: block;
-      animation: slideUp 0.3s ease;
-    }
-    
-    @keyframes slideUp {
-      from { transform: translate(-50%, -40%); opacity: 0; }
-      to { transform: translate(-50%, -50%); opacity: 1; }
     }
     
     .modal-header {
@@ -342,13 +302,13 @@
     .modal-title {
       font-size: 22px;
       font-weight: bold;
-      color: #2D2D3A;
+      color: var(--text-dark);
     }
     
     .modal-close {
       font-size: 28px;
       cursor: pointer;
-      color: #888;
+      color: var(--text-light);
     }
     
     .form-group {
@@ -358,168 +318,76 @@
     .form-label {
       font-size: 15px;
       font-weight: 600;
-      color: #2D2D3A;
+      color: var(--text-dark);
       margin-bottom: 8px;
       display: block;
     }
     
-    .form-input {
+    .form-input, .form-select, .form-textarea {
       width: 100%;
       padding: 12px 15px;
       border: 2px solid #E5E5E5;
-      border-radius: 12px;
+      border-radius: var(--radius-sm);
       font-size: 15px;
       font-family: inherit;
       outline: none;
-      transition: border 0.3s;
+      transition: var(--transition);
     }
     
-    .form-input:focus {
-      border-color: #8B7EB8;
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--primary);
     }
     
     .form-textarea {
-      width: 100%;
-      min-height: 80px;
-      padding: 12px 15px;
-      border: 2px solid #E5E5E5;
-      border-radius: 12px;
-      font-size: 15px;
-      font-family: inherit;
-      outline: none;
-      transition: border 0.3s;
       resize: vertical;
-    }
-    
-    .form-textarea:focus {
-      border-color: #8B7EB8;
-    }
-    
-    .color-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 10px;
-    }
-    
-    .color-option {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      cursor: pointer;
-      border: 3px solid transparent;
-      transition: all 0.3s;
-    }
-    
-    .color-option.selected {
-      border-color: #2D2D3A;
-      transform: scale(1.2);
-    }
-    
-    .emoji-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 10px;
-      max-height: 200px;
-      overflow-y: auto;
-    }
-    
-    .emoji-option {
-      font-size: 32px;
-      text-align: center;
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 12px;
-      transition: all 0.2s;
-    }
-    
-    .emoji-option:active {
-      background: rgba(139, 126, 184, 0.1);
-      transform: scale(1.2);
+      min-height: 100px;
     }
     
     .save-btn {
       width: 100%;
       padding: 15px;
-      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
       color: white;
       border: none;
       border-radius: 15px;
       font-size: 17px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 10px;
-      transition: all 0.3s;
+      transition: var(--transition);
     }
     
     .save-btn:active {
       transform: scale(0.98);
     }
     
-    .delete-btn {
-      width: 100%;
-      padding: 12px;
-      background: #ff6b6b;
-      color: white;
-      border: none;
-      border-radius: 15px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 15px;
-      transition: all 0.3s;
-    }
-    
-    .delete-btn:active {
-      transform: scale(0.98);
-      background: #ff5252;
-    }
-    
-    .alter-list-item {
-      padding: 12px;
-      background: rgba(139, 126, 184, 0.05);
-      border-radius: 12px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .alter-list-item:active {
-      background: rgba(139, 126, 184, 0.1);
-    }
-    
-    .success-message {
+    .bottom-nav {
       position: fixed;
-      top: 50%;
+      bottom: 15px;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translateX(-50%);
       background: white;
-      padding: 30px 40px;
-      border-radius: 20px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-      text-align: center;
-      z-index: 4000;
-      display: none;
+      border-radius: var(--radius-lg);
+      padding: 15px 25px;
+      display: flex;
+      gap: 35px;
+      box-shadow: var(--shadow-md);
+      z-index: 1000;
+      max-width: 350px;
+      width: calc(100% - 40px);
+      justify-content: center;
     }
     
-    .success-message.show {
-      display: block;
-      animation: popup 0.3s ease;
+    .nav-item {
+      font-size: 26px;
+      cursor: pointer;
+      transition: var(--transition);
+      opacity: 0.4;
+      text-decoration: none;
     }
     
-    @keyframes popup {
-      from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
-      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    }
-    
-    .success-icon {
-      font-size: 60px;
-      margin-bottom: 15px;
-    }
-    
-    .success-text {
-      font-size: 20px;
-      font-weight: bold;
-      color: #2D2D3A;
+    .nav-item.active {
+      opacity: 1;
+      transform: scale(1.15);
     }
   </style>
 </head>
@@ -527,40 +395,26 @@
   <div class="container">
     <div class="header">
       <a href="index.html" class="back-btn">←</a>
-      <div class="header-title">Système/Alters</div>
-      <div class="add-btn-header" onclick="openAddModal()">+</div>
+      <div class="header-title">TDI / Alters</div>
+      <div class="add-btn" onclick="alterManager.openModal()">+</div>
     </div>
     
-    <div class="fronting-card">
-      <div class="fronting-title">Frontal en ce moment :</div>
-      <div class="fronting-display">
-        <div class="fronting-name" id="frontingName">Personne</div>
-        <div class="fronting-time" id="frontingTime">-</div>
-      </div>
-      <button class="switch-btn" onclick="openSwitchModal()">📝 Logger un switch</button>
+    <div class="quick-switch">
+      <div class="quick-title">Enregistrer un switch</div>
+      <select class="alter-select" id="quickAlterSelect">
+        <option value="">Sélectionne un alter</option>
+      </select>
+      <button class="quick-btn" onclick="alterManager.quickSwitch()">✓ Enregistrer</button>
     </div>
     
-    <div class="stats-card">
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-value" id="totalAlters">0</div>
-          <div class="stat-label">Alters</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value" id="totalSwitches">0</div>
-          <div class="stat-label">Switches</div>
-        </div>
-      </div>
+    <div class="card">
+      <div class="card-title">Mes alters</div>
+      <ul class="alter-list" id="alterList"></ul>
     </div>
     
-    <div class="section-card">
-      <div class="section-title">Tous les alters</div>
-      <div id="altersList"></div>
-    </div>
-    
-    <div class="section-card">
-      <div class="section-title">Historique des switches</div>
-      <div id="switchHistory"></div>
+    <div class="card">
+      <div class="card-title">Historique des switchs</div>
+      <ul class="switch-list" id="switchList"></ul>
     </div>
   </div>
   
@@ -572,469 +426,242 @@
     <a href="profil.html" class="nav-item">👤</a>
   </div>
   
-  <!-- Add Alter Modal -->
-  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+  <div class="modal-overlay" id="modalOverlay" onclick="alterManager.closeModal()"></div>
   <div class="modal" id="alterModal">
     <div class="modal-header">
-      <div class="modal-title" id="modalTitleText">Ajouter un alter</div>
-      <div class="modal-close" onclick="closeModal()">×</div>
+      <div class="modal-title" id="modalTitle">Nouvel alter</div>
+      <div class="modal-close" onclick="alterManager.closeModal()">×</div>
     </div>
     
     <div class="form-group">
       <label class="form-label">Nom</label>
-      <input type="text" class="form-input" id="alterName" placeholder="Nom de l'alter">
+      <input type="text" class="form-input" id="alterName" placeholder="Prénom de l'alter">
     </div>
     
     <div class="form-group">
-      <label class="form-label">Âge</label>
-      <input type="text" class="form-input" id="alterAge" placeholder="Ex: 25, enfant, ageless...">
+      <label class="form-label">Âge apparent</label>
+      <input type="text" class="form-input" id="alterAge" placeholder="Ex: 8 ans, adolescent, adulte...">
     </div>
     
     <div class="form-group">
-      <label class="form-label">Pronom</label>
-      <input type="text" class="form-input" id="alterPronoun" placeholder="il/elle/iel/autre">
+      <label class="form-label">Rôle / Fonction</label>
+      <input type="text" class="form-input" id="alterRole" placeholder="Ex: Protecteur, Enfant, Hôte...">
     </div>
     
     <div class="form-group">
-      <label class="form-label">Rôle</label>
-      <input type="text" class="form-input" id="alterRole" placeholder="Ex: Protecteur, Gardien, Hôte...">
+      <label class="form-label">Description</label>
+      <textarea class="form-textarea" id="alterDesc" placeholder="Personnalité, caractéristiques, triggers de front..."></textarea>
     </div>
     
-    <div class="form-group">
-      <label class="form-label">Emoji</label>
-      <div class="emoji-grid">
-        <div class="emoji-option" onclick="selectEmoji('😊')">😊</div>
-        <div class="emoji-option" onclick="selectEmoji('😎')">😎</div>
-        <div class="emoji-option" onclick="selectEmoji('🥰')">🥰</div>
-        <div class="emoji-option" onclick="selectEmoji('😤')">😤</div>
-        <div class="emoji-option" onclick="selectEmoji('😢')">😢</div>
-        <div class="emoji-option" onclick="selectEmoji('😠')">😠</div>
-        <div class="emoji-option" onclick="selectEmoji('🤔')">🤔</div>
-        <div class="emoji-option" onclick="selectEmoji('😴')">😴</div>
-        <div class="emoji-option" onclick="selectEmoji('🤗')">🤗</div>
-        <div class="emoji-option" onclick="selectEmoji('😌')">😌</div>
-        <div class="emoji-option" onclick="selectEmoji('🧐')">🧐</div>
-        <div class="emoji-option" onclick="selectEmoji('👶')">👶</div>
-        <div class="emoji-option" onclick="selectEmoji('👧')">👧</div>
-        <div class="emoji-option" onclick="selectEmoji('👦')">👦</div>
-        <div class="emoji-option" onclick="selectEmoji('👨')">👨</div>
-        <div class="emoji-option" onclick="selectEmoji('👩')">👩</div>
-        <div class="emoji-option" onclick="selectEmoji('🦸')">🦸</div>
-        <div class="emoji-option" onclick="selectEmoji('🦹')">🦹</div>
-        <div class="emoji-option" onclick="selectEmoji('🧚')">🧚</div>
-        <div class="emoji-option" onclick="selectEmoji('🧛')">🧛</div>
-        <div class="emoji-option" onclick="selectEmoji('🐺')">🐺</div>
-        <div class="emoji-option" onclick="selectEmoji('🐱')">🐱</div>
-        <div class="emoji-option" onclick="selectEmoji('🐉')">🐉</div>
-        <div class="emoji-option" onclick="selectEmoji('⭐')">⭐</div>
-      </div>
-      <input type="hidden" id="alterEmoji" value="😊">
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Couleur</label>
-      <div class="color-grid">
-        <div class="color-option" style="background: #8B7EB8;" onclick="selectColor('#8B7EB8')"></div>
-        <div class="color-option" style="background: #F4C4D8;" onclick="selectColor('#F4C4D8')"></div>
-        <div class="color-option" style="background: #A8D8EA;" onclick="selectColor('#A8D8EA')"></div>
-        <div class="color-option" style="background: #B8E6D5;" onclick="selectColor('#B8E6D5')"></div>
-        <div class="color-option" style="background: #FFD54F;" onclick="selectColor('#FFD54F')"></div>
-        <div class="color-option" style="background: #FF8787;" onclick="selectColor('#FF8787')"></div>
-        <div class="color-option" style="background: #667eea;" onclick="selectColor('#667eea')"></div>
-        <div class="color-option" style="background: #4CAF50;" onclick="selectColor('#4CAF50')"></div>
-        <div class="color-option" style="background: #FFC107;" onclick="selectColor('#FFC107')"></div>
-        <div class="color-option" style="background: #9C27B0;" onclick="selectColor('#9C27B0')"></div>
-        <div class="color-option" style="background: #FF5722;" onclick="selectColor('#FF5722')"></div>
-        <div class="color-option" style="background: #607D8B;" onclick="selectColor('#607D8B')"></div>
-      </div>
-      <input type="hidden" id="alterColor" value="#8B7EB8">
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Description / Traits</label>
-      <textarea class="form-textarea" id="alterDesc" placeholder="Personnalité, préférences, notes..."></textarea>
-    </div>
-    
-    <button class="save-btn" onclick="saveAlter()">💚 Enregistrer</button>
-    <button class="delete-btn" id="deleteAlterBtn" style="display: none;" onclick="deleteAlter()">🗑️ Supprimer cet alter</button>
-  </div>
-  
-  <!-- Switch Modal -->
-  <div class="modal" id="switchModal">
-    <div class="modal-header">
-      <div class="modal-title">Logger un switch</div>
-      <div class="modal-close" onclick="closeModal()">×</div>
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Qui est frontal maintenant ?</label>
-      <div id="alterSelectList"></div>
-    </div>
-    
-    <button class="save-btn" onclick="saveSwitch()">💚 Confirmer</button>
-  </div>
-  
-  <!-- View Alter Modal -->
-  <div class="modal" id="viewModal">
-    <div class="modal-header">
-      <div class="modal-title" id="viewAlterName"></div>
-      <div class="modal-close" onclick="closeModal()">×</div>
-    </div>
-    
-    <div id="viewAlterContent"></div>
-    
-    <button class="save-btn" onclick="editCurrentAlter()">✏️ Modifier</button>
-  </div>
-  
-  <div class="success-message" id="successMessage">
-    <div class="success-icon">✅</div>
-    <div class="success-text">Enregistré !</div>
+    <button class="save-btn" onclick="alterManager.save()">💚 Enregistrer</button>
   </div>
   
   <script>
-    let currentAlterId = null;
-    let editMode = false;
-    let selectedEmoji = '😊';
-    let selectedColor = '#8B7EB8';
+    const ALTERS_KEY = 'mindflow_alters';
+    const SWITCHES_KEY = 'mindflow_switches';
     
-    function selectEmoji(emoji) {
-      selectedEmoji = emoji;
-      document.getElementById('alterEmoji').value = emoji;
-    }
-    
-    function selectColor(color) {
-      selectedColor = color;
-      document.getElementById('alterColor').value = color;
-      document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
-      event.target.classList.add('selected');
-    }
-    
-    function loadSystem() {
-      loadAlters();
-      loadSwitches();
-      updateFronting();
-    }
-    
-    function loadAlters() {
-      const alters = JSON.parse(localStorage.getItem('mindflow_alters') || '[]');
-      const list = document.getElementById('altersList');
+    const alterManager = {
+      alters: [],
+      switches: [],
+      editingId: null,
       
-      document.getElementById('totalAlters').textContent = alters.length;
+      init() {
+        this.loadData();
+        this.render();
+        this.updateQuickSelect();
+      },
       
-      if (alters.length === 0) {
-        list.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">🎭</div>
-            <div class="empty-text">Aucun alter ajouté<br>Commence par le + en haut !</div>
-          </div>
-        `;
-        return;
-      }
+      loadData() {
+        this.alters = JSON.parse(localStorage.getItem(ALTERS_KEY) || '[]');
+        this.switches = JSON.parse(localStorage.getItem(SWITCHES_KEY) || '[]');
+        this.switches.sort((a, b) => b.timestamp - a.timestamp);
+      },
       
-      list.innerHTML = alters.map(alter => `
-        <div class="alter-item" onclick="viewAlter(${alter.id})">
-          <div class="alter-avatar" style="background: ${alter.color};">
-            ${alter.emoji}
-          </div>
-          <div class="alter-info">
-            <div class="alter-name">${alter.name}</div>
-            <div class="alter-details">${alter.age} • ${alter.pronoun}</div>
-            <div class="alter-role">${alter.role}</div>
-          </div>
-        </div>
-      `).join('');
-    }
-    
-    function loadSwitches() {
-      const switches = JSON.parse(localStorage.getItem('mindflow_switches') || '[]');
-      const list = document.getElementById('switchHistory');
+      saveData() {
+        localStorage.setItem(ALTERS_KEY, JSON.stringify(this.alters));
+        localStorage.setItem(SWITCHES_KEY, JSON.stringify(this.switches));
+      },
       
-      document.getElementById('totalSwitches').textContent = switches.length;
+      updateQuickSelect() {
+        const select = document.getElementById('quickAlterSelect');
+        select.innerHTML = '<option value="">Sélectionne un alter</option>' +
+          this.alters.map(alter => 
+            `<option value="${alter.id}">${alter.name}</option>`
+          ).join('');
+      },
       
-      if (switches.length === 0) {
-        list.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">📝</div>
-            <div class="empty-text">Aucun switch enregistré</div>
-          </div>
-        `;
-        return;
-      }
+      render() {
+        this.renderAlters();
+        this.renderSwitches();
+      },
       
-      list.innerHTML = switches.slice(0, 10).map(sw => {
-        const date = new Date(sw.date);
-        const dateStr = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+      renderAlters() {
+        const list = document.getElementById('alterList');
         
-        let duration = '';
-        if (sw.endDate) {
-          const end = new Date(sw.endDate);
-          const diff = Math.floor((end - date) / 1000 / 60);
-          if (diff < 60) duration = `${diff} min`;
-          else if (diff < 1440) duration = `${Math.floor(diff / 60)}h ${diff % 60}min`;
-          else duration = `${Math.floor(diff / 1440)} jours`;
-        }
-        
-        return `
-          <div class="switch-item">
-            <div class="switch-header">
-              <div class="switch-name">${sw.alterName}</div>
-              <div class="switch-date">${dateStr}</div>
+        if (this.alters.length === 0) {
+          list.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">🎭</div>
+              <div class="empty-text">Aucun alter enregistré<br>Clique sur + pour en ajouter</div>
             </div>
-            ${duration ? `<div class="switch-duration">Durée: ${duration}</div>` : ''}
-          </div>
-        `;
-      }).join('');
-    }
-    
-    function updateFronting() {
-      const switches = JSON.parse(localStorage.getItem('mindflow_switches') || '[]');
-      if (switches.length === 0) {
-        document.getElementById('frontingName').textContent = 'Personne';
-        document.getElementById('frontingTime').textContent = '-';
-        return;
-      }
-      
-      const current = switches[0];
-      document.getElementById('frontingName').textContent = current.alterName;
-      
-      const date = new Date(current.date);
-      const now = new Date();
-      const diff = Math.floor((now - date) / 1000 / 60);
-      
-      let timeStr = '';
-      if (diff < 60) timeStr = `Depuis ${diff} min`;
-      else if (diff < 1440) timeStr = `Depuis ${Math.floor(diff / 60)}h ${diff % 60}min`;
-      else timeStr = `Depuis ${Math.floor(diff / 1440)} jour(s)`;
-      
-      document.getElementById('frontingTime').textContent = timeStr;
-    }
-    
-    function openAddModal() {
-      editMode = false;
-      currentAlterId = null;
-      document.getElementById('modalTitleText').textContent = 'Ajouter un alter';
-      document.getElementById('alterName').value = '';
-      document.getElementById('alterAge').value = '';
-      document.getElementById('alterPronoun').value = '';
-      document.getElementById('alterRole').value = '';
-      document.getElementById('alterDesc').value = '';
-      selectedEmoji = '😊';
-      selectedColor = '#8B7EB8';
-      document.getElementById('deleteAlterBtn').style.display = 'none';
-      
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('alterModal').classList.add('show');
-    }
-    
-    function viewAlter(id) {
-      const alters = JSON.parse(localStorage.getItem('mindflow_alters') || '[]');
-      const alter = alters.find(a => a.id === id);
-      
-      if (!alter) return;
-      
-      currentAlterId = id;
-      
-      document.getElementById('viewAlterName').textContent = alter.name;
-      
-      const switches = JSON.parse(localStorage.getItem('mindflow_switches') || '[]');
-      const alterSwitches = switches.filter(s => s.alterId === id);
-      
-      document.getElementById('viewAlterContent').innerHTML = `
-        <div style="text-align: center; margin-bottom: 20px;">
-          <div style="width: 80px; height: 80px; border-radius: 50%; background: ${alter.color}; display: inline-flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 15px;">
-            ${alter.emoji}
-          </div>
-        </div>
-        <div style="margin-bottom: 15px;">
-          <strong>Âge:</strong> ${alter.age}<br>
-          <strong>Pronom:</strong> ${alter.pronoun}<br>
-          <strong>Rôle:</strong> ${alter.role}
-        </div>
-        <div style="margin-bottom: 15px;">
-          <strong>Description:</strong><br>
-          ${alter.desc || '<em>Aucune description</em>'}
-        </div>
-        <div style="margin-bottom: 15px;">
-          <strong>Statistiques:</strong><br>
-          Nombre de switches enregistrés: ${alterSwitches.length}
-        </div>
-      `;
-      
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('viewModal').classList.add('show');
-    }
-    
-    function editCurrentAlter() {
-      const alters = JSON.parse(localStorage.getItem('mindflow_alters') || '[]');
-      const alter = alters.find(a => a.id === currentAlterId);
-      
-      if (!alter) return;
-      
-      editMode = true;
-      document.getElementById('modalTitleText').textContent = 'Modifier l\'alter';
-      document.getElementById('alterName').value = alter.name;
-      document.getElementById('alterAge').value = alter.age;
-      document.getElementById('alterPronoun').value = alter.pronoun;
-      document.getElementById('alterRole').value = alter.role;
-      document.getElementById('alterDesc').value = alter.desc || '';
-      selectedEmoji = alter.emoji;
-      selectedColor = alter.color;
-      document.getElementById('deleteAlterBtn').style.display = 'block';
-      
-      closeModal();
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('alterModal').classList.add('show');
-    }
-    
-    function saveAlter() {
-      const name = document.getElementById('alterName').value.trim();
-      const age = document.getElementById('alterAge').value.trim();
-      const pronoun = document.getElementById('alterPronoun').value.trim();
-      const role = document.getElementById('alterRole').value.trim();
-      const desc = document.getElementById('alterDesc').value.trim();
-      
-      if (!name) {
-        alert('Entre le nom de l\'alter ! 💚');
-        return;
-      }
-      
-      let alters = JSON.parse(localStorage.getItem('mindflow_alters') || '[]');
-      
-      if (editMode && currentAlterId) {
-        const alter = alters.find(a => a.id === currentAlterId);
-        if (alter) {
-          alter.name = name;
-          alter.age = age;
-          alter.pronoun = pronoun;
-          alter.role = role;
-          alter.emoji = selectedEmoji;
-          alter.color = selectedColor;
-          alter.desc = desc;
+          `;
+          return;
         }
-      } else {
-        alters.push({
+        
+        list.innerHTML = this.alters.map(alter => `
+          <li class="alter-item">
+            <div class="alter-header">
+              <div>
+                <div class="alter-name">${alter.name}</div>
+                <div class="alter-age">${alter.age}</div>
+              </div>
+              <span class="alter-role">${alter.role}</span>
+            </div>
+            <div class="alter-desc">${alter.description}</div>
+            <div class="alter-actions">
+              <button class="action-btn edit" onclick="alterManager.edit(${alter.id})">✏️ Modifier</button>
+              <button class="action-btn delete" onclick="alterManager.delete(${alter.id})">🗑️ Supprimer</button>
+            </div>
+          </li>
+        `).join('');
+      },
+      
+      renderSwitches() {
+        const list = document.getElementById('switchList');
+        
+        if (this.switches.length === 0) {
+          list.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">🔄</div>
+              <div class="empty-text">Aucun switch enregistré</div>
+            </div>
+          `;
+          return;
+        }
+        
+        list.innerHTML = this.switches.slice(0, 20).map(sw => {
+          const alter = this.alters.find(a => a.id === sw.alterId);
+          const time = new Date(sw.timestamp);
+          
+          return `
+            <li class="switch-item">
+              <div class="switch-header">
+                <div class="switch-alter">${alter ? alter.name : 'Inconnu'}</div>
+                <div class="switch-time">${time.toLocaleString('fr-FR')}</div>
+              </div>
+              ${sw.note ? `<div class="switch-note">${sw.note}</div>` : ''}
+            </li>
+          `;
+        }).join('');
+      },
+      
+      quickSwitch() {
+        const alterId = parseInt(document.getElementById('quickAlterSelect').value);
+        
+        if (!alterId) {
+          alert('Sélectionne un alter ! 💚');
+          return;
+        }
+        
+        this.switches.unshift({
           id: Date.now(),
-          name: name,
-          age: age,
-          pronoun: pronoun,
-          role: role,
-          emoji: selectedEmoji,
-          color: selectedColor,
-          desc: desc
+          alterId,
+          timestamp: Date.now(),
+          note: ''
         });
+        
+        this.saveData();
+        this.renderSwitches();
+        
+        document.getElementById('quickAlterSelect').value = '';
+      },
+      
+      openModal(id = null) {
+        this.editingId = id;
+        
+        if (id) {
+          const alter = this.alters.find(a => a.id === id);
+          if (alter) {
+            document.getElementById('modalTitle').textContent = 'Modifier l\'alter';
+            document.getElementById('alterName').value = alter.name;
+            document.getElementById('alterAge').value = alter.age;
+            document.getElementById('alterRole').value = alter.role;
+            document.getElementById('alterDesc').value = alter.description;
+          }
+        } else {
+          document.getElementById('modalTitle').textContent = 'Nouvel alter';
+          document.getElementById('alterName').value = '';
+          document.getElementById('alterAge').value = '';
+          document.getElementById('alterRole').value = '';
+          document.getElementById('alterDesc').value = '';
+        }
+        
+        document.getElementById('modalOverlay').classList.add('show');
+        document.getElementById('alterModal').classList.add('show');
+      },
+      
+      closeModal() {
+        document.getElementById('modalOverlay').classList.remove('show');
+        document.getElementById('alterModal').classList.remove('show');
+        this.editingId = null;
+      },
+      
+      save() {
+        const name = document.getElementById('alterName').value.trim();
+        const age = document.getElementById('alterAge').value.trim();
+        const role = document.getElementById('alterRole').value.trim();
+        const description = document.getElementById('alterDesc').value.trim();
+        
+        if (!name || !age || !role) {
+          alert('Remplis au moins le nom, l\'âge et le rôle ! 💚');
+          return;
+        }
+        
+        if (this.editingId) {
+          const index = this.alters.findIndex(a => a.id === this.editingId);
+          if (index > -1) {
+            this.alters[index] = {
+              ...this.alters[index],
+              name,
+              age,
+              role,
+              description
+            };
+          }
+        } else {
+          this.alters.push({
+            id: Date.now(),
+            name,
+            age,
+            role,
+            description
+          });
+        }
+        
+        this.saveData();
+        this.closeModal();
+        this.render();
+        this.updateQuickSelect();
+      },
+      
+      edit(id) {
+        this.openModal(id);
+      },
+      
+      delete(id) {
+        if (!confirm('Supprimer cet alter ?')) return;
+        
+        this.alters = this.alters.filter(a => a.id !== id);
+        this.switches = this.switches.filter(s => s.alterId !== id);
+        this.saveData();
+        this.render();
+        this.updateQuickSelect();
       }
-      
-      localStorage.setItem('mindflow_alters', JSON.stringify(alters));
-      
-      closeModal();
-      showSuccess();
-      loadSystem();
-    }
+    };
     
-    function deleteAlter() {
-      if (!confirm('Supprimer cet alter et tout son historique ?')) return;
-      
-      let alters = JSON.parse(localStorage.getItem('mindflow_alters') || '[]');
-      alters = alters.filter(a => a.id !== currentAlterId);
-      localStorage.setItem('mindflow_alters', JSON.stringify(alters));
-      
-      let switches = JSON.parse(localStorage.getItem('mindflow_switches') || '[]');
-      switches = switches.filter(s => s.alterId !== currentAlterId);
-      localStorage.setItem('mindflow_switches', JSON.stringify(switches));
-      
-      closeModal();
-      loadSystem();
-    }
-    
-    function openSwitchModal() {
-      const alters = JSON.parse(localStorage.getItem('mindflow_alters') || '[]');
-      
-      if (alters.length === 0) {
-        alert('Ajoute d\'abord des alters ! 💚');
-        return;
-      }
-      
-      const list = document.getElementById('alterSelectList');
-      list.innerHTML = alters.map(alter => `
-        <div class="alter-list-item" onclick="selectAlterForSwitch(${alter.id}, '${alter.name}')">
-          <span style="font-size: 24px; margin-right: 10px;">${alter.emoji}</span>
-          <strong>${alter.name}</strong>
-        </div>
-      `).join('');
-      
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('switchModal').classList.add('show');
-    }
-    
-    let selectedAlterForSwitch = null;
-    
-    function selectAlterForSwitch(id, name) {
-      selectedAlterForSwitch = { id: id, name: name };
-      document.querySelectorAll('.alter-list-item').forEach(item => {
-        item.style.background = 'rgba(139, 126, 184, 0.05)';
-      });
-      event.currentTarget.style.background = 'rgba(139, 126, 184, 0.2)';
-    }
-    
-    function saveSwitch() {
-      if (!selectedAlterForSwitch) {
-        alert('Sélectionne un alter ! 💚');
-        return;
-      }
-      
-      let switches = JSON.parse(localStorage.getItem('mindflow_switches') || '[]');
-      
-      if (switches.length > 0) {
-        switches[0].endDate = new Date().toISOString();
-      }
-      
-      switches.unshift({
-        id: Date.now(),
-        alterId: selectedAlterForSwitch.id,
-        alterName: selectedAlterForSwitch.name,
-        date: new Date().toISOString(),
-        endDate: null
-      });
-      
-      localStorage.setItem('mindflow_switches', JSON.stringify(switches));
-      
-      selectedAlterForSwitch = null;
-      closeModal();
-      showSuccess();
-      loadSystem();
-    }
-    
-    function closeModal() {
-      document.getElementById('modalOverlay').classList.remove('show');
-      document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('show'));
-      currentAlterId = null;
-      editMode = false;
-      selectedAlterForSwitch = null;
-    }
-    
-    function showSuccess() {
-      const msg = document.getElementById('successMessage');
-      msg.classList.add('show');
-      setTimeout(() => msg.classList.remove('show'), 1500);
-    }
-    
-    loadSystem();
-    setInterval(updateFronting, 60000);
+    document.addEventListener('DOMContentLoaded', () => {
+      alterManager.init();
+    });
   </script>
-  <script src="luna-bubble.js"></script>
-```
-
-**5️⃣ Commit !**
-
-**Message :**
-```
-Alters - Ajout bulle Luna
 </body>
 </html>
-```
-
----
-
-## ✅ **MESSAGE DE COMMIT :**
-```
-Création module TDI/Alters avec tracking switches
