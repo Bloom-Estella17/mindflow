@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>💔 MindFlow - Borderline (DBT)</title>
+  <title>💔 MindFlow - Borderline</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#8B7EB8">
   
   <style>
     * {
@@ -13,9 +15,25 @@
       -webkit-tap-highlight-color: transparent;
     }
     
+    :root {
+      --primary: #8B7EB8;
+      --primary-light: #B8A7D5;
+      --secondary: #A8D8EA;
+      --text-dark: #2D2D3A;
+      --text-gray: #666;
+      --text-light: #888;
+      --bg-card: rgba(139, 126, 184, 0.05);
+      --shadow-sm: 0 4px 20px rgba(0,0,0,0.08);
+      --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 25px;
+      --transition: all 0.3s ease;
+    }
+    
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
       min-height: 100vh;
       padding: 15px;
       padding-bottom: 100px;
@@ -34,199 +52,181 @@
       align-items: center;
       padding: 20px 25px;
       background: white;
-      border-radius: 20px;
+      border-radius: var(--radius-md);
       margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      box-shadow: var(--shadow-sm);
     }
     
     .back-btn {
       font-size: 24px;
       cursor: pointer;
       text-decoration: none;
+      transition: var(--transition);
     }
     
     .header-title {
       font-size: 20px;
       font-weight: bold;
-      color: #ec4899;
+      color: var(--primary);
     }
     
-    .quick-log-card {
-      background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
-      border-radius: 25px;
+    .header-placeholder { width: 24px; }
+    
+    .card {
+      background: white;
+      border-radius: var(--radius-lg);
       padding: 25px;
       margin-bottom: 20px;
-      box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);
-      color: white;
+      box-shadow: var(--shadow-sm);
     }
     
-    .quick-log-title {
+    .card-title {
       font-size: 20px;
       font-weight: bold;
+      color: var(--text-dark);
       margin-bottom: 15px;
     }
     
-    .quick-log-btn {
-      width: 100%;
-      padding: 15px;
-      background: rgba(255,255,255,0.25);
-      color: white;
-      border: none;
-      border-radius: 15px;
-      font-size: 17px;
-      font-weight: bold;
+    .skill-category {
+      margin-bottom: 25px;
+    }
+    
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
       cursor: pointer;
-      transition: all 0.3s;
     }
     
-    .quick-log-btn:active {
-      background: rgba(255,255,255,0.4);
-      transform: scale(0.98);
+    .category-icon {
+      font-size: 24px;
     }
     
-    .stats-card {
-      background: white;
-      border-radius: 25px;
-      padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    }
-    
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-    }
-    
-    .stat-item {
-      background: rgba(236, 72, 153, 0.08);
-      padding: 20px;
-      border-radius: 15px;
-      text-align: center;
-    }
-    
-    .stat-value {
-      font-size: 32px;
+    .category-title {
+      font-size: 18px;
       font-weight: bold;
-      color: #ec4899;
-      margin-bottom: 5px;
+      color: var(--primary);
+      flex: 1;
     }
     
-    .stat-label {
-      font-size: 13px;
-      color: #666;
-    }
-    
-    .section-card {
-      background: white;
-      border-radius: 25px;
-      padding: 25px;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    }
-    
-    .section-title {
+    .category-arrow {
       font-size: 20px;
-      font-weight: bold;
-      color: #2D2D3A;
-      margin-bottom: 20px;
+      transition: var(--transition);
+    }
+    
+    .category-header.expanded .category-arrow {
+      transform: rotate(90deg);
+    }
+    
+    .skill-list {
+      list-style: none;
+      display: none;
+    }
+    
+    .skill-list.show {
+      display: block;
     }
     
     .skill-item {
-      background: rgba(236, 72, 153, 0.05);
-      border-radius: 15px;
-      padding: 18px;
-      margin-bottom: 12px;
+      background: var(--bg-card);
+      padding: 15px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 10px;
       cursor: pointer;
-      transition: all 0.2s;
-      border-left: 4px solid #ec4899;
+      transition: var(--transition);
     }
     
     .skill-item:active {
-      background: rgba(236, 72, 153, 0.1);
       transform: scale(0.98);
+      background: rgba(139, 126, 184, 0.1);
     }
     
     .skill-name {
-      font-size: 17px;
-      font-weight: bold;
-      color: #ec4899;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-dark);
       margin-bottom: 5px;
     }
     
     .skill-desc {
-      font-size: 14px;
-      color: #666;
+      font-size: 13px;
+      color: var(--text-gray);
       line-height: 1.5;
     }
     
-    .skill-usage {
-      font-size: 13px;
-      color: #999;
-      margin-top: 8px;
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      display: none;
     }
     
-    .log-item {
-      background: rgba(236, 72, 153, 0.05);
-      border-radius: 15px;
-      padding: 18px;
-      margin-bottom: 12px;
-      border-left: 4px solid #ec4899;
+    .modal-overlay.show {
+      display: block;
     }
     
-    .log-header {
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      max-width: 90%;
+      width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      z-index: 2001;
+      display: none;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .modal.show {
+      display: block;
+    }
+    
+    .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .modal-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    
+    .modal-close {
+      font-size: 28px;
+      cursor: pointer;
+      color: var(--text-light);
+    }
+    
+    .modal-content {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text-dark);
+    }
+    
+    .modal-content h3 {
+      font-size: 17px;
+      color: var(--primary);
+      margin-top: 20px;
       margin-bottom: 10px;
     }
     
-    .log-emotion {
-      font-size: 17px;
-      font-weight: bold;
-      color: #2D2D3A;
-    }
-    
-    .log-intensity {
-      background: #ec4899;
-      color: white;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: bold;
-    }
-    
-    .log-date {
-      font-size: 13px;
-      color: #999;
-      margin-bottom: 8px;
-    }
-    
-    .log-trigger {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 8px;
-    }
-    
-    .log-skill {
-      font-size: 14px;
-      color: #ec4899;
-      font-weight: 600;
-    }
-    
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: #999;
-    }
-    
-    .empty-icon {
-      font-size: 60px;
+    .modal-content ul {
+      margin-left: 20px;
       margin-bottom: 15px;
     }
     
-    .empty-text {
-      font-size: 16px;
+    .modal-content li {
+      margin-bottom: 8px;
     }
     
     .bottom-nav {
@@ -235,11 +235,11 @@
       left: 50%;
       transform: translateX(-50%);
       background: white;
-      border-radius: 25px;
+      border-radius: var(--radius-lg);
       padding: 15px 25px;
       display: flex;
       gap: 35px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      box-shadow: var(--shadow-md);
       z-index: 1000;
       max-width: 350px;
       width: calc(100% - 40px);
@@ -249,7 +249,7 @@
     .nav-item {
       font-size: 26px;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: var(--transition);
       opacity: 0.4;
       text-decoration: none;
     }
@@ -258,302 +258,54 @@
       opacity: 1;
       transform: scale(1.15);
     }
-    
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 3000;
-      display: none;
-    }
-    
-    .modal-overlay.show {
-      display: block;
-      animation: fadeIn 0.3s ease;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    .modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      border-radius: 25px;
-      padding: 30px;
-      max-width: 90%;
-      width: 400px;
-      max-height: 80vh;
-      overflow-y: auto;
-      z-index: 3001;
-      display: none;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    }
-    
-    .modal.show {
-      display: block;
-      animation: slideUp 0.3s ease;
-    }
-    
-    @keyframes slideUp {
-      from { transform: translate(-50%, -40%); opacity: 0; }
-      to { transform: translate(-50%, -50%); opacity: 1; }
-    }
-    
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-    }
-    
-    .modal-title {
-      font-size: 22px;
-      font-weight: bold;
-      color: #2D2D3A;
-    }
-    
-    .modal-close {
-      font-size: 28px;
-      cursor: pointer;
-      color: #888;
-    }
-    
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    .form-label {
-      font-size: 15px;
-      font-weight: 600;
-      color: #2D2D3A;
-      margin-bottom: 8px;
-      display: block;
-    }
-    
-    .form-input {
-      width: 100%;
-      padding: 12px 15px;
-      border: 2px solid #E5E5E5;
-      border-radius: 12px;
-      font-size: 15px;
-      font-family: inherit;
-      outline: none;
-      transition: border 0.3s;
-    }
-    
-    .form-input:focus {
-      border-color: #ec4899;
-    }
-    
-    .form-textarea {
-      width: 100%;
-      min-height: 80px;
-      padding: 12px 15px;
-      border: 2px solid #E5E5E5;
-      border-radius: 12px;
-      font-size: 15px;
-      font-family: inherit;
-      outline: none;
-      transition: border 0.3s;
-      resize: vertical;
-    }
-    
-    .form-textarea:focus {
-      border-color: #ec4899;
-    }
-    
-    .form-select {
-      width: 100%;
-      padding: 12px 15px;
-      border: 2px solid #E5E5E5;
-      border-radius: 12px;
-      font-size: 15px;
-      font-family: inherit;
-      outline: none;
-      transition: border 0.3s;
-      background: white;
-    }
-    
-    .form-select:focus {
-      border-color: #ec4899;
-    }
-    
-    .intensity-slider {
-      width: 100%;
-      height: 8px;
-      border-radius: 5px;
-      outline: none;
-      -webkit-appearance: none;
-      background: linear-gradient(to right, #10b981 0%, #f59e0b 50%, #ef4444 100%);
-    }
-    
-    .intensity-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: white;
-      border: 3px solid #ec4899;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-    
-    .intensity-slider::-moz-range-thumb {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: white;
-      border: 3px solid #ec4899;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-    
-    .intensity-value {
-      text-align: center;
-      font-size: 32px;
-      font-weight: bold;
-      color: #ec4899;
-      margin-bottom: 10px;
-    }
-    
-    .save-btn {
-      width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
-      color: white;
-      border: none;
-      border-radius: 15px;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: all 0.3s;
-    }
-    
-    .save-btn:active {
-      transform: scale(0.98);
-    }
-    
-    .skill-detail {
-      background: rgba(236, 72, 153, 0.05);
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-    }
-    
-    .skill-detail-title {
-      font-size: 16px;
-      font-weight: bold;
-      color: #ec4899;
-      margin-bottom: 10px;
-    }
-    
-    .skill-detail-text {
-      font-size: 14px;
-      color: #666;
-      line-height: 1.6;
-    }
-    
-    .skill-steps {
-      list-style: none;
-      padding: 0;
-    }
-    
-    .skill-steps li {
-      padding: 8px 0;
-      padding-left: 25px;
-      position: relative;
-      font-size: 14px;
-      color: #666;
-    }
-    
-    .skill-steps li:before {
-      content: "→";
-      position: absolute;
-      left: 0;
-      color: #ec4899;
-      font-weight: bold;
-    }
-    
-    .success-message {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      padding: 30px 40px;
-      border-radius: 20px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-      text-align: center;
-      z-index: 4000;
-      display: none;
-    }
-    
-    .success-message.show {
-      display: block;
-      animation: popup 0.3s ease;
-    }
-    
-    @keyframes popup {
-      from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
-      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-    }
-    
-    .success-icon {
-      font-size: 60px;
-      margin-bottom: 15px;
-    }
-    
-    .success-text {
-      font-size: 20px;
-      font-weight: bold;
-      color: #2D2D3A;
-    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
       <a href="index.html" class="back-btn">←</a>
-      <div class="header-title">Borderline (DBT)</div>
-      <div style="width: 24px;"></div>
+      <div class="header-title">Borderline / TPL</div>
+      <div class="header-placeholder"></div>
     </div>
     
-    <div class="quick-log-card">
-      <div class="quick-log-title">Journal émotionnel</div>
-      <button class="quick-log-btn" onclick="openLogModal()">📝 Logger une émotion</button>
-    </div>
-    
-    <div class="stats-card">
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-value" id="totalLogs">0</div>
-          <div class="stat-label">Émotions loggées</div>
+    <div class="card">
+      <div class="card-title">Compétences DBT</div>
+      
+      <div class="skill-category">
+        <div class="category-header" onclick="borderlineManager.toggleCategory('mindfulness')">
+          <span class="category-icon">🧘</span>
+          <span class="category-title">Pleine Conscience</span>
+          <span class="category-arrow">›</span>
         </div>
-        <div class="stat-item">
-          <div class="stat-value" id="avgIntensity">0</div>
-          <div class="stat-label">Intensité moyenne</div>
-        </div>
+        <ul class="skill-list" id="mindfulness-list"></ul>
       </div>
-    </div>
-    
-    <div class="section-card">
-      <div class="section-title">Skills DBT</div>
-      <div id="skillsList"></div>
-    </div>
-    
-    <div class="section-card">
-      <div class="section-title">Historique émotionnel</div>
-      <div id="logsList"></div>
+      
+      <div class="skill-category">
+        <div class="category-header" onclick="borderlineManager.toggleCategory('distress')">
+          <span class="category-icon">🆘</span>
+          <span class="category-title">Tolérance à la Détresse</span>
+          <span class="category-arrow">›</span>
+        </div>
+        <ul class="skill-list" id="distress-list"></ul>
+      </div>
+      
+      <div class="skill-category">
+        <div class="category-header" onclick="borderlineManager.toggleCategory('emotion')">
+          <span class="category-icon">❤️</span>
+          <span class="category-title">Régulation Émotionnelle</span>
+          <span class="category-arrow">›</span>
+        </div>
+        <ul class="skill-list" id="emotion-list"></ul>
+      </div>
+      
+      <div class="skill-category">
+        <div class="category-header" onclick="borderlineManager.toggleCategory('interpersonal')">
+          <span class="category-icon">👥</span>
+          <span class="category-title">Efficacité Interpersonnelle</span>
+          <span class="category-arrow">›</span>
+        </div>
+        <ul class="skill-list" id="interpersonal-list"></ul>
+      </div>
     </div>
   </div>
   
@@ -565,303 +317,131 @@
     <a href="profil.html" class="nav-item">👤</a>
   </div>
   
-  <!-- Log Emotion Modal -->
-  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
-  <div class="modal" id="logModal">
-    <div class="modal-header">
-      <div class="modal-title">Logger une émotion</div>
-      <div class="modal-close" onclick="closeModal()">×</div>
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Émotion principale</label>
-      <input type="text" class="form-input" id="emotionName" placeholder="Ex: Colère, Tristesse, Peur...">
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Intensité</label>
-      <div class="intensity-value" id="intensityDisplay">5</div>
-      <input type="range" class="intensity-slider" id="emotionIntensity" min="1" max="10" value="5" oninput="updateIntensity()">
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Déclencheur</label>
-      <textarea class="form-textarea" id="emotionTrigger" placeholder="Qu'est-ce qui a déclenché cette émotion ?"></textarea>
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Skill utilisé (optionnel)</label>
-      <select class="form-select" id="skillUsed">
-        <option value="">Aucun</option>
-        <option value="DEAR MAN">DEAR MAN</option>
-        <option value="STOP">STOP</option>
-        <option value="TIPP">TIPP</option>
-        <option value="Respiration">Respiration profonde</option>
-        <option value="Pleine conscience">Pleine conscience</option>
-        <option value="Distraction">Distraction</option>
-        <option value="Auto-apaisement">Auto-apaisement</option>
-      </select>
-    </div>
-    
-    <div class="form-group">
-      <label class="form-label">Efficacité du skill (1-10)</label>
-      <input type="range" class="intensity-slider" id="skillEffectiveness" min="1" max="10" value="5">
-    </div>
-    
-    <button class="save-btn" onclick="saveLog()">💚 Enregistrer</button>
-  </div>
-  
-  <!-- Skill Detail Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="borderlineManager.closeModal()"></div>
   <div class="modal" id="skillModal">
     <div class="modal-header">
-      <div class="modal-title" id="skillModalTitle"></div>
-      <div class="modal-close" onclick="closeModal()">×</div>
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-close" onclick="borderlineManager.closeModal()">×</div>
     </div>
-    
-    <div id="skillModalContent"></div>
-  </div>
-  
-  <div class="success-message" id="successMessage">
-    <div class="success-icon">✅</div>
-    <div class="success-text">Enregistré !</div>
+    <div class="modal-content" id="modalContent"></div>
   </div>
   
   <script>
-    const dbtSkills = [
-      {
-        name: "DEAR MAN",
-        desc: "Technique de communication efficace pour demander ce que tu veux",
-        steps: [
-          "Describe (Décrire) : Décris la situation objectivement",
-          "Express (Exprimer) : Exprime tes sentiments",
-          "Assert (Affirmer) : Demande clairement ce que tu veux",
-          "Reinforce (Renforcer) : Explique les bénéfices",
-          "Mindful (Pleine conscience) : Reste concentré sur ton objectif",
-          "Appear confident (Paraître confiant) : Reste calme et assertif",
-          "Negotiate (Négocier) : Sois prêt(e) à faire des compromis"
+    const borderlineManager = {
+      skills: {
+        mindfulness: [
+          {
+            name: 'Observer',
+            desc: 'Remarquer sans juger',
+            content: '<p>Observer consiste à simplement remarquer ce qui se passe, sans jugement.</p><h3>Comment pratiquer :</h3><ul><li>Remarque tes pensées comme des nuages qui passent</li><li>Observe tes émotions sans les rejeter</li><li>Note les sensations dans ton corps</li><li>Regarde le monde autour de toi avec curiosité</li></ul>'
+          },
+          {
+            name: 'Décrire',
+            desc: 'Mettre des mots sur l\'expérience',
+            content: '<p>Décrire signifie mettre des mots sur ce que tu observes, sans interpréter.</p><h3>Pratique :</h3><ul><li>"Je ressens de la tristesse" au lieu de "Je suis nul(le)"</li><li>"Mon cœur bat vite" au lieu de "Je vais mourir"</li><li>Reste factuel, comme un reporter</li></ul>'
+          },
+          {
+            name: 'Participer',
+            desc: 'Être pleinement dans l\'action',
+            content: '<p>Participer c\'est s\'immerger complètement dans l\'activité du moment.</p><h3>Comment faire :</h3><ul><li>Fais une seule chose à la fois</li><li>Perds-toi dans l\'activité</li><li>Oublie le passé et le futur</li><li>Sois UN avec ce que tu fais</li></ul>'
+          }
+        ],
+        distress: [
+          {
+            name: 'TIPP',
+            desc: 'Température, Intensité, Respiration, Relaxation',
+            content: '<p>TIPP est une technique d\'urgence pour calmer rapidement une crise.</p><h3>Les 4 étapes :</h3><ul><li><strong>T</strong>empérature : eau froide sur le visage</li><li><strong>I</strong>ntensité : exercice physique intense 5-10min</li><li><strong>P</strong>aced breathing : respiration lente et profonde</li><li><strong>P</strong>aired muscle relaxation : tension puis relâchement musculaire</li></ul>'
+          },
+          {
+            name: 'Auto-apaisement',
+            desc: 'Utiliser les 5 sens',
+            content: '<p>Apaise-toi en stimulant tes sens de façon agréable.</p><h3>Les 5 sens :</h3><ul><li><strong>Vue</strong> : regarde des images apaisantes</li><li><strong>Ouïe</strong> : écoute de la musique douce</li><li><strong>Odorat</strong> : sens une huile essentielle</li><li><strong>Goût</strong> : savoure un bonbon</li><li><strong>Toucher</strong> : caresse un tissu doux</li></ul>'
+          },
+          {
+            name: 'ACCEPTS',
+            desc: '7 façons de tolérer la détresse',
+            content: '<p>ACCEPTS regroupe 7 stratégies pour traverser un moment difficile.</p><h3>A-C-C-E-P-T-S :</h3><ul><li><strong>A</strong>ctivités : fais autre chose</li><li><strong>C</strong>ontribuer : aide quelqu\'un</li><li><strong>C</strong>omparaisons : relatif aux autres</li><li><strong>E</strong>motions opposées : change d\'émotion</li><li><strong>P</strong>ushing away : mets de côté temporairement</li><li><strong>T</strong>houghts : pense à autre chose</li><li><strong>S</strong>ensations : crée une sensation forte</li></ul>'
+          }
+        ],
+        emotion: [
+          {
+            name: 'Vérifier les faits',
+            desc: 'L\'émotion correspond-elle à la réalité ?',
+            content: '<p>Vérifie si ton émotion est justifiée par les faits réels.</p><h3>Questions à te poser :</h3><ul><li>Qu\'est-ce qui s\'est VRAIMENT passé ?</li><li>Mon interprétation est-elle la seule possible ?</li><li>Quelle est la probabilité que ma peur se réalise ?</li><li>L\'émotion est-elle proportionnée aux faits ?</li></ul>'
+          },
+          {
+            name: 'Action opposée',
+            desc: 'Agir à l\'opposé de l\'impulsion',
+            content: '<p>Quand l\'émotion n\'est pas justifiée, fais l\'inverse de ce qu\'elle te pousse à faire.</p><h3>Exemples :</h3><ul><li><strong>Peur</strong> → Approche-toi au lieu de fuir</li><li><strong>Colère</strong> → Sois gentil au lieu d\'attaquer</li><li><strong>Tristesse</strong> → Active-toi au lieu de t\'isoler</li><li><strong>Honte</strong> → Partage au lieu de cacher</li></ul>'
+          },
+          {
+            name: 'Accumulation de positif',
+            desc: 'Construire des émotions positives',
+            content: '<p>Crée des expériences positives à court et long terme.</p><h3>Court terme :</h3><ul><li>Fais une activité plaisante par jour</li><li>Sois attentif aux moments agréables</li></ul><h3>Long terme :</h3><ul><li>Travaille vers tes objectifs de vie</li><li>Développe des compétences</li><li>Crée des relations significatives</li></ul>'
+          }
+        ],
+        interpersonal: [
+          {
+            name: 'DEAR MAN',
+            desc: 'Obtenir ce que tu veux',
+            content: '<p>DEAR MAN aide à demander quelque chose efficacement.</p><h3>D-E-A-R M-A-N :</h3><ul><li><strong>D</strong>écrire : expose les faits</li><li><strong>E</strong>xprimer : dis ce que tu ressens</li><li><strong>A</strong>ffirmer : demande clairement</li><li><strong>R</strong>enforcer : explique les conséquences positives</li><li><strong>M</strong>indful : reste concentré sur ton objectif</li><li><strong>A</strong>ppear confident : sois confiant</li><li><strong>N</strong>egociate : sois prêt à négocier</li></ul>'
+          },
+          {
+            name: 'GIVE',
+            desc: 'Garder la relation',
+            content: '<p>GIVE t\'aide à maintenir de bonnes relations.</p><h3>G-I-V-E :</h3><ul><li><strong>G</strong>entle : sois doux, pas agressif</li><li><strong>I</strong>nterested : montre de l\'intérêt</li><li><strong>V</strong>alidate : valide l\'autre</li><li><strong>E</strong>asy manner : reste léger et souriant</li></ul>'
+          },
+          {
+            name: 'FAST',
+            desc: 'Respecte-toi',
+            content: '<p>FAST t\'aide à garder ton estime de toi.</p><h3>F-A-S-T :</h3><ul><li><strong>F</strong>air : sois juste envers toi et les autres</li><li><strong>A</strong>pologies : ne t\'excuse pas trop</li><li><strong>S</strong>tick to values : reste fidèle à tes valeurs</li><li><strong>T</strong>ruthful : sois honnête, ne mens pas</li></ul>'
+          }
         ]
       },
-      {
-        name: "STOP",
-        desc: "Gestion de l'impulsivité et des comportements à risque",
-        steps: [
-          "Stop (Arrête) : Fige-toi, ne bouge plus",
-          "Take a step back (Recule) : Prends du recul mentalement",
-          "Observe (Observe) : Remarque ce qui se passe en toi",
-          "Proceed mindfully (Agis consciemment) : Choisis ta réaction"
-        ]
+      
+      init() {
+        this.renderSkills();
       },
-      {
-        name: "TIPP",
-        desc: "Régulation rapide en crise intense",
-        steps: [
-          "Temperature (Température) : Eau froide sur le visage",
-          "Intense exercise (Exercice intense) : Bouge rapidement",
-          "Paced breathing (Respiration rythmée) : Respire lentement",
-          "Progressive muscle relaxation (Relaxation musculaire) : Contracte et relâche"
-        ]
+      
+      renderSkills() {
+        Object.keys(this.skills).forEach(category => {
+          const list = document.getElementById(`${category}-list`);
+          list.innerHTML = this.skills[category].map((skill, index) => `
+            <li class="skill-item" onclick="borderlineManager.showSkill('${category}', ${index})">
+              <div class="skill-name">${skill.name}</div>
+              <div class="skill-desc">${skill.desc}</div>
+            </li>
+          `).join('');
+        });
       },
-      {
-        name: "Respiration profonde",
-        desc: "Calmer le système nerveux par la respiration",
-        steps: [
-          "Inspire par le nez pendant 4 secondes",
-          "Retiens ta respiration 4 secondes",
-          "Expire par la bouche pendant 6 secondes",
-          "Répète 5-10 fois"
-        ]
-      },
-      {
-        name: "Pleine conscience",
-        desc: "Rester dans le moment présent sans jugement",
-        steps: [
-          "Observe tes pensées sans les juger",
-          "Décris ce que tu vis objectivement",
-          "Participe pleinement à l'instant",
-          "Reste non-jugeant envers toi-même"
-        ]
-      },
-      {
-        name: "Distraction",
-        desc: "Éloigner temporairement l'attention de la douleur émotionnelle",
-        steps: [
-          "Activités : Fais quelque chose d'engageant",
-          "Contribuer : Aide quelqu'un d'autre",
-          "Comparaisons : Compare à un moment pire",
-          "Émotions opposées : Génère une émotion différente",
-          "Pousser mentalement : Pense à autre chose",
-          "Sensations : Utilise tes 5 sens"
-        ]
-      }
-    ];
-    
-    function updateIntensity() {
-      const value = document.getElementById('emotionIntensity').value;
-      document.getElementById('intensityDisplay').textContent = value;
-    }
-    
-    function loadDBT() {
-      loadSkills();
-      loadLogs();
-      calculateStats();
-    }
-    
-    function loadSkills() {
-      const logs = JSON.parse(localStorage.getItem('mindflow_dbt_logs') || '[]');
-      const list = document.getElementById('skillsList');
       
-      list.innerHTML = dbtSkills.map(skill => {
-        const usageCount = logs.filter(l => l.skill === skill.name).length;
-        return `
-          <div class="skill-item" onclick="viewSkill('${skill.name}')">
-            <div class="skill-name">${skill.name}</div>
-            <div class="skill-desc">${skill.desc}</div>
-            <div class="skill-usage">Utilisé ${usageCount} fois</div>
-          </div>
-        `;
-      }).join('');
-    }
-    
-    function viewSkill(skillName) {
-      const skill = dbtSkills.find(s => s.name === skillName);
-      if (!skill) return;
-      
-      document.getElementById('skillModalTitle').textContent = skill.name;
-      
-      const steps = skill.steps.map(step => `<li>${step}</li>`).join('');
-      
-      document.getElementById('skillModalContent').innerHTML = `
-        <div class="skill-detail">
-          <div class="skill-detail-title">Description</div>
-          <div class="skill-detail-text">${skill.desc}</div>
-        </div>
-        <div class="skill-detail">
-          <div class="skill-detail-title">Comment l'utiliser</div>
-          <ul class="skill-steps">${steps}</ul>
-        </div>
-      `;
-      
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('skillModal').classList.add('show');
-    }
-    
-    function loadLogs() {
-      const logs = JSON.parse(localStorage.getItem('mindflow_dbt_logs') || '[]');
-      const list = document.getElementById('logsList');
-      
-      if (logs.length === 0) {
-        list.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">💔</div>
-            <div class="empty-text">Aucune émotion loggée</div>
-          </div>
-        `;
-        return;
-      }
-      
-      list.innerHTML = logs.map(log => {
-        const date = new Date(log.date);
-        const dateStr = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+      toggleCategory(category) {
+        const list = document.getElementById(`${category}-list`);
+        const header = event.currentTarget;
         
-        return `
-          <div class="log-item">
-            <div class="log-header">
-              <div class="log-emotion">${log.emotion}</div>
-              <div class="log-intensity">${log.intensity}/10</div>
-            </div>
-            <div class="log-date">${dateStr}</div>
-            <div class="log-trigger">${log.trigger}</div>
-            ${log.skill ? `<div class="log-skill">Skill: ${log.skill} (Efficacité: ${log.effectiveness}/10)</div>` : ''}
-          </div>
-        `;
-      }).join('');
-    }
-    
-    function calculateStats() {
-      const logs = JSON.parse(localStorage.getItem('mindflow_dbt_logs') || '[]');
+        list.classList.toggle('show');
+        header.classList.toggle('expanded');
+      },
       
-      document.getElementById('totalLogs').textContent = logs.length;
+      showSkill(category, index) {
+        const skill = this.skills[category][index];
+        
+        document.getElementById('modalTitle').textContent = skill.name;
+        document.getElementById('modalContent').innerHTML = skill.content;
+        
+        document.getElementById('modalOverlay').classList.add('show');
+        document.getElementById('skillModal').classList.add('show');
+      },
       
-      if (logs.length === 0) {
-        document.getElementById('avgIntensity').textContent = '0';
-        return;
+      closeModal() {
+        document.getElementById('modalOverlay').classList.remove('show');
+        document.getElementById('skillModal').classList.remove('show');
       }
-      
-      const total = logs.reduce((sum, log) => sum + log.intensity, 0);
-      const avg = (total / logs.length).toFixed(1);
-      document.getElementById('avgIntensity').textContent = avg;
-    }
+    };
     
-    function openLogModal() {
-      document.getElementById('emotionName').value = '';
-      document.getElementById('emotionIntensity').value = 5;
-      document.getElementById('intensityDisplay').textContent = 5;
-      document.getElementById('emotionTrigger').value = '';
-      document.getElementById('skillUsed').value = '';
-      document.getElementById('skillEffectiveness').value = 5;
-      
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('logModal').classList.add('show');
-    }
-    
-    function saveLog() {
-      const emotion = document.getElementById('emotionName').value.trim();
-      const intensity = document.getElementById('emotionIntensity').value;
-      const trigger = document.getElementById('emotionTrigger').value.trim();
-      const skill = document.getElementById('skillUsed').value;
-      const effectiveness = document.getElementById('skillEffectiveness').value;
-      
-      if (!emotion || !trigger) {
-        alert('Remplis l\'émotion et le déclencheur ! 💚');
-        return;
-      }
-      
-      let logs = JSON.parse(localStorage.getItem('mindflow_dbt_logs') || '[]');
-      
-      logs.unshift({
-        id: Date.now(),
-        emotion: emotion,
-        intensity: parseInt(intensity),
-        trigger: trigger,
-        skill: skill,
-        effectiveness: skill ? parseInt(effectiveness) : null,
-        date: new Date().toISOString()
-      });
-      
-      localStorage.setItem('mindflow_dbt_logs', JSON.stringify(logs));
-      
-      closeModal();
-      showSuccess();
-      loadDBT();
-    }
-    
-    function closeModal() {
-      document.getElementById('modalOverlay').classList.remove('show');
-      document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('show'));
-    }
-    
-    function showSuccess() {
-      const msg = document.getElementById('successMessage');
-      msg.classList.add('show');
-      setTimeout(() => msg.classList.remove('show'), 1500);
-    }
-    
-    loadDBT();
+    document.addEventListener('DOMContentLoaded', () => {
+      borderlineManager.init();
+    });
   </script>
-  <script src="luna-bubble.js"></script>
-```
-
-**5️⃣ Commit !**
-
-**Message :**
-```
-Borderline - Ajout bulle Luna
 </body>
 </html>
-```
-
----
-
-## ✅ **MESSAGE DE COMMIT :**
-```
-Création module Borderline (DBT) avec skills complets
