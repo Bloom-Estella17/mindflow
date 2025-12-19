@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luna - Ton Compagnon IA | MindFlow</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8B7BB8;
+            --primary-dark: #6B5B98;
+            --bg-main: #1a1625;
+            --bg-card: #251d35;
+            --text-primary: #E8E4F3;
+            --text-secondary: #B8B0CC;
+            --accent: #A78BFA;
+            --success: #10b981;
+            --border: #3d3450;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--bg-main) 0%, #2d1b4e 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: var(--bg-card);
+            padding: 1rem;
+            border-bottom: 2px solid var(--border);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 20px;
+            border: 1px solid var(--success);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .chat-container {
+            flex: 1;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            gap: 1rem;
+        }
+
+        .messages-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            min-height: 400px;
+            max-height: calc(100vh - 250px);
+        }
+
+        .message {
+            display: flex;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .message.luna .message-avatar {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 1rem;
+            border-radius: 16px;
+            line-height: 1.6;
+        }
+
+        .message.luna .message-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+
+        .typing-indicator {
+            display: none;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            width: fit-content;
+        }
+
+        .typing-indicator.active {
+            display: flex;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.7;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        .input-area {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 24px;
+            padding: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .input-area:focus-within {
+            border-color: var(--primary);
+        }
+
+        #userInput {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            resize: none;
+            max-height: 120px;
+            font-family: inherit;
+        }
+
+        #userInput::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .send-btn {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .send-btn:active {
+            transform: scale(0.95);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            margin-bottom: 1rem;
+        }
+
+        .welcome-message h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+
+        .welcome-message p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .quick-action {
+            padding: 0.5rem 1rem;
+            background: rgba(139, 123, 184, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .quick-action:hover {
+            background: rgba(139, 123, 184, 0.2);
+            border-color: var(--primary);
+        }
+
+        .messages-area::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .messages-area::-webkit-scrollbar-track {
+            background: var(--bg-main);
+            border-radius: 4px;
+        }
+
+        .messages-area::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .welcome-message {
+                padding: 1.5rem;
+            }
+
+            .logo h1 {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🌙</div>
+                <h1>Luna</h1>
+            </div>
+            <div class="status">
+                <div class="status-dot"></div>
+                <span>En ligne</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="chat-container">
+        <div class="messages-area" id="messagesArea">
+            <div class="welcome-message">
+                <h2>Bienvenue 💜</h2>
+                <p>Je suis Luna, ton compagnon IA empathique. Je suis là pour t'écouter, te soutenir et t'accompagner dans ton parcours de bien-être mental.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">N'hésite pas à me parler de ce que tu ressens, je suis là pour toi 24/7.</p>
+                <div class="quick-actions">
+                    <div class="quick-action" onclick="sendQuickMessage('Je me sens anxieux(se) aujourd\'hui')">😰 Je suis anxieux(se)</div>
+                    <div class="quick-action" onclick="sendQuickMessage('J\'ai besoin de parler')">💬 Besoin de parler</div>
+                    <div class="quick-action" onclick="sendQuickMessage('Comment gérer une crise ?')">🆘 Gérer une crise</div>
+                    <div class="quick-action" onclick="sendQuickMessage('J\'ai besoin de motivation')">✨ Motivation</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="input-area">
+            <textarea 
+                id="userInput" 
+                placeholder="Écris-moi ce que tu ressens..."
+                rows="1"
+            ></textarea>
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                ➤
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = 'AIzaSyBjBs2nnr9HalmK-6BxT-aXQBoHA-HIGG4';
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+
+        const messagesArea = document.getElementById('messagesArea');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const errorMessage = document.getElementById('errorMessage');
+
+        let conversationHistory = [];
+
+        const SYSTEM_PROMPT = `Tu es Luna, un compagnon IA empathique spécialisé en santé mentale pour l'application MindFlow. 
+
+Ton rôle :
+- Écouter avec empathie et bienveillance
+- Offrir un soutien émotionnel sans jugement
+- Proposer des techniques de gestion (respiration, ancrage, etc.)
+- Encourager la consultation de professionnels si nécessaire
+- Reconnaître les signes de crise et orienter vers l'aide appropriée
+
+Ton style :
+- Chaleureux et empathique
+- Langage simple et accessible
+- Réponses concises mais complètes
+- Utilisation modérée d'emojis adaptés (💜, 🌙, ✨, 🌸)
+- Tutoiement naturel et bienveillant
+
+IMPORTANT :
+- Tu n'es PAS un thérapeute ou médecin
+- En cas de crise urgente, toujours recommander les urgences (15, 3114)
+- Valorise les petites victoires
+- Rappelle que demander de l'aide est un signe de force
+
+Réponds toujours en français, avec empathie et professionnalisme.`;
+
+        userInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+
+        userInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, 'user');
+            userInput.value = '';
+            userInput.style.height = 'auto';
+
+            setInputState(false);
+            showTypingIndicator(true);
+            hideError();
+
+            try {
+                const messages = [
+                    { role: 'user', parts: [{ text: SYSTEM_PROMPT }] },
+                    { role: 'model', parts: [{ text: 'Je comprends parfaitement mon rôle en tant que Luna. Je suis là pour t\'écouter et te soutenir avec empathie et bienveillance. Comment puis-je t\'aider aujourd\'hui ? 💜' }] }
+                ];
+
+                conversationHistory.forEach(msg => {
+                    messages.push({
+                        role: msg.role === 'user' ? 'user' : 'model',
+                        parts: [{ text: msg.content }]
+                    });
+                });
+
+                messages.push({
+                    role: 'user',
+                    parts: [{ text: message }]
+                });
+
+                const response = await fetch(`${API_URL}?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: messages,
+                        generationConfig: {
+                            temperature: 0.9,
+                            topK: 40,
+                            topP: 0.95,
+                            maxOutputTokens: 1024,
+                        },
+                        safetySettings: [
+                            {
+                                category: 'HARM_CATEGORY_HARASSMENT',
+                                threshold: 'BLOCK_NONE'
+                            },
+                            {
+                                category: 'HARM_CATEGORY_HATE_SPEECH',
+                                threshold: 'BLOCK_NONE'
+                            },
+                            {
+                                category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+                                threshold: 'BLOCK_NONE'
+                            },
+                            {
+                                category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+                                threshold: 'BLOCK_NONE'
+                            }
+                        ]
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || `Erreur API: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                    const lunaResponse = data.candidates[0].content.parts[0].text;
+                    
+                    conversationHistory.push(
+                        { role: 'user', content: message },
+                        { role: 'assistant', content: lunaResponse }
+                    );
+
+                    if (conversationHistory.length > 20) {
+                        conversationHistory = conversationHistory.slice(-20);
+                    }
+
+                    showTypingIndicator(false);
+                    addMessage(lunaResponse, 'luna');
+                } else {
+                    throw new Error('Réponse API invalide');
+                }
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                showTypingIndicator(false);
+                showError('Oups, j\'ai eu un petit problème. Peux-tu réessayer ? 💜');
+                addMessage('Désolée, j\'ai rencontré un problème technique. Peux-tu réessayer s\'il te plaît ? 💜', 'luna');
+            } finally {
+                setInputState(true);
+                userInput.focus();
+            }
+        }
+
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = sender === 'luna' ? '🌙' : '👤';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.textContent = text;
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            
+            messagesArea.appendChild(messageDiv);
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+        }
+
+        function sendQuickMessage(message) {
+            userInput.value = message;
+            sendMessage();
+        }
+
+        function showTypingIndicator(show) {
+            typingIndicator.classList.toggle('active', show);
+            if (show) {
+                messagesArea.scrollTop = messagesArea.scrollHeight;
+            }
+        }
+
+        function setInputState(enabled) {
+            userInput.disabled = !enabled;
+            sendBtn.disabled = !enabled;
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('active');
+        }
+
+        function hideError() {
+            errorMessage.classList.remove('active');
+        }
+
+        window.addEventListener('load', () => {
+            userInput.focus();
+        });
+    </script>
+</body>
+</html>
