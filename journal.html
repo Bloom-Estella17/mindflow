@@ -3,9 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>💚 MindFlow - Journal</title>
+  <title>📝 MindFlow - Journal</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#8B7EB8">
   
   <style>
+    /* ===== RESET & BASE ===== */
     * {
       margin: 0;
       padding: 0;
@@ -13,9 +16,25 @@
       -webkit-tap-highlight-color: transparent;
     }
     
+    :root {
+      --primary: #8B7EB8;
+      --primary-light: #B8A7D5;
+      --secondary: #A8D8EA;
+      --text-dark: #2D2D3A;
+      --text-gray: #666;
+      --text-light: #888;
+      --bg-card: rgba(139, 126, 184, 0.05);
+      --shadow-sm: 0 4px 20px rgba(0,0,0,0.08);
+      --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 25px;
+      --transition: all 0.3s ease;
+    }
+    
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
       min-height: 100vh;
       padding: 15px;
       padding-bottom: 100px;
@@ -28,179 +47,186 @@
       padding: 0 5px;
     }
     
+    /* ===== HEADER ===== */
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 20px 25px;
       background: white;
-      border-radius: 20px;
+      border-radius: var(--radius-md);
       margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      box-shadow: var(--shadow-sm);
     }
     
     .back-btn {
       font-size: 24px;
       cursor: pointer;
       text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .back-btn:active {
+      transform: scale(1.2);
     }
     
     .header-title {
       font-size: 20px;
       font-weight: bold;
-      color: #8B7EB8;
+      color: var(--primary);
     }
     
-    .main-card {
+    .header-placeholder {
+      width: 24px;
+    }
+    
+    /* ===== WRITE CARD ===== */
+    .write-card {
       background: white;
-      border-radius: 25px;
+      border-radius: var(--radius-lg);
       padding: 30px 25px;
       margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      box-shadow: var(--shadow-sm);
     }
     
-    .title {
+    .write-title {
       font-size: 24px;
       font-weight: bold;
-      color: #2D2D3A;
-      margin-bottom: 10px;
+      color: var(--text-dark);
+      margin-bottom: 8px;
     }
     
-    .subtitle {
-      font-size: 15px;
-      color: #8B7EB8;
+    .write-subtitle {
+      font-size: 14px;
+      color: var(--text-light);
       margin-bottom: 25px;
     }
     
     .journal-textarea {
       width: 100%;
       min-height: 200px;
-      padding: 20px;
+      padding: 15px;
       border: 2px solid #E5E5E5;
-      border-radius: 15px;
-      font-size: 16px;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
       font-family: inherit;
+      line-height: 1.6;
       resize: vertical;
       outline: none;
-      transition: border 0.3s;
-      line-height: 1.6;
+      transition: var(--transition);
     }
     
     .journal-textarea:focus {
-      border-color: #8B7EB8;
+      border-color: var(--primary);
     }
     
     .journal-textarea::placeholder {
-      color: #999;
+      color: #ccc;
     }
     
     .word-count {
       text-align: right;
       font-size: 13px;
-      color: #888;
-      margin-top: 10px;
-      margin-bottom: 20px;
+      color: var(--text-light);
+      margin-top: 8px;
     }
     
     .save-btn {
       width: 100%;
-      padding: 18px;
-      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      padding: 15px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
       color: white;
       border: none;
-      border-radius: 20px;
-      font-size: 18px;
+      border-radius: 15px;
+      font-size: 17px;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(139, 126, 184, 0.3);
-      transition: all 0.3s;
+      margin-top: 15px;
+      transition: var(--transition);
     }
     
     .save-btn:active {
       transform: scale(0.98);
     }
     
-    .history-card {
+    /* ===== ENTRIES CARD ===== */
+    .entries-card {
       background: white;
-      border-radius: 25px;
+      border-radius: var(--radius-lg);
       padding: 25px;
       margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      box-shadow: var(--shadow-sm);
     }
     
-    .history-title {
+    .entries-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .entries-title {
       font-size: 20px;
       font-weight: bold;
-      color: #2D2D3A;
-      margin-bottom: 10px;
+      color: var(--text-dark);
     }
     
-    .stats {
-      display: flex;
+    .entries-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 15px;
       margin-bottom: 20px;
     }
     
     .stat-item {
-      flex: 1;
-      background: rgba(139, 126, 184, 0.08);
+      background: var(--bg-card);
       padding: 15px;
-      border-radius: 15px;
+      border-radius: var(--radius-sm);
       text-align: center;
     }
     
     .stat-value {
       font-size: 28px;
       font-weight: bold;
-      color: #8B7EB8;
+      color: var(--primary);
       margin-bottom: 5px;
     }
     
     .stat-label {
-      font-size: 13px;
-      color: #666;
+      font-size: 12px;
+      color: var(--text-gray);
     }
     
+    /* ===== ENTRIES LIST ===== */
     .entries-list {
-      margin-top: 20px;
+      list-style: none;
     }
     
     .entry-item {
-      background: rgba(139, 126, 184, 0.05);
-      border-radius: 15px;
+      background: var(--bg-card);
       padding: 18px;
+      border-radius: var(--radius-sm);
       margin-bottom: 12px;
       cursor: pointer;
-      transition: all 0.2s;
-      border-left: 4px solid #8B7EB8;
+      transition: var(--transition);
+      border-left: 4px solid var(--primary);
     }
     
     .entry-item:active {
-      background: rgba(139, 126, 184, 0.1);
       transform: scale(0.98);
-    }
-    
-    .entry-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
+      background: rgba(139, 126, 184, 0.1);
     }
     
     .entry-date {
-      font-size: 14px;
+      font-size: 13px;
+      color: var(--primary);
       font-weight: 600;
-      color: #8B7EB8;
-    }
-    
-    .entry-time {
-      font-size: 12px;
-      color: #888;
+      margin-bottom: 8px;
     }
     
     .entry-preview {
-      font-size: 14px;
-      color: #555;
+      font-size: 15px;
+      color: var(--text-dark);
       line-height: 1.5;
       display: -webkit-box;
       -webkit-line-clamp: 3;
@@ -208,16 +234,16 @@
       overflow: hidden;
     }
     
-    .entry-words {
-      font-size: 12px;
-      color: #999;
+    .entry-mood {
+      font-size: 20px;
       margin-top: 8px;
     }
     
+    /* ===== EMPTY STATE ===== */
     .empty-state {
       text-align: center;
       padding: 40px 20px;
-      color: #999;
+      color: var(--text-light);
     }
     
     .empty-icon {
@@ -226,20 +252,21 @@
     }
     
     .empty-text {
-      font-size: 16px;
+      font-size: 15px;
     }
     
+    /* ===== BOTTOM NAV ===== */
     .bottom-nav {
       position: fixed;
       bottom: 15px;
       left: 50%;
       transform: translateX(-50%);
       background: white;
-      border-radius: 25px;
+      border-radius: var(--radius-lg);
       padding: 15px 25px;
       display: flex;
       gap: 35px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      box-shadow: var(--shadow-md);
       z-index: 1000;
       max-width: 350px;
       width: calc(100% - 40px);
@@ -249,7 +276,7 @@
     .nav-item {
       font-size: 26px;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: var(--transition);
       opacity: 0.4;
       text-decoration: none;
     }
@@ -259,6 +286,11 @@
       transform: scale(1.15);
     }
     
+    .nav-item:active {
+      transform: scale(0.9);
+    }
+    
+    /* ===== SUCCESS MESSAGE ===== */
     .success-message {
       position: fixed;
       top: 50%;
@@ -266,10 +298,10 @@
       transform: translate(-50%, -50%);
       background: white;
       padding: 30px 40px;
-      border-radius: 20px;
+      border-radius: var(--radius-md);
       box-shadow: 0 10px 40px rgba(0,0,0,0.2);
       text-align: center;
-      z-index: 2000;
+      z-index: 3000;
       display: none;
     }
     
@@ -279,8 +311,14 @@
     }
     
     @keyframes popup {
-      from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
-      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      from {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
     }
     
     .success-icon {
@@ -291,17 +329,15 @@
     .success-text {
       font-size: 20px;
       font-weight: bold;
-      color: #2D2D3A;
+      color: var(--text-dark);
     }
     
+    /* ===== MODAL ===== */
     .modal-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       background: rgba(0,0,0,0.5);
-      z-index: 3000;
+      z-index: 2000;
       display: none;
     }
     
@@ -321,12 +357,13 @@
       left: 50%;
       transform: translate(-50%, -50%);
       background: white;
-      border-radius: 25px;
+      border-radius: var(--radius-lg);
       padding: 30px;
       max-width: 90%;
+      width: 400px;
       max-height: 80vh;
       overflow-y: auto;
-      z-index: 3001;
+      z-index: 2001;
       display: none;
       box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     }
@@ -337,8 +374,14 @@
     }
     
     @keyframes slideUp {
-      from { transform: translate(-50%, -40%); opacity: 0; }
-      to { transform: translate(-50%, -50%); opacity: 1; }
+      from {
+        transform: translate(-50%, -40%);
+        opacity: 0;
+      }
+      to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+      }
     }
     
     .modal-header {
@@ -348,91 +391,106 @@
       margin-bottom: 20px;
     }
     
-    .modal-date {
+    .modal-title {
       font-size: 18px;
       font-weight: bold;
-      color: #8B7EB8;
+      color: var(--text-dark);
     }
     
     .modal-close {
       font-size: 28px;
       cursor: pointer;
-      color: #888;
+      color: var(--text-light);
+    }
+    
+    .modal-date {
+      font-size: 14px;
+      color: var(--primary);
+      font-weight: 600;
+      margin-bottom: 15px;
     }
     
     .modal-content {
-      font-size: 16px;
-      line-height: 1.8;
-      color: #2D2D3A;
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text-dark);
       white-space: pre-wrap;
+      margin-bottom: 20px;
     }
     
     .delete-btn {
       width: 100%;
       padding: 12px;
-      background: #ff6b6b;
+      background: #ef4444;
       color: white;
       border: none;
-      border-radius: 15px;
+      border-radius: var(--radius-sm);
       font-size: 15px;
-      font-weight: 600;
+      font-weight: bold;
       cursor: pointer;
-      margin-top: 20px;
-      transition: all 0.3s;
+      transition: var(--transition);
     }
     
     .delete-btn:active {
       transform: scale(0.98);
-      background: #ff5252;
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- HEADER -->
     <div class="header">
       <a href="index.html" class="back-btn">←</a>
       <div class="header-title">Mon Journal</div>
-      <div style="width: 24px;"></div>
+      <div class="header-placeholder"></div>
     </div>
     
-    <div class="main-card">
-      <div class="title">Écris ce que tu ressens</div>
-      <div class="subtitle">Libère tes pensées, sans jugement 💚</div>
+    <!-- WRITE SECTION -->
+    <div class="write-card">
+      <div class="write-title">Écris ce que tu ressens</div>
+      <div class="write-subtitle">Libère tes pensées, sans jugement 💚</div>
       
       <textarea 
         class="journal-textarea" 
-        id="journalText" 
-        placeholder="Aujourd'hui, je me sens...&#10;&#10;Ce qui s'est passé...&#10;&#10;Ce que j'ai appris...&#10;&#10;Mes pensées..."
+        id="journalText"
+        placeholder="Aujourd'hui, je me sens...
+
+Ce qui s'est passé...
+
+Ce que j'ai appris...
+
+Mes pensées..."
       ></textarea>
       
       <div class="word-count" id="wordCount">0 mots</div>
       
-      <button class="save-btn" onclick="saveEntry()">💚 Enregistrer dans mon journal</button>
+      <button class="save-btn" onclick="journalManager.save()">
+        💚 Enregistrer dans mon journal
+      </button>
     </div>
     
-    <div class="history-card">
-      <div class="history-title">Mes entrées</div>
+    <!-- ENTRIES SECTION -->
+    <div class="entries-card">
+      <div class="entries-header">
+        <div class="entries-title">Mes entrées</div>
+      </div>
       
-      <div class="stats">
+      <div class="entries-stats">
         <div class="stat-item">
           <div class="stat-value" id="totalEntries">0</div>
           <div class="stat-label">Entrées totales</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value" id="thisMonth">0</div>
+          <div class="stat-value" id="monthEntries">0</div>
           <div class="stat-label">Ce mois-ci</div>
         </div>
       </div>
       
-      <div class="entries-list" id="entriesList">
-        <div class="empty-state">
-          <div class="empty-icon">📝</div>
-          <div class="empty-text">Aucune entrée pour l'instant<br>Commence à écrire !</div>
-        </div>
-      </div>
+      <ul class="entries-list" id="entriesList"></ul>
     </div>
   </div>
   
+  <!-- BOTTOM NAV -->
   <div class="bottom-nav">
     <a href="index.html" class="nav-item">🏠</a>
     <a href="mood.html" class="nav-item">😊</a>
@@ -441,172 +499,215 @@
     <a href="profil.html" class="nav-item">👤</a>
   </div>
   
+  <!-- SUCCESS MESSAGE -->
   <div class="success-message" id="successMessage">
     <div class="success-icon">✅</div>
     <div class="success-text">Entrée enregistrée !</div>
   </div>
   
-  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
-  <div class="modal" id="modal">
+  <!-- VIEW MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="journalManager.closeModal()"></div>
+  <div class="modal" id="viewModal">
     <div class="modal-header">
-      <div class="modal-date" id="modalDate"></div>
-      <div class="modal-close" onclick="closeModal()">×</div>
+      <div class="modal-title">Entrée du journal</div>
+      <div class="modal-close" onclick="journalManager.closeModal()">×</div>
     </div>
+    <div class="modal-date" id="modalDate"></div>
     <div class="modal-content" id="modalContent"></div>
-    <button class="delete-btn" onclick="deleteEntry()">🗑️ Supprimer cette entrée</button>
+    <button class="delete-btn" onclick="journalManager.deleteEntry()">🗑️ Supprimer</button>
   </div>
   
   <script>
-    const textarea = document.getElementById('journalText');
-    const wordCount = document.getElementById('wordCount');
-    let currentEntryId = null;
+    // ============================================
+    // JOURNAL MANAGER - ES6+ VERSION
+    // ============================================
     
-    textarea.addEventListener('input', function() {
-      const text = this.value.trim();
-      const words = text ? text.split(/\s+/).length : 0;
-      wordCount.textContent = words + ' mot' + (words > 1 ? 's' : '');
-    });
+    const STORAGE_KEY = 'mindflow_journal';
     
-    function saveEntry() {
-      const text = textarea.value.trim();
+    const journalManager = {
+      // State
+      entries: [],
+      currentEntryId: null,
       
-      if (!text) {
-        alert('Écris quelque chose avant d\'enregistrer ! 💚');
-        return;
-      }
+      // Initialize
+      init() {
+        this.loadData();
+        this.render();
+        this.updateStats();
+        this.setupWordCounter();
+      },
       
-      const entry = {
-        id: Date.now(),
-        date: new Date().toISOString(),
-        text: text,
-        words: text.split(/\s+/).length
-      };
+      // Load from localStorage
+      loadData() {
+        this.entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        // Sort by date (newest first)
+        this.entries.sort((a, b) => b.timestamp - a.timestamp);
+      },
       
-      let entries = JSON.parse(localStorage.getItem('mindflow_journal') || '[]');
-      entries.unshift(entry);
-      localStorage.setItem('mindflow_journal', JSON.stringify(entries));
+      // Save to localStorage
+      saveData() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.entries));
+      },
       
-      textarea.value = '';
-      wordCount.textContent = '0 mot';
-      
-      const successMsg = document.getElementById('successMessage');
-      successMsg.classList.add('show');
-      setTimeout(() => {
-        successMsg.classList.remove('show');
-        loadEntries();
-      }, 1500);
-    }
-    
-    function loadEntries() {
-      const entries = JSON.parse(localStorage.getItem('mindflow_journal') || '[]');
-      const entriesList = document.getElementById('entriesList');
-      
-      document.getElementById('totalEntries').textContent = entries.length;
-      
-      const thisMonth = entries.filter(e => {
-        const entryDate = new Date(e.date);
-        const now = new Date();
-        return entryDate.getMonth() === now.getMonth() && 
-               entryDate.getFullYear() === now.getFullYear();
-      }).length;
-      document.getElementById('thisMonth').textContent = thisMonth;
-      
-      if (entries.length === 0) {
-        entriesList.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">📝</div>
-            <div class="empty-text">Aucune entrée pour l'instant<br>Commence à écrire !</div>
-          </div>
-        `;
-        return;
-      }
-      
-      entriesList.innerHTML = entries.map(entry => {
-        const date = new Date(entry.date);
-        const dateStr = date.toLocaleDateString('fr-FR', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
+      // Setup word counter
+      setupWordCounter() {
+        const textarea = document.getElementById('journalText');
+        textarea.addEventListener('input', () => {
+          const text = textarea.value.trim();
+          const words = text ? text.split(/\s+/).length : 0;
+          document.getElementById('wordCount').textContent = `${words} mot${words > 1 ? 's' : ''}`;
         });
-        const timeStr = date.toLocaleTimeString('fr-FR', { 
-          hour: '2-digit', 
-          minute: '2-digit' 
+      },
+      
+      // Render entries
+      render() {
+        const list = document.getElementById('entriesList');
+        
+        if (this.entries.length === 0) {
+          list.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">📖</div>
+              <div class="empty-text">Aucune entrée pour l'instant<br>Commence à écrire !</div>
+            </div>
+          `;
+          return;
+        }
+        
+        list.innerHTML = this.entries
+          .map(entry => {
+            const date = new Date(entry.timestamp);
+            const dateStr = date.toLocaleDateString('fr-FR', {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric'
+            });
+            
+            return `
+              <li class="entry-item" onclick="journalManager.viewEntry(${entry.id})">
+                <div class="entry-date">${dateStr}</div>
+                <div class="entry-preview">${entry.text}</div>
+                ${entry.mood ? `<div class="entry-mood">${entry.mood}</div>` : ''}
+              </li>
+            `;
+          })
+          .join('');
+      },
+      
+      // Update statistics
+      updateStats() {
+        const total = this.entries.length;
+        document.getElementById('totalEntries').textContent = total;
+        
+        // Count this month
+        const now = new Date();
+        const thisMonth = this.entries.filter(entry => {
+          const entryDate = new Date(entry.timestamp);
+          return entryDate.getMonth() === now.getMonth() && 
+                 entryDate.getFullYear() === now.getFullYear();
+        }).length;
+        
+        document.getElementById('monthEntries').textContent = thisMonth;
+      },
+      
+      // Save new entry
+      save() {
+        const text = document.getElementById('journalText').value.trim();
+        
+        if (!text) {
+          alert('Écris quelque chose avant d\'enregistrer ! 💚');
+          return;
+        }
+        
+        // Get mood from today's mood tracker (if available)
+        const mood = this.getTodayMood();
+        
+        // Create entry
+        const entry = {
+          id: Date.now(),
+          timestamp: Date.now(),
+          text,
+          mood
+        };
+        
+        // Add to beginning
+        this.entries.unshift(entry);
+        
+        // Save
+        this.saveData();
+        
+        // Clear textarea
+        document.getElementById('journalText').value = '';
+        document.getElementById('wordCount').textContent = '0 mots';
+        
+        // Update UI
+        this.render();
+        this.updateStats();
+        this.showSuccess();
+      },
+      
+      // Get today's mood (from mood tracker)
+      getTodayMood() {
+        const moodData = JSON.parse(localStorage.getItem('mindflow_moods') || '[]');
+        const today = new Date().toISOString().split('T')[0];
+        const todayMood = moodData.find(m => m.date === today);
+        return todayMood?.mood || null;
+      },
+      
+      // View entry
+      viewEntry(id) {
+        this.currentEntryId = id;
+        const entry = this.entries.find(e => e.id === id);
+        
+        if (!entry) return;
+        
+        const date = new Date(entry.timestamp);
+        const dateStr = date.toLocaleDateString('fr-FR', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
         });
         
-        return `
-          <div class="entry-item" onclick="openEntry(${entry.id})">
-            <div class="entry-header">
-              <div class="entry-date">${dateStr}</div>
-              <div class="entry-time">${timeStr}</div>
-            </div>
-            <div class="entry-preview">${entry.text}</div>
-            <div class="entry-words">${entry.words} mot${entry.words > 1 ? 's' : ''}</div>
-          </div>
-        `;
-      }).join('');
-    }
+        document.getElementById('modalDate').textContent = dateStr;
+        document.getElementById('modalContent').textContent = entry.text;
+        
+        document.getElementById('modalOverlay').classList.add('show');
+        document.getElementById('viewModal').classList.add('show');
+      },
+      
+      // Close modal
+      closeModal() {
+        document.getElementById('modalOverlay').classList.remove('show');
+        document.getElementById('viewModal').classList.remove('show');
+        this.currentEntryId = null;
+      },
+      
+      // Delete entry
+      deleteEntry() {
+        if (!confirm('Supprimer cette entrée ?')) return;
+        
+        this.entries = this.entries.filter(e => e.id !== this.currentEntryId);
+        this.saveData();
+        this.closeModal();
+        this.render();
+        this.updateStats();
+      },
+      
+      // Show success message
+      showSuccess() {
+        const msg = document.getElementById('successMessage');
+        msg.classList.add('show');
+        setTimeout(() => msg.classList.remove('show'), 1500);
+      }
+    };
     
-    function openEntry(id) {
-      const entries = JSON.parse(localStorage.getItem('mindflow_journal') || '[]');
-      const entry = entries.find(e => e.id === id);
-      
-      if (!entry) return;
-      
-      currentEntryId = id;
-      
-      const date = new Date(entry.date);
-      const dateStr = date.toLocaleDateString('fr-FR', { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-      
-      document.getElementById('modalDate').textContent = dateStr;
-      document.getElementById('modalContent').textContent = entry.text;
-      
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('modal').classList.add('show');
-    }
-    
-    function closeModal() {
-      document.getElementById('modalOverlay').classList.remove('show');
-      document.getElementById('modal').classList.remove('show');
-      currentEntryId = null;
-    }
-    
-    function deleteEntry() {
-      if (!currentEntryId) return;
-      
-      if (!confirm('Es-tu sûr(e) de vouloir supprimer cette entrée ?')) return;
-      
-      let entries = JSON.parse(localStorage.getItem('mindflow_journal') || '[]');
-      entries = entries.filter(e => e.id !== currentEntryId);
-      localStorage.setItem('mindflow_journal', JSON.stringify(entries));
-      
-      closeModal();
-      loadEntries();
-    }
-    
-    loadEntries();
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      journalManager.init();
+    });
   </script>
-  <script src="luna-bubble.js"></script>
-```
-
-**5️⃣ Commit !**
-
-**Message :**
-```
-Journal - Ajout bulle Luna
 </body>
 </html>
-```
-
----
-
-## ✅ **MESSAGE DE COMMIT :**
-```
-Création Journal avec sauvegarde et historique
