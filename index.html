@@ -626,5 +626,21 @@
     // Load on start
     loadTasks();
   </script>
+  
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  
+  <script>
+    // Vérifier si l'utilisateur est connecté
+    authentification.onAuthStateChanged((utilisateur) => {
+      if (!utilisateur) {
+        // Pas connecté → rediriger vers login
+        window.location.href = 'connexion.html';
+      }
+    });
+  </script>
 </body>
 </html>
