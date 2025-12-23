@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscription - MindFlow</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .signup-container {
+      background: white;
+      border-radius: 25px;
+      padding: 40px;
+      max-width: 450px;
+      width: 100%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    }
+    
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .logo-icon {
+      font-size: 60px;
+      margin-bottom: 10px;
+    }
+    
+    .logo-text {
+      font-size: 28px;
+      font-weight: bold;
+      color: #8B7EB8;
+    }
+    
+    h1 {
+      font-size: 24px;
+      color: #2D2D3A;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #2D2D3A;
+      margin-bottom: 8px;
+    }
+    
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #8B7EB8;
+    }
+    
+    .signup-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 10px;
+    }
+    
+    .signup-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(139, 126, 184, 0.4);
+    }
+    
+    .signup-btn:active {
+      transform: translateY(0);
+    }
+    
+    .signup-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    .error-message {
+      background: #fee;
+      color: #c33;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      display: none;
+    }
+    
+    .error-message.show {
+      display: block;
+    }
+    
+    .login-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .login-link a {
+      color: #8B7EB8;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+    
+    .password-strength {
+      height: 4px;
+      background: #E5E5E5;
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+    
+    .password-strength-bar {
+      height: 100%;
+      width: 0%;
+      transition: all 0.3s;
+    }
+    
+    .password-strength-bar.weak {
+      width: 33%;
+      background: #ff6b6b;
+    }
+    
+    .password-strength-bar.medium {
+      width: 66%;
+      background: #ffa500;
+    }
+    
+    .password-strength-bar.strong {
+      width: 100%;
+      background: #10b981;
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <div class="logo">
+      <div class="logo-icon">💚</div>
+      <div class="logo-text">MindFlow</div>
+    </div>
+    
+    <h1>Créer un compte</h1>
+    <p class="subtitle">Commence ton voyage vers un meilleur bien-être</p>
+    
+    <div class="error-message" id="errorMessage"></div>
+    
+    <form id="signupForm">
+      <div class="form-group">
+        <label for="name">Prénom</label>
+        <input type="text" id="name" placeholder="Ton prénom" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="ton@email.com" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" placeholder="Minimum 6 caractères" required>
+        <div class="password-strength">
+          <div class="password-strength-bar" id="passwordStrength"></div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="confirmPassword">Confirmer le mot de passe</label>
+        <input type="password" id="confirmPassword" placeholder="Tape à nouveau ton mot de passe" required>
+      </div>
+      
+      <button type="submit" class="signup-btn" id="signupBtn">
+        💚 Créer mon compte
+      </button>
+    </form>
+    
+    <div class="login-link">
+      Déjà un compte ? <a href="login.html">Se connecter</a>
+    </div>
+  </div>
+  
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  
+  <script>
+    const signupForm = document.getElementById('signupForm');
+    const signupBtn = document.getElementById('signupBtn');
+    const errorMessage = document.getElementById('errorMessage');
+    const passwordInput = document.getElementById('password');
+    const passwordStrength = document.getElementById('passwordStrength');
+    
+    // Vérification force du mot de passe
+    passwordInput.addEventListener('input', function() {
+      const password = this.value;
+      const strength = getPasswordStrength(password);
+      
+      passwordStrength.className = 'password-strength-bar';
+      if (strength === 'weak') passwordStrength.classList.add('weak');
+      if (strength === 'medium') passwordStrength.classList.add('medium');
+      if (strength === 'strong') passwordStrength.classList.add('strong');
+    });
+    
+    function getPasswordStrength(password) {
+      if (password.length < 6) return 'weak';
+      if (password.length < 10) return 'medium';
+      if (password.length >= 10 && /[A-Z]/.test(password) && /[0-9]/.test(password)) return 'strong';
+      return 'medium';
+    }
+    
+    signupForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      // Validation
+      if (!name || !email || !password) {
+        showError('Tous les champs sont requis');
+        return;
+      }
+      
+      if (password.length < 6) {
+        showError('Le mot de passe doit faire au moins 6 caractères');
+        return;
+      }
+      
+      if (password !== confirmPassword) {
+        showError('Les mots de passe ne correspondent pas');
+        return;
+      }
+      
+      signupBtn.disabled = true;
+      signupBtn.textContent = 'Création en cours...';
+      
+      try {
+        // Créer le compte Firebase
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        
+        // Créer le document utilisateur dans Firestore
+        await db.collection('users').doc(user.uid).set({
+          name: name,
+          email: email,
+          isPro: false,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          lunaMessagesToday: 0,
+          lastLunaReset: new Date().toISOString().split('T')[0]
+        });
+        
+        // Mettre à jour le profil
+        await user.updateProfile({
+          displayName: name
+        });
+        
+        // Rediriger vers l'app
+        window.location.href = 'index.html';
+        
+      } catch (error) {
+        console.error('Erreur inscription:', error);
+        
+        let message = 'Une erreur est survenue';
+        if (error.code === 'auth/email-already-in-use') {
+          message = 'Cet email est déjà utilisé';
+        } else if (error.code === 'auth/invalid-email') {
+          message = 'Email invalide';
+        } else if (error.code === 'auth/weak-password') {
+          message = 'Mot de passe trop faible';
+        }
+        
+        showError(message);
+        signupBtn.disabled = false;
+        signupBtn.textContent = '💚 Créer mon compte';
+      }
+    });
+    
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.classList.add('show');
+      setTimeout(() => {
+        errorMessage.classList.remove('show');
+      }, 5000);
+    }
+  </script>
+</body>
+</html>
