@@ -228,6 +228,66 @@
     .modal-content li {
       margin-bottom: 8px;
     }
+
+    /* Questions interactives */
+    .question-item {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: var(--bg-card);
+      border-radius: var(--radius-sm);
+    }
+
+    .question-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+    }
+
+    .question-input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #E5E5E5;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 80px;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .question-input:focus {
+      border-color: var(--primary);
+    }
+
+    .save-answers-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 15px;
+    }
+
+    .save-answers-btn:active {
+      transform: scale(0.98);
+    }
+
+    .success-badge {
+      display: inline-block;
+      background: #10b981;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-left: 10px;
+    }
     
     .bottom-nav {
       position: fixed;
@@ -327,6 +387,8 @@
   </div>
   
   <script>
+    const STORAGE_KEY = 'mindflow_dbt_answers';
+
     const borderlineManager = {
       skills: {
         mindfulness: [
@@ -367,7 +429,14 @@
           {
             name: 'Vérifier les faits',
             desc: 'L\'émotion correspond-elle à la réalité ?',
-            content: '<p>Vérifie si ton émotion est justifiée par les faits réels.</p><h3>Questions à te poser :</h3><ul><li>Qu\'est-ce qui s\'est VRAIMENT passé ?</li><li>Mon interprétation est-elle la seule possible ?</li><li>Quelle est la probabilité que ma peur se réalise ?</li><li>L\'émotion est-elle proportionnée aux faits ?</li></ul>'
+            content: '<p>Vérifie si ton émotion est justifiée par les faits réels.</p><h3>Questions à te poser :</h3><div id="questions-container"></div>',
+            hasQuestions: true,
+            questions: [
+              'Qu\'est-ce qui s\'est VRAIMENT passé ?',
+              'Mon interprétation est-elle la seule possible ?',
+              'Quelle est la probabilité que ma peur se réalise ?',
+              'L\'émotion est-elle proportionnée aux faits ?'
+            ]
           },
           {
             name: 'Action opposée',
@@ -399,6 +468,8 @@
         ]
       },
       
+      currentSkillId: null,
+      
       init() {
         this.renderSkills();
       },
@@ -425,12 +496,72 @@
       
       showSkill(category, index) {
         const skill = this.skills[category][index];
+        this.currentSkillId = `${category}_${index}`;
         
         document.getElementById('modalTitle').textContent = skill.name;
         document.getElementById('modalContent').innerHTML = skill.content;
         
+        // Si la compétence a des questions interactives
+        if (skill.hasQuestions && skill.questions) {
+          setTimeout(() => this.renderQuestions(skill.questions), 100);
+        }
+        
         document.getElementById('modalOverlay').classList.add('show');
         document.getElementById('skillModal').classList.add('show');
+      },
+      
+      renderQuestions(questions) {
+        const container = document.getElementById('questions-container');
+        if (!container) return;
+        
+        const savedAnswers = this.loadAnswers();
+        
+        const questionsHTML = questions.map((q, i) => `
+          <div class="question-item">
+            <div class="question-text">${q}</div>
+            <textarea 
+              class="question-input" 
+              id="answer_${i}"
+              placeholder="Écris ta réponse ici..."
+            >${savedAnswers[i] || ''}</textarea>
+          </div>
+        `).join('');
+        
+        container.innerHTML = `
+          ${questionsHTML}
+          <button class="save-answers-btn" onclick="borderlineManager.saveAnswers()">
+            💚 Sauvegarder mes réponses
+          </button>
+        `;
+      },
+      
+      loadAnswers() {
+        const allAnswers = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        return allAnswers[this.currentSkillId] || [];
+      },
+      
+      saveAnswers() {
+        const allAnswers = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        const answers = [];
+        
+        let i = 0;
+        while (true) {
+          const input = document.getElementById(`answer_${i}`);
+          if (!input) break;
+          answers.push(input.value.trim());
+          i++;
+        }
+        
+        allAnswers[this.currentSkillId] = answers;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(allAnswers));
+        
+        // Afficher confirmation
+        const btn = event.target;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '✅ Sauvegardé !';
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+        }, 2000);
       },
       
       closeModal() {
