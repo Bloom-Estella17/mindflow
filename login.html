@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion - MindFlow</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .login-container {
+      background: white;
+      border-radius: 25px;
+      padding: 40px;
+      max-width: 450px;
+      width: 100%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    }
+    
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .logo-icon {
+      font-size: 60px;
+      margin-bottom: 10px;
+    }
+    
+    .logo-text {
+      font-size: 28px;
+      font-weight: bold;
+      color: #8B7EB8;
+    }
+    
+    h1 {
+      font-size: 24px;
+      color: #2D2D3A;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #2D2D3A;
+      margin-bottom: 8px;
+    }
+    
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 15px;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #8B7EB8;
+    }
+    
+    .login-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 10px;
+    }
+    
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(139, 126, 184, 0.4);
+    }
+    
+    .login-btn:active {
+      transform: translateY(0);
+    }
+    
+    .login-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    .error-message {
+      background: #fee;
+      color: #c33;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      display: none;
+    }
+    
+    .error-message.show {
+      display: block;
+    }
+    
+    .signup-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .signup-link a {
+      color: #8B7EB8;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
+    
+    .forgot-password {
+      text-align: right;
+      margin-top: 10px;
+    }
+    
+    .forgot-password a {
+      font-size: 13px;
+      color: #8B7EB8;
+      text-decoration: none;
+    }
+    
+    .forgot-password a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo">
+      <div class="logo-icon">💚</div>
+      <div class="logo-text">MindFlow</div>
+    </div>
+    
+    <h1>Bon retour !</h1>
+    <p class="subtitle">Connecte-toi pour continuer ton parcours</p>
+    
+    <div class="error-message" id="errorMessage"></div>
+    
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="ton@email.com" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" placeholder="Ton mot de passe" required>
+        <div class="forgot-password">
+          <a href="#" onclick="resetPassword(); return false;">Mot de passe oublié ?</a>
+        </div>
+      </div>
+      
+      <button type="submit" class="login-btn" id="loginBtn">
+        💚 Se connecter
+      </button>
+    </form>
+    
+    <div class="signup-link">
+      Pas encore de compte ? <a href="signup.html">Créer un compte</a>
+    </div>
+  </div>
+  
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const errorMessage = document.getElementById('errorMessage');
+    
+    loginForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      
+      if (!email || !password) {
+        showError('Tous les champs sont requis');
+        return;
+      }
+      
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Connexion...';
+      
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+        window.location.href = 'index.html';
+      } catch (error) {
+        console.error('Erreur connexion:', error);
+        
+        let message = 'Email ou mot de passe incorrect';
+        if (error.code === 'auth/user-not-found') {
+          message = 'Aucun compte avec cet email';
+        } else if (error.code === 'auth/wrong-password') {
+          message = 'Mot de passe incorrect';
+        } else if (error.code === 'auth/invalid-email') {
+          message = 'Email invalide';
+        } else if (error.code === 'auth/too-many-requests') {
+          message = 'Trop de tentatives. Réessaye plus tard';
+        }
+        
+        showError(message);
+        loginBtn.disabled = false;
+        loginBtn.textContent = '💚 Se connecter';
+      }
+    });
+    
+    async function resetPassword() {
+      const email = document.getElementById('email').value.trim();
+      
+      if (!email) {
+        showError('Entre ton email pour réinitialiser ton mot de passe');
+        return;
+      }
+      
+      try {
+        await auth.sendPasswordResetEmail(email);
+        alert('Email de réinitialisation envoyé ! Vérifie ta boîte mail.');
+      } catch (error) {
+        console.error('Erreur reset:', error);
+        showError('Erreur lors de l\'envoi de l\'email');
+      }
+    }
+    
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.classList.add('show');
+      setTimeout(() => {
+        errorMessage.classList.remove('show');
+      }, 5000);
+    }
+  </script>
+</body>
+</html>
