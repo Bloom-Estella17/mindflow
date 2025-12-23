@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Devenir PRO - MindFlow</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      min-height: 100vh;
+      padding: 20px;
+      padding-bottom: 100px;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+    
+    .header h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+    
+    .header p {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    
+    .pricing-card {
+      background: white;
+      border-radius: 25px;
+      padding: 40px;
+      position: relative;
+      transition: all 0.3s;
+    }
+    
+    .pricing-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+    
+    .pricing-card.pro {
+      border: 3px solid #8B7EB8;
+    }
+    
+    .badge {
+      position: absolute;
+      top: -15px;
+      right: 30px;
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+    
+    .plan-name {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 15px;
+    }
+    
+    .price {
+      font-size: 48px;
+      font-weight: bold;
+      color: #8B7EB8;
+      margin-bottom: 5px;
+    }
+    
+    .price-period {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 30px;
+    }
+    
+    .features {
+      list-style: none;
+      margin-bottom: 30px;
+    }
+    
+    .features li {
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .features li:last-child {
+      border-bottom: none;
+    }
+    
+    .check {
+      color: #10b981;
+      font-size: 18px;
+    }
+    
+    .cross {
+      color: #ccc;
+      font-size: 18px;
+    }
+    
+    .cta-btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+    }
+    
+    .cta-btn.free {
+      background: #f0f0f0;
+      color: #666;
+    }
+    
+    .cta-btn.pro {
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      color: white;
+    }
+    
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(139, 126, 184, 0.4);
+    }
+    
+    .cta-btn:active {
+      transform: translateY(0);
+    }
+    
+    .guarantee {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .guarantee h3 {
+      color: #8B7EB8;
+      margin-bottom: 10px;
+    }
+    
+    .guarantee p {
+      color: #666;
+    }
+    
+    .bottom-nav {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: 25px;
+      padding: 15px 25px;
+      display: flex;
+      gap: 35px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      z-index: 1000;
+      max-width: 350px;
+      width: calc(100% - 40px);
+      justify-content: center;
+    }
+    
+    .nav-item {
+      font-size: 26px;
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 0.4;
+      text-decoration: none;
+    }
+    
+    .nav-item:active {
+      transform: scale(0.9);
+    }
+    
+    @media (max-width: 768px) {
+      .pricing-cards {
+        grid-template-columns: 1fr;
+      }
+      
+      .header h1 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>✨ Passe à MindFlow PRO ✨</h1>
+      <p>Débloque toutes les fonctionnalités et accélère ton bien-être</p>
+    </div>
+    
+    <div class="pricing-cards">
+      <!-- GRATUIT -->
+      <div class="pricing-card">
+        <div class="plan-name">Gratuit</div>
+        <div class="price">0€</div>
+        <div class="price-period">pour toujours</div>
+        
+        <ul class="features">
+          <li><span class="check">✓</span> Suivi d'humeur (7 derniers jours)</li>
+          <li><span class="check">✓</span> 3 exercices DBT de base</li>
+          <li><span class="check">✓</span> Luna (5 messages/jour)</li>
+          <li><span class="cross">✗</span> Historique illimité</li>
+          <li><span class="cross">✗</span> Tous les exercices DBT</li>
+          <li><span class="cross">✗</span> Luna illimitée</li>
+          <li><span class="cross">✗</span> Export PDF</li>
+          <li><span class="cross">✗</span> Statistiques avancées</li>
+        </ul>
+        
+        <button class="cta-btn free" onclick="window.location.href='index.html'">
+          Version actuelle
+        </button>
+      </div>
+      
+      <!-- PRO -->
+      <div class="pricing-card pro">
+        <div class="badge">⭐ RECOMMANDÉ</div>
+        <div class="plan-name">MindFlow PRO</div>
+        <div class="price">4,99€</div>
+        <div class="price-period">par mois</div>
+        
+        <ul class="features">
+          <li><span class="check">✓</span> Suivi d'humeur illimité</li>
+          <li><span class="check">✓</span> 12 exercices DBT complets</li>
+          <li><span class="check">✓</span> Luna illimitée + empathique</li>
+          <li><span class="check">✓</span> Historique complet</li>
+          <li><span class="check">✓</span> Export PDF de tes données</li>
+          <li><span class="check">✓</span> Statistiques détaillées</li>
+          <li><span class="check">✓</span> Nouvelles features en premier</li>
+          <li><span class="check">✓</span> Support prioritaire</li>
+        </ul>
+        
+        <button class="cta-btn pro" id="subscribeBtn" onclick="handleSubscribe()">
+          💎 Passer à PRO
+        </button>
+      </div>
+    </div>
+    
+    <div class="guarantee">
+      <h3>🔒 Garantie satisfait ou remboursé</h3>
+      <p>Tu peux annuler ton abonnement à tout moment. Aucun engagement.</p>
+    </div>
+  </div>
+  
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">🏠</a>
+    <a href="mood.html" class="nav-item">😊</a>
+    <a href="journal.html" class="nav-item">📝</a>
+    <a href="traitement.html" class="nav-item">💊</a>
+    <a href="profil.html" class="nav-item">👤</a>
+  </div>
+  
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  
+  <!-- Stripe -->
+  <script src="https://js.stripe.com/v3/"></script>
+  
+  <script>
+    // ⚠️ IMPORTANT : Remplace cette clé par ta VRAIE clé publique Stripe
+    const stripe = Stripe('pk_test_VOTRE_CLE_PUBLIQUE_STRIPE');
+    
+    async function handleSubscribe() {
+      // Vérifier si connecté
+      if (!auth.currentUser) {
+        alert('Tu dois te connecter d\'abord !');
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      const btn = document.getElementById('subscribeBtn');
+      btn.disabled = true;
+      btn.textContent = 'Redirection vers le paiement...';
+      
+      try {
+        // ⚠️ ICI TU DEVRAS CRÉER UN BACKEND (Cloud Function Firebase)
+        // Pour créer une session Stripe Checkout
+        
+        // POUR L'INSTANT, on redirige vers Stripe directement
+        // Tu devras configurer un "Payment Link" dans ton dashboard Stripe
+        
+        // Exemple de redirection vers un Payment Link Stripe :
+        // window.location.href = 'https://buy.stripe.com/VOTRE_LIEN';
+        
+        // OU tu crées une Cloud Function Firebase qui retourne une session Stripe
+        // const response = await fetch('https://YOUR_CLOUD_FUNCTION_URL/create-checkout', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify({ userId: auth.currentUser.uid })
+        // });
+        // const session = await response.json();
+        // await stripe.redirectToCheckout({ sessionId: session.id });
+        
+        alert('Configuration Stripe en cours ! Consulte le guide d\'installation.');
+        
+      } catch (error) {
+        console.error('Erreur:', error);
+        alert('Erreur lors de la création du paiement');
+        btn.disabled = false;
+        btn.textContent = '💎 Passer à PRO';
+      }
+    }
+    
+    // Vérifier si l'utilisateur est déjà PRO
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const isPro = await isUserPro();
+        if (isPro) {
+          alert('Tu es déjà abonné PRO ! 🎉');
+          window.location.href = 'index.html';
+        }
+      }
+    });
+  </script>
+</body>
+</html>
