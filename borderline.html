@@ -430,17 +430,35 @@
           {
             name: 'TIPP',
             desc: 'Température, Intensité, Respiration, Relaxation',
-            content: '<p>TIPP est une technique d\'urgence pour calmer rapidement une crise.</p><h3>Les 4 étapes :</h3><ul><li><strong>T</strong>empérature : eau froide sur le visage</li><li><strong>I</strong>ntensité : exercice physique intense 5-10min</li><li><strong>P</strong>aced breathing : respiration lente et profonde</li><li><strong>P</strong>aired muscle relaxation : tension puis relâchement musculaire</li></ul>'
+            content: '<p>TIPP est une technique d\'urgence pour calmer rapidement une crise.</p><h3>Les 4 étapes :</h3><ul><li><strong>T</strong>empérature : eau froide sur le visage</li><li><strong>I</strong>ntensité : exercice physique intense 5-10min</li><li><strong>P</strong>aced breathing : respiration lente et profonde</li><li><strong>P</strong>aired muscle relaxation : tension puis relâchement musculaire</li></ul><h3>Suivi de ta pratique :</h3><div id="questions-container"></div>',
+            hasQuestions: true,
+            questions: [
+              'Quelle technique TIPP as-tu utilisée aujourd\'hui ?',
+              'Comment t\'es-tu senti(e) après l\'avoir pratiquée ?',
+              'Quelle intensité de crise as-tu vécue ? (1-10)'
+            ]
           },
           {
             name: 'Auto-apaisement',
             desc: 'Utiliser les 5 sens',
-            content: '<p>Apaise-toi en stimulant tes sens de façon agréable.</p><h3>Les 5 sens :</h3><ul><li><strong>Vue</strong> : regarde des images apaisantes</li><li><strong>Ouïe</strong> : écoute de la musique douce</li><li><strong>Odorat</strong> : sens une huile essentielle</li><li><strong>Goût</strong> : savoure un bonbon</li><li><strong>Toucher</strong> : caresse un tissu doux</li></ul>'
+            content: '<p>Apaise-toi en stimulant tes sens de façon agréable.</p><h3>Les 5 sens :</h3><ul><li><strong>Vue</strong> : regarde des images apaisantes</li><li><strong>Ouïe</strong> : écoute de la musique douce</li><li><strong>Odorat</strong> : sens une huile essentielle</li><li><strong>Goût</strong> : savoure un bonbon</li><li><strong>Toucher</strong> : caresse un tissu doux</li></ul><h3>Ton expérience d\'auto-apaisement :</h3><div id="questions-container"></div>',
+            hasQuestions: true,
+            questions: [
+              'Quel(s) sens as-tu utilisé(s) pour t\'apaiser aujourd\'hui ?',
+              'Qu\'as-tu fait concrètement ? (ex: musique douce, bougie parfumée...)',
+              'Cela t\'a-t-il aidé(e) ? Comment te sens-tu maintenant ?'
+            ]
           },
           {
             name: 'ACCEPTS',
             desc: '7 façons de tolérer la détresse',
-            content: '<p>ACCEPTS regroupe 7 stratégies pour traverser un moment difficile.</p><h3>A-C-C-E-P-T-S :</h3><ul><li><strong>A</strong>ctivités : fais autre chose</li><li><strong>C</strong>ontribuer : aide quelqu\'un</li><li><strong>C</strong>omparaisons : relatif aux autres</li><li><strong>E</strong>motions opposées : change d\'émotion</li><li><strong>P</strong>ushing away : mets de côté temporairement</li><li><strong>T</strong>houghts : pense à autre chose</li><li><strong>S</strong>ensations : crée une sensation forte</li></ul>'
+            content: '<p>ACCEPTS regroupe 7 stratégies pour traverser un moment difficile.</p><h3>A-C-C-E-P-T-S :</h3><ul><li><strong>A</strong>ctivités : fais autre chose</li><li><strong>C</strong>ontribuer : aide quelqu\'un</li><li><strong>C</strong>omparaisons : relatif aux autres</li><li><strong>E</strong>motions opposées : change d\'émotion</li><li><strong>P</strong>ushing away : mets de côté temporairement</li><li><strong>T</strong>houghts : pense à autre chose</li><li><strong>S</strong>ensations : crée une sensation forte</li></ul><h3>Quelle stratégie as-tu utilisée ?</h3><div id="questions-container"></div>',
+            hasQuestions: true,
+            questions: [
+              'Quelle(s) lettre(s) d\'ACCEPTS as-tu utilisée(s) ? (A, C, E, P, T, S)',
+              'Décris ce que tu as fait concrètement',
+              'Est-ce que ça t\'a aidé(e) à tolérer la détresse ?'
+            ]
           }
         ],
         emotion: [
@@ -459,29 +477,63 @@
           {
             name: 'Action opposée',
             desc: 'Agir à l\'opposé de l\'impulsion',
-            content: '<p>Quand l\'émotion n\'est pas justifiée, fais l\'inverse de ce qu\'elle te pousse à faire.</p><h3>Exemples :</h3><ul><li><strong>Peur</strong> → Approche-toi au lieu de fuir</li><li><strong>Colère</strong> → Sois gentil au lieu d\'attaquer</li><li><strong>Tristesse</strong> → Active-toi au lieu de t\'isoler</li><li><strong>Honte</strong> → Partage au lieu de cacher</li></ul>'
+            content: '<p>Quand l\'émotion n\'est pas justifiée, fais l\'inverse de ce qu\'elle te pousse à faire.</p><h3>Exemples :</h3><ul><li><strong>Peur</strong> → Approche-toi au lieu de fuir</li><li><strong>Colère</strong> → Sois gentil au lieu d\'attaquer</li><li><strong>Tristesse</strong> → Active-toi au lieu de t\'isoler</li><li><strong>Honte</strong> → Partage au lieu de cacher</li></ul><h3>Ta pratique d\'action opposée :</h3><div id="questions-container"></div>',
+            hasQuestions: true,
+            questions: [
+              'Quelle émotion as-tu ressentie ? (peur, colère, tristesse, honte...)',
+              'Quelle était ton impulsion ? (ce que l\'émotion te poussait à faire)',
+              'Qu\'as-tu fait à la place ? (action opposée)',
+              'Comment t\'es-tu senti(e) après avoir agi à l\'opposé ?'
+            ]
           },
           {
             name: 'Accumulation de positif',
             desc: 'Construire des émotions positives',
-            content: '<p>Crée des expériences positives à court et long terme.</p><h3>Court terme :</h3><ul><li>Fais une activité plaisante par jour</li><li>Sois attentif aux moments agréables</li></ul><h3>Long terme :</h3><ul><li>Travaille vers tes objectifs de vie</li><li>Développe des compétences</li><li>Crée des relations significatives</li></ul>'
+            content: '<p>Crée des expériences positives à court et long terme.</p><h3>Court terme :</h3><ul><li>Fais une activité plaisante par jour</li><li>Sois attentif aux moments agréables</li></ul><h3>Long terme :</h3><ul><li>Travaille vers tes objectifs de vie</li><li>Développe des compétences</li><li>Crée des relations significatives</li></ul><h3>Tes expériences positives :</h3><div id="questions-container"></div>',
+            hasQuestions: true,
+            questions: [
+              'Quelle activité plaisante as-tu faite aujourd\'hui ?',
+              'Quel moment agréable as-tu remarqué et savouré ?',
+              'Quel objectif à long terme veux-tu développer ?'
+            ]
           }
         ],
         interpersonal: [
           {
             name: 'DEAR MAN',
             desc: 'Obtenir ce que tu veux',
-            content: '<p>DEAR MAN aide à demander quelque chose efficacement.</p><h3>D-E-A-R M-A-N :</h3><ul><li><strong>D</strong>écrire : expose les faits</li><li><strong>E</strong>xprimer : dis ce que tu ressens</li><li><strong>A</strong>ffirmer : demande clairement</li><li><strong>R</strong>enforcer : explique les conséquences positives</li><li><strong>M</strong>indful : reste concentré sur ton objectif</li><li><strong>A</strong>ppear confident : sois confiant</li><li><strong>N</strong>egociate : sois prêt à négocier</li></ul>'
+            content: '<p>DEAR MAN aide à demander quelque chose efficacement.</p><h3>D-E-A-R M-A-N :</h3><ul><li><strong>D</strong>écrire : expose les faits</li><li><strong>E</strong>xprimer : dis ce que tu ressens</li><li><strong>A</strong>ffirmer : demande clairement</li><li><strong>R</strong>enforcer : explique les conséquences positives</li><li><strong>M</strong>indful : reste concentré sur ton objectif</li><li><strong>A</strong>ppear confident : sois confiant</li><li><strong>N</strong>egociate : sois prêt à négocier</li></ul><h3>Prépare ta demande :</h3><div id="questions-container"></div>',
+            hasQuestions: true,
+            questions: [
+              'Que veux-tu demander ? (sois clair et précis)',
+              'Quels sont les faits objectifs de la situation ?',
+              'Comment te sens-tu par rapport à cette situation ?',
+              'Quel bénéfice y aura-t-il pour l\'autre personne si elle accepte ?'
+            ]
           },
           {
             name: 'GIVE',
             desc: 'Garder la relation',
-            content: '<p>GIVE t\'aide à maintenir de bonnes relations.</p><h3>G-I-V-E :</h3><ul><li><strong>G</strong>entle : sois doux, pas agressif</li><li><strong>I</strong>nterested : montre de l\'intérêt</li><li><strong>V</strong>alidate : valide l\'autre</li><li><strong>E</strong>asy manner : reste léger et souriant</li></ul>'
+            content: '<p>GIVE t\'aide à maintenir de bonnes relations.</p><h3>G-I-V-E :</h3><ul><li><strong>G</strong>entle : sois doux, pas agressif</li><li><strong>I</strong>nterested : montre de l\'intérêt</li><li><strong>V</strong>alidate : valide l\'autre</li><li><strong>E</strong>asy manner : reste léger et souriant</li></ul><h3>Réflexion sur ta relation :</h3><div id="questions-container"></div>',
+            hasQuestions: true,
+            questions: [
+              'Avec qui veux-tu améliorer ta relation ?',
+              'Comment peux-tu montrer plus d\'intérêt pour cette personne ?',
+              'Qu\'est-ce que tu peux valider chez elle ? (émotion, point de vue...)',
+              'Comment peux-tu être plus doux(ce) dans tes interactions ?'
+            ]
           },
           {
             name: 'FAST',
             desc: 'Respecte-toi',
-            content: '<p>FAST t\'aide à garder ton estime de toi.</p><h3>F-A-S-T :</h3><ul><li><strong>F</strong>air : sois juste envers toi et les autres</li><li><strong>A</strong>pologies : ne t\'excuse pas trop</li><li><strong>S</strong>tick to values : reste fidèle à tes valeurs</li><li><strong>T</strong>ruthful : sois honnête, ne mens pas</li></ul>'
+            content: '<p>FAST t\'aide à garder ton estime de toi.</p><h3>F-A-S-T :</h3><ul><li><strong>F</strong>air : sois juste envers toi et les autres</li><li><strong>A</strong>pologies : ne t\'excuse pas trop</li><li><strong>S</strong>tick to values : reste fidèle à tes valeurs</li><li><strong>T</strong>ruthful : sois honnête, ne mens pas</li></ul><h3>Protège ton estime de toi :</h3><div id="questions-container"></div>',
+            hasQuestions: true,
+            questions: [
+              'Quelles sont tes valeurs importantes ? (liste 2-3 valeurs)',
+              'Dans quelle situation as-tu du mal à rester fidèle à tes valeurs ?',
+              'T\'excuses-tu trop souvent ? Dans quelles situations ?',
+              'Comment peux-tu être plus honnête avec toi-même et les autres ?'
+            ]
           }
         ]
       },
