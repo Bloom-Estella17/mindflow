@@ -635,10 +635,10 @@
   
   <script>
     // Vérifier si l'utilisateur est connecté
-    authentification.onAuthStateChanged((utilisateur) => {
-      if (!utilisateur) {
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
         // Pas connecté → rediriger vers login
-        window.location.href = 'connexion.html';
+        window.location.href = 'login.html';
       }
     });
   </script>
