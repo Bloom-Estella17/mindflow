@@ -1,6 +1,27 @@
-// Firebase Configuration for MindFlow
-// This file contains the connection keys to Firebase
+Clé API:"AIzaSyAtb4nTMjvLruh0fg5O9_wiAPJI1Nall-g",
+```
 
+**C'est ENCORE traduit en français !**
+
+- ❌ `Clé API` au lieu de `apiKey`
+- ❌ `domaine d'authentification` au lieu de `authDomain`
+- ❌ `authentification` au lieu de `auth`
+- ❌ Guillemets bizarres
+
+---
+
+## **🎯 LE VRAI PROBLÈME :**
+
+**Ton navigateur ou ton éditeur TRADUIT automatiquement le code !**
+
+---
+
+## **✅ SOLUTION :**
+
+**Je vais te donner le code en TXT brut que tu vas copier directement !**
+
+**COPIE CE CODE (Ctrl+C) :**
+```
 const firebaseConfig = {
   apiKey: "AIzaSyAtb4nTMjvLruh0fg5O9_wiAPJI1Nall-g",
   authDomain: "mindflow-66abc.firebaseapp.com",
@@ -11,34 +32,28 @@ const firebaseConfig = {
   measurementId: "G-B7PEXP45WH"
 };
 
-// Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Function to check if user is PRO
 async function isUserPro() {
   const user = auth.currentUser;
   if (!user) return false;
-  
   try {
     const userDoc = await db.collection('users').doc(user.uid).get();
     if (!userDoc.exists) return false;
-    
     const userData = userDoc.data();
     return userData.isPro === true;
   } catch (error) {
-    console.error('Error checking PRO status:', error);
+    console.error('Error checking PRO:', error);
     return false;
   }
 }
 
-// Function to check if user is logged in
 function isUserLoggedIn() {
   return auth.currentUser !== null;
 }
 
-// Redirect to login if not logged in
 function requireAuth() {
   if (!isUserLoggedIn()) {
     window.location.href = 'login.html';
@@ -47,7 +62,6 @@ function requireAuth() {
   return true;
 }
 
-// Logout function
 async function logout() {
   try {
     await auth.signOut();
