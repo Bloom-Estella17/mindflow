@@ -1,5 +1,5 @@
-// Configuration Firebase pour MindFlow
-// Ce fichier contient les clés de connexion à Firebase
+// Firebase Configuration for MindFlow
+// This file contains the connection keys to Firebase
 
 const firebaseConfig = {
   apiKey: "AIzaSyAtb4nTMjvLruh0fg5O9_wiAPJI1Nall-g",
@@ -11,12 +11,12 @@ const firebaseConfig = {
   measurementId: "G-B7PEXP45WH"
 };
 
-// Initialisation Firebase
+// Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Fonction pour vérifier si l'utilisateur est PRO
+// Function to check if user is PRO
 async function isUserPro() {
   const user = auth.currentUser;
   if (!user) return false;
@@ -28,17 +28,17 @@ async function isUserPro() {
     const userData = userDoc.data();
     return userData.isPro === true;
   } catch (error) {
-    console.error('Erreur vérification PRO:', error);
+    console.error('Error checking PRO status:', error);
     return false;
   }
 }
 
-// Fonction pour vérifier si l'utilisateur est connecté
+// Function to check if user is logged in
 function isUserLoggedIn() {
   return auth.currentUser !== null;
 }
 
-// Rediriger vers login si pas connecté
+// Redirect to login if not logged in
 function requireAuth() {
   if (!isUserLoggedIn()) {
     window.location.href = 'login.html';
@@ -47,13 +47,13 @@ function requireAuth() {
   return true;
 }
 
-// Déconnexion
+// Logout function
 async function logout() {
   try {
     await auth.signOut();
     window.location.href = 'login.html';
   } catch (error) {
-    console.error('Erreur déconnexion:', error);
+    console.error('Logout error:', error);
     alert('Erreur lors de la déconnexion');
   }
 }
