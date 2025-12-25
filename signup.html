@@ -226,16 +226,31 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-  <script src="firebase-config.js"></script>
   
   <script>
+    // Firebase Configuration - INTÉGRÉ DIRECTEMENT
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtb4nTMjvLruh0fg5O9_wiAPJI1Nall-g",
+      authDomain: "mindflow-66abc.firebaseapp.com",
+      projectId: "mindflow-66abc",
+      storageBucket: "mindflow-66abc.firebasestorage.app",
+      messagingSenderId: "466651144452",
+      appId: "1:466651144452:web:4b1dc68d4f6ac1896830051",
+      measurementId: "G-B7PEXP45WH"
+    };
+    
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    
     const signupForm = document.getElementById('signupForm');
     const signupBtn = document.getElementById('signupBtn');
     const errorMessage = document.getElementById('errorMessage');
     const passwordInput = document.getElementById('password');
     const passwordStrength = document.getElementById('passwordStrength');
     
-    // Vérification force du mot de passe
+    // Password strength
     passwordInput.addEventListener('input', function() {
       const password = this.value;
       const strength = getPasswordStrength(password);
@@ -261,7 +276,6 @@
       const password = document.getElementById('password').value;
       const confirmPassword = document.getElementById('confirmPassword').value;
       
-      // Validation
       if (!name || !email || !password) {
         showError('Tous les champs sont requis');
         return;
@@ -281,11 +295,9 @@
       signupBtn.textContent = 'Création en cours...';
       
       try {
-        // Créer le compte Firebase
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
         const user = userCredential.user;
         
-        // Créer le document utilisateur dans Firestore
         await db.collection('users').doc(user.uid).set({
           name: name,
           email: email,
@@ -295,12 +307,10 @@
           lastLunaReset: new Date().toISOString().split('T')[0]
         });
         
-        // Mettre à jour le profil
         await user.updateProfile({
           displayName: name
         });
         
-        // Rediriger vers l'app
         window.location.href = 'index.html';
         
       } catch (error) {
