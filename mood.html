@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,6 +8,11 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#8B7EB8">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   
   <style>
     * {
@@ -29,6 +35,7 @@
       --radius-md: 20px;
       --radius-lg: 25px;
       --transition: all 0.3s ease;
+      --gold: #FFD700;
     }
     
     body {
@@ -73,6 +80,7 @@
       padding: 25px;
       margin-bottom: 20px;
       box-shadow: var(--shadow-sm);
+      position: relative;
     }
     
     .card-title {
@@ -80,6 +88,85 @@
       font-weight: bold;
       color: var(--text-dark);
       margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .pro-badge {
+      background: linear-gradient(135deg, var(--gold) 0%, #FFA500 100%);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    
+    /* Overlay PRO */
+    .pro-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.95);
+      border-radius: var(--radius-lg);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 30px;
+      text-align: center;
+    }
+    
+    .pro-overlay.show {
+      display: flex;
+    }
+    
+    .pro-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .pro-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+    }
+    
+    .pro-desc {
+      font-size: 14px;
+      color: var(--text-gray);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    
+    .upgrade-btn {
+      background: linear-gradient(135deg, var(--gold) 0%, #FFA500 100%);
+      color: white;
+      padding: 14px 30px;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255,215,0,0.3);
+      transition: var(--transition);
+    }
+    
+    .upgrade-btn:active {
+      transform: scale(0.95);
+    }
+    
+    /* Limitation FREE */
+    .limit-badge {
+      background: #ef4444;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 15px;
     }
     
     /* Sélection émotions multiples */
@@ -102,6 +189,7 @@
       flex-direction: column;
       align-items: center;
       gap: 5px;
+      position: relative;
     }
     
     .emotion-btn:active {
@@ -112,6 +200,19 @@
       border-color: var(--primary);
       background: linear-gradient(135deg, var(--primary-light) 0%, var(--bg-card) 100%);
       transform: scale(1.05);
+    }
+    
+    .emotion-btn.locked {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    
+    .emotion-btn.locked::after {
+      content: '🔒';
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      font-size: 14px;
     }
     
     .emotion-label {
@@ -274,6 +375,11 @@
       transform: scale(0.98);
     }
     
+    .save-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
     /* Graphiques */
     .chart-card {
       background: white;
@@ -281,6 +387,7 @@
       padding: 25px;
       margin-bottom: 20px;
       box-shadow: var(--shadow-sm);
+      position: relative;
     }
     
     .chart-header {
@@ -311,12 +418,19 @@
       cursor: pointer;
       transition: var(--transition);
       color: var(--text-gray);
+      position: relative;
     }
     
     .period-btn.active {
       border-color: var(--primary);
       background: var(--bg-card);
       color: var(--primary);
+    }
+    
+    .period-btn.pro-only::after {
+      content: '🔒';
+      margin-left: 4px;
+      font-size: 10px;
     }
     
     .chart-container {
@@ -413,7 +527,15 @@
     </div>
     
     <div class="card">
-      <div class="card-title">🎭 Tes émotions du moment</div>
+      <div class="card-title">
+        🎭 Tes émotions du moment
+        <span class="pro-badge" id="multiEmotionBadge" style="display: none;">PRO</span>
+      </div>
+      
+      <div id="freeLimit" class="limit-badge" style="display: none;">
+        ⚠️ Version gratuite : 1 émotion max
+      </div>
+      
       <div class="emotions-grid" id="emotionsGrid"></div>
       
       <div class="intensity-section">
@@ -442,17 +564,28 @@
       
       <textarea class="mood-note" id="moodNote" placeholder="Notes optionnelles... Qu'est-ce qui influence ton humeur aujourd'hui ?"></textarea>
       
-      <button class="save-btn" onclick="moodManager.save()">
+      <button class="save-btn" onclick="moodManager.save()" id="saveBtn">
         💾 Enregistrer mon état
       </button>
     </div>
     
     <div class="chart-card">
+      <div class="pro-overlay" id="statsProOverlay">
+        <div class="pro-icon">📊✨</div>
+        <div class="pro-title">Stats avancées PRO</div>
+        <div class="pro-desc">
+          Accède aux statistiques sur 30 jours, graphiques détaillés et analyse de patterns avec la version PRO !
+        </div>
+        <button class="upgrade-btn" onclick="moodManager.showUpgrade()">
+          ✨ Passer à PRO
+        </button>
+      </div>
+      
       <div class="chart-header">
         <div class="chart-title">📊 Évolution de tes humeurs</div>
         <div class="period-btns">
           <button class="period-btn active" onclick="moodManager.changePeriod(7)">7j</button>
-          <button class="period-btn" onclick="moodManager.changePeriod(30)">30j</button>
+          <button class="period-btn pro-only" onclick="moodManager.changePeriod(30)" id="btn30days">30j</button>
         </div>
       </div>
       
@@ -491,6 +624,24 @@
   </div>
   
   <script>
+    // Configuration Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtb4nTMjvlruh0fg5O9_wiAPJI1Nall-g",
+      authDomain: "mindflow-66abc.firebaseapp.com",
+      projectId: "mindflow-66abc",
+      storageBucket: "mindflow-66abc.firebasestorage.app",
+      messagingSenderId: "466651144452",
+      appId: "1:466651144452:web:4b1dc68d4feac189683051",
+      measurementId: "G-B7PEXP45WH"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    
     const STORAGE_KEY = 'mindflow_moods_v2';
     
     const emotions = [
@@ -532,8 +683,10 @@
       sleep: 7,
       chart: null,
       currentPeriod: 7,
+      isPro: false,
       
-      init() {
+      async init() {
+        await this.checkProStatus();
         this.loadData();
         this.renderEmotions();
         this.renderEnergy();
@@ -542,6 +695,49 @@
         this.checkTodayMood();
         this.initChart();
         this.updateStats();
+        this.applyProLimitations();
+      },
+      
+      async checkProStatus() {
+        return new Promise((resolve) => {
+          auth.onAuthStateChanged(async (user) => {
+            if (user) {
+              try {
+                // CHECK si mode preview FREE activé
+                const previewMode = localStorage.getItem('previewFreeMode') === 'true';
+                
+                if (previewMode) {
+                  this.isPro = false;
+                  console.log('👁️ MODE PREVIEW FREE ACTIVÉ');
+                } else {
+                  const userDoc = await db.collection('users').doc(user.uid).get();
+                  this.isPro = userDoc.exists && userDoc.data().isPro === true;
+                }
+              } catch (error) {
+                console.error('Erreur vérification PRO:', error);
+                this.isPro = false;
+              }
+            }
+            resolve();
+          });
+        });
+      },
+      
+      applyProLimitations() {
+        if (!this.isPro) {
+          // Afficher badge limitation
+          document.getElementById('freeLimit').style.display = 'block';
+          
+          // Bloquer stats 30 jours
+          document.getElementById('btn30days').disabled = true;
+          document.getElementById('btn30days').style.opacity = '0.5';
+          
+          // Afficher badge PRO pour multi-émotions
+          document.getElementById('multiEmotionBadge').style.display = 'inline-block';
+        } else {
+          document.getElementById('freeLimit').style.display = 'none';
+          document.getElementById('multiEmotionBadge').style.display = 'none';
+        }
       },
       
       renderEmotions() {
@@ -581,6 +777,12 @@
       },
       
       toggleEmotion(index) {
+        // LIMITATION FREE : 1 seule émotion
+        if (!this.isPro && this.selectedEmotions.length >= 1 && !this.selectedEmotions.includes(index)) {
+          this.showUpgrade('multi-emotions');
+          return;
+        }
+        
         const idx = this.selectedEmotions.indexOf(index);
         if (idx > -1) {
           this.selectedEmotions.splice(idx, 1);
@@ -769,6 +971,12 @@
       },
       
       changePeriod(days) {
+        // LIMITATION FREE : 7 jours seulement
+        if (!this.isPro && days > 7) {
+          this.showUpgrade('stats-30days');
+          return;
+        }
+        
         this.currentPeriod = days;
         document.querySelectorAll('.period-btn').forEach(btn => btn.classList.remove('active'));
         event.target.classList.add('active');
@@ -794,6 +1002,24 @@
         const msg = document.getElementById('successMessage');
         msg.classList.add('show');
         setTimeout(() => msg.classList.remove('show'), 1500);
+      },
+      
+      showUpgrade(feature) {
+        let message = '';
+        switch(feature) {
+          case 'multi-emotions':
+            message = '🎭 Sélectionne plusieurs émotions simultanément avec PRO !';
+            break;
+          case 'stats-30days':
+            message = '📊 Accède aux stats sur 30 jours avec PRO !';
+            break;
+          default:
+            message = '✨ Cette fonctionnalité est réservée aux membres PRO !';
+        }
+        
+        if (confirm(message + '\n\n💎 Passer à PRO maintenant ?')) {
+          window.location.href = 'profil.html';
+        }
       }
     };
     
