@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💎 MindFlow PRO</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FFD700">
+  
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+  <!-- Stripe -->
+  <script src="https://js.stripe.com/v3/"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    :root {
+      --gold: #FFD700;
+      --gold-dark: #FFA500;
+      --text-dark: #2D2D3A;
+      --text-gray: #666;
+      --shadow-sm: 0 4px 20px rgba(0,0,0,0.08);
+      --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
+      --shadow-lg: 0 20px 60px rgba(255,215,0,0.3);
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 25px;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      min-height: 100vh;
+      padding: 15px;
+      padding-bottom: 100px;
+    }
+    
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      background: white;
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .back-btn {
+      font-size: 24px;
+      text-decoration: none;
+      color: var(--text-dark);
+    }
+    
+    .header-title {
+      font-size: 20px;
+      font-weight: bold;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    /* Hero Section */
+    .hero-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 40px 30px;
+      margin-bottom: 25px;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+      border: 3px solid var(--gold);
+    }
+    
+    .hero-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .hero-title {
+      font-size: 32px;
+      font-weight: bold;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+    
+    .hero-subtitle {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    
+    .price-tag {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      color: white;
+      padding: 20px;
+      border-radius: var(--radius-md);
+      margin-bottom: 30px;
+    }
+    
+    .price-amount {
+      font-size: 48px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .price-period {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    .trial-badge {
+      background: #10b981;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+      display: inline-block;
+      margin-top: 10px;
+    }
+    
+    /* Features List */
+    .features-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 30px 25px;
+      margin-bottom: 25px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .features-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 25px;
+      text-align: center;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: rgba(255,215,0,0.05);
+      border-radius: var(--radius-sm);
+      border-left: 4px solid var(--gold);
+    }
+    
+    .feature-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+    
+    .feature-text {
+      flex: 1;
+    }
+    
+    .feature-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 5px;
+    }
+    
+    .feature-desc {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+    
+    /* CTA Button */
+    .subscribe-btn {
+      width: 100%;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: var(--shadow-lg);
+      transition: all 0.3s ease;
+      margin-bottom: 15px;
+    }
+    
+    .subscribe-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .subscribe-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    .secure-note {
+      text-align: center;
+      font-size: 12px;
+      color: white;
+      margin-bottom: 20px;
+    }
+    
+    /* Already PRO */
+    .already-pro {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      display: none;
+    }
+    
+    .already-pro.show {
+      display: block;
+    }
+    
+    .already-pro-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .already-pro-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+    }
+    
+    .already-pro-text {
+      font-size: 14px;
+      color: var(--text-gray);
+      margin-bottom: 20px;
+    }
+    
+    .back-home-btn {
+      padding: 15px 30px;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    /* FAQ */
+    .faq-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .faq-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 20px;
+    }
+    
+    .faq-item {
+      margin-bottom: 15px;
+    }
+    
+    .faq-question {
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 5px;
+    }
+    
+    .faq-answer {
+      font-size: 13px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: white;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <a href="profil.html" class="back-btn">←</a>
+      <div class="header-title">💎 MindFlow PRO</div>
+      <div style="width: 24px;"></div>
+    </div>
+    
+    <div id="loadingSection" class="loading">
+      Chargement... ⏳
+    </div>
+    
+    <!-- Already PRO -->
+    <div id="alreadyProSection" class="already-pro">
+      <div class="already-pro-icon">✨💎✨</div>
+      <div class="already-pro-title">Tu es déjà PRO !</div>
+      <div class="already-pro-text">
+        Tu as accès à toutes les fonctionnalités premium de MindFlow
+      </div>
+      <a href="index.html" class="back-home-btn">
+        🏠 Retour à l'accueil
+      </a>
+    </div>
+    
+    <!-- Subscription Section -->
+    <div id="subscriptionSection" style="display: none;">
+      <!-- Hero -->
+      <div class="hero-card">
+        <div class="hero-icon">💎</div>
+        <div class="hero-title">MindFlow PRO</div>
+        <div class="hero-subtitle">
+          Débloque toutes les fonctionnalités pour un suivi optimal de ta santé mentale
+        </div>
+        
+        <div class="price-tag">
+          <div class="price-amount">9,99€</div>
+          <div class="price-period">par mois</div>
+          <div class="trial-badge">✨ 7 jours d'essai gratuit</div>
+        </div>
+        
+        <button class="subscribe-btn" onclick="subscriptionManager.subscribe()" id="subscribeBtn">
+          🚀 Commencer l'essai gratuit
+        </button>
+        
+        <div class="secure-note">
+          🔒 Paiement sécurisé par Stripe • Annule à tout moment
+        </div>
+      </div>
+      
+      <!-- Features -->
+      <div class="features-card">
+        <div class="features-title">✨ Tout ce que tu débloques</div>
+        
+        <div class="feature-item">
+          <div class="feature-icon">🎭</div>
+          <div class="feature-text">
+            <div class="feature-title">Émotions illimitées</div>
+            <div class="feature-desc">Sélectionne plusieurs émotions par entrée au lieu d'une seule</div>
+          </div>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-icon">📝</div>
+          <div class="feature-text">
+            <div class="feature-title">Journal illimité</div>
+            <div class="feature-desc">Écris autant d'entrées que tu veux + export PDF</div>
+          </div>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-icon">💊</div>
+          <div class="feature-text">
+            <div class="feature-title">Médicaments illimités</div>
+            <div class="feature-desc">Suivi complet de tous tes traitements avec historique</div>
+          </div>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-icon">📊</div>
+          <div class="feature-text">
+            <div class="feature-title">Stats avancées 30 jours</div>
+            <div class="feature-desc">Graphiques détaillés et analyse de patterns</div>
+          </div>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-icon">💬</div>
+          <div class="feature-text">
+            <div class="feature-title">Luna - Chatbot IA</div>
+            <div class="feature-desc">Compagnon IA disponible 24/7 pour soutien émotionnel</div>
+          </div>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-icon">🎨</div>
+          <div class="feature-text">
+            <div class="feature-title">Thèmes personnalisés</div>
+            <div class="feature-desc">Dark mode et personnalisation des couleurs</div>
+          </div>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-icon">📄</div>
+          <div class="feature-text">
+            <div class="feature-title">Export & Backup</div>
+            <div class="feature-desc">Exporte toutes tes données en PDF ou JSON</div>
+          </div>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-icon">🚫</div>
+          <div class="feature-text">
+            <div class="feature-title">Sans publicités</div>
+            <div class="feature-desc">Expérience pure sans interruptions</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- FAQ -->
+      <div class="faq-card">
+        <div class="faq-title">❓ Questions fréquentes</div>
+        
+        <div class="faq-item">
+          <div class="faq-question">L'essai gratuit est-il vraiment gratuit ?</div>
+          <div class="faq-answer">Oui ! Tu as 7 jours pour tester sans payer. Tu peux annuler avant la fin sans frais.</div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">Puis-je annuler à tout moment ?</div>
+          <div class="faq-answer">Absolument. Annule depuis ton profil en 2 clics, sans frais cachés.</div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">Mes données sont-elles sécurisées ?</div>
+          <div class="faq-answer">Oui, 100%. Paiement sécurisé via Stripe et données chiffrées.</div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">Que se passe-t-il si j'annule ?</div>
+          <div class="faq-answer">Tu gardes l'accès jusqu'à la fin de ton mois payé, puis retour à la version gratuite.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtb4nTMjvlruh0fg5O9_wiAPJI1Nall-g",
+      authDomain: "mindflow-66abc.firebaseapp.com",
+      projectId: "mindflow-66abc",
+      storageBucket: "mindflow-66abc.firebasestorage.app",
+      messagingSenderId: "466651144452",
+      appId: "1:466651144452:web:4b1dc68d4feac189683051",
+      measurementId: "G-B7PEXP45WH"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    
+    // REMPLACE PAR TA CLÉ STRIPE PUBLISHABLE (mode test)
+    const STRIPE_PUBLISHABLE_KEY = 'pk_test_51QdjJYP5z8yQb2rqh5O6rDnAKp7pQgNr2fMBDMU8QcM0h7PbnbYiZmBKV7b2OqbCzPkGrPXP4C6tLkHQZ9h9lNEa00MG53p9K8';
+    const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+    
+    const subscriptionManager = {
+      user: null,
+      isPro: false,
+      
+      async init() {
+        await this.checkAuth();
+        await this.checkProStatus();
+        this.showContent();
+      },
+      
+      async checkAuth() {
+        return new Promise((resolve) => {
+          auth.onAuthStateChanged((user) => {
+            if (!user) {
+              window.location.href = 'login.html';
+              return;
+            }
+            this.user = user;
+            resolve();
+          });
+        });
+      },
+      
+      async checkProStatus() {
+        try {
+          const userDoc = await db.collection('users').doc(this.user.uid).get();
+          this.isPro = userDoc.exists && userDoc.data().isPro === true;
+        } catch (error) {
+          console.error('Erreur vérification PRO:', error);
+          this.isPro = false;
+        }
+      },
+      
+      showContent() {
+        document.getElementById('loadingSection').style.display = 'none';
+        
+        if (this.isPro) {
+          document.getElementById('alreadyProSection').classList.add('show');
+        } else {
+          document.getElementById('subscriptionSection').style.display = 'block';
+        }
+      },
+      
+      async subscribe() {
+        const btn = document.getElementById('subscribeBtn');
+        btn.disabled = true;
+        btn.textContent = '⏳ Redirection vers Stripe...';
+        
+        try {
+          // MÉTHODE 1 : Stripe Checkout (la plus simple)
+          // Tu devras créer un "Price" dans ton dashboard Stripe
+          // et remplacer 'price_xxxxx' par ton vrai Price ID
+          
+          const { error } = await stripe.redirectToCheckout({
+            lineItems: [{
+              price: 'price_1QdjbYP5z8yQb2rqYrxON2WP', // REMPLACE par ton Price ID Stripe
+              quantity: 1,
+            }],
+            mode: 'subscription',
+            successUrl: window.location.origin + '/success.html?session_id={CHECKOUT_SESSION_ID}',
+            cancelUrl: window.location.origin + '/subscription.html',
+            customerEmail: this.user.email,
+            clientReferenceId: this.user.uid
+          });
+          
+          if (error) {
+            console.error('Erreur Stripe:', error);
+            alert('Erreur lors de la redirection vers Stripe. Réessaye !');
+            btn.disabled = false;
+            btn.textContent = '🚀 Commencer l\'essai gratuit';
+          }
+          
+        } catch (error) {
+          console.error('Erreur:', error);
+          alert('Une erreur est survenue. Réessaye !');
+          btn.disabled = false;
+          btn.textContent = '🚀 Commencer l\'essai gratuit';
+        }
+      }
+    };
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      subscriptionManager.init();
+    });
+  </script>
+</body>
+</html>
