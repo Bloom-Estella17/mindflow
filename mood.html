@@ -22,7 +22,6 @@
       --secondary: #A8D8EA;
       --text-dark: #2D2D3A;
       --text-gray: #666;
-      --text-light: #888;
       --bg-card: rgba(139, 126, 184, 0.05);
       --shadow-sm: 0 4px 20px rgba(0,0,0,0.08);
       --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
@@ -43,8 +42,6 @@
     .container {
       max-width: 450px;
       margin: 0 auto;
-      width: 100%;
-      padding: 0 5px;
     }
     
     .header {
@@ -60,13 +57,8 @@
     
     .back-btn {
       font-size: 24px;
-      cursor: pointer;
       text-decoration: none;
-      transition: var(--transition);
-    }
-    
-    .back-btn:active {
-      transform: scale(1.2);
+      color: var(--text-dark);
     }
     
     .header-title {
@@ -75,60 +67,175 @@
       color: var(--primary);
     }
     
-    .header-placeholder {
-      width: 24px;
-    }
-    
-    .mood-card {
+    .card {
       background: white;
       border-radius: var(--radius-lg);
-      padding: 30px 25px;
+      padding: 25px;
       margin-bottom: 20px;
       box-shadow: var(--shadow-sm);
-      text-align: center;
     }
     
-    .mood-question {
-      font-size: 20px;
+    .card-title {
+      font-size: 18px;
       font-weight: bold;
       color: var(--text-dark);
+      margin-bottom: 20px;
+    }
+    
+    /* Sélection émotions multiples */
+    .emotions-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
       margin-bottom: 25px;
     }
     
-    .mood-options {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
-      margin-bottom: 25px;
-    }
-    
-    .mood-btn {
-      font-size: 50px;
-      background: none;
+    .emotion-btn {
+      font-size: 40px;
+      background: var(--bg-card);
       border: 3px solid transparent;
+      border-radius: 15px;
+      padding: 15px 10px;
       cursor: pointer;
       transition: var(--transition);
-      padding: 10px;
-      border-radius: 20px;
-      width: 80px;
-      height: 80px;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      gap: 5px;
     }
     
-    .mood-btn:hover {
-      transform: scale(1.1);
+    .emotion-btn:active {
+      transform: scale(0.95);
     }
     
-    .mood-btn:active,
-    .mood-btn.selected {
+    .emotion-btn.selected {
       border-color: var(--primary);
-      background: var(--bg-card);
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--bg-card) 100%);
       transform: scale(1.05);
     }
     
+    .emotion-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-gray);
+    }
+    
+    /* Intensité */
+    .intensity-section {
+      margin-bottom: 25px;
+    }
+    
+    .section-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+      display: block;
+    }
+    
+    .intensity-slider {
+      width: 100%;
+      height: 8px;
+      border-radius: 10px;
+      background: linear-gradient(to right, #10b981, #fbbf24, #ef4444);
+      outline: none;
+      -webkit-appearance: none;
+      margin-bottom: 10px;
+    }
+    
+    .intensity-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid var(--primary);
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    
+    .intensity-value {
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    
+    /* Énergie */
+    .energy-buttons {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 25px;
+    }
+    
+    .energy-btn {
+      padding: 12px;
+      background: var(--bg-card);
+      border: 2px solid transparent;
+      border-radius: 10px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .energy-btn.selected {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: white;
+      transform: scale(1.05);
+    }
+    
+    /* Sommeil */
+    .sleep-hours {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .sleep-input {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #E5E5E5;
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      outline: none;
+    }
+    
+    .sleep-input:focus {
+      border-color: var(--primary);
+    }
+    
+    /* Facteurs déclencheurs */
+    .triggers-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+    
+    .trigger-btn {
+      padding: 12px;
+      background: var(--bg-card);
+      border: 2px solid transparent;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: left;
+      color: var(--text-dark);
+    }
+    
+    .trigger-btn.selected {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--bg-card) 100%);
+    }
+    
+    /* Note */
     .mood-note {
       width: 100%;
       padding: 15px;
@@ -139,8 +246,7 @@
       resize: vertical;
       min-height: 100px;
       outline: none;
-      transition: var(--transition);
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
     
     .mood-note:focus {
@@ -149,7 +255,7 @@
     
     .save-btn {
       width: 100%;
-      padding: 15px;
+      padding: 16px;
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
       color: white;
       border: none;
@@ -164,6 +270,7 @@
       transform: scale(0.98);
     }
     
+    /* Graphiques */
     .chart-card {
       background: white;
       border-radius: var(--radius-lg);
@@ -180,7 +287,7 @@
     }
     
     .chart-title {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
       color: var(--text-dark);
     }
@@ -208,13 +315,36 @@
       color: var(--primary);
     }
     
-    .period-btn:active {
-      transform: scale(0.95);
+    .chart-container {
+      height: 250px;
+      margin-bottom: 20px;
     }
     
-    .chart-container {
-      position: relative;
-      height: 250px;
+    /* Stats rapides */
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .stat-box {
+      background: var(--bg-card);
+      padding: 15px;
+      border-radius: var(--radius-sm);
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-gray);
     }
     
     .bottom-nav {
@@ -231,24 +361,18 @@
       z-index: 1000;
       max-width: 350px;
       width: calc(100% - 40px);
-      justify-content: center;
     }
     
     .nav-item {
       font-size: 26px;
-      cursor: pointer;
-      transition: var(--transition);
       opacity: 0.4;
       text-decoration: none;
+      transition: var(--transition);
     }
     
     .nav-item.active {
       opacity: 1;
       transform: scale(1.15);
-    }
-    
-    .nav-item:active {
-      transform: scale(0.9);
     }
     
     .success-message {
@@ -271,25 +395,8 @@
     }
     
     @keyframes popup {
-      from {
-        transform: translate(-50%, -50%) scale(0.8);
-        opacity: 0;
-      }
-      to {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-      }
-    }
-    
-    .success-icon {
-      font-size: 60px;
-      margin-bottom: 15px;
-    }
-    
-    .success-text {
-      font-size: 20px;
-      font-weight: bold;
-      color: var(--text-dark);
+      from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+      to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     }
   </style>
 </head>
@@ -298,39 +405,68 @@
     <div class="header">
       <a href="index.html" class="back-btn">←</a>
       <div class="header-title">Comment vas-tu ?</div>
-      <div class="header-placeholder"></div>
+      <div style="width: 24px;"></div>
     </div>
     
-    <div class="mood-card">
-      <div class="mood-question">Choisis ton humeur du moment</div>
+    <div class="card">
+      <div class="card-title">🎭 Tes émotions du moment</div>
+      <div class="emotions-grid" id="emotionsGrid"></div>
       
-      <div class="mood-options">
-        <button class="mood-btn" data-mood="😊" onclick="moodManager.selectMood('😊')">😊</button>
-        <button class="mood-btn" data-mood="😐" onclick="moodManager.selectMood('😐')">😐</button>
-        <button class="mood-btn" data-mood="😔" onclick="moodManager.selectMood('😔')">😔</button>
-        <button class="mood-btn" data-mood="😰" onclick="moodManager.selectMood('😰')">😰</button>
-        <button class="mood-btn" data-mood="😡" onclick="moodManager.selectMood('😡')">😡</button>
+      <div class="intensity-section">
+        <label class="section-label">⭐ Intensité émotionnelle</label>
+        <input type="range" min="1" max="10" value="5" class="intensity-slider" id="intensitySlider">
+        <div class="intensity-value" id="intensityValue">5/10</div>
       </div>
       
-      <textarea 
-        class="mood-note" 
-        id="moodNote"
-        placeholder="Note optionnelle... Qu'est-ce qui influence ton humeur ?"
-      ></textarea>
+      <div class="intensity-section">
+        <label class="section-label">⚡ Niveau d'énergie</label>
+        <div class="energy-buttons" id="energyButtons"></div>
+      </div>
+      
+      <div class="intensity-section">
+        <label class="section-label">😴 Heures de sommeil</label>
+        <div class="sleep-hours">
+          <input type="number" min="0" max="24" step="0.5" value="7" class="sleep-input" id="sleepHours" placeholder="7.5">
+          <span style="font-size: 14px; color: var(--text-gray);">heures</span>
+        </div>
+      </div>
+      
+      <div class="intensity-section">
+        <label class="section-label">🎯 Facteurs déclencheurs</label>
+        <div class="triggers-grid" id="triggersGrid"></div>
+      </div>
+      
+      <textarea class="mood-note" id="moodNote" placeholder="Notes optionnelles... Qu'est-ce qui influence ton humeur aujourd'hui ?"></textarea>
       
       <button class="save-btn" onclick="moodManager.save()">
-        💚 Enregistrer mon humeur
+        💾 Enregistrer mon état
       </button>
     </div>
     
     <div class="chart-card">
       <div class="chart-header">
-        <div class="chart-title">Tes humeurs</div>
+        <div class="chart-title">📊 Évolution de tes humeurs</div>
         <div class="period-btns">
           <button class="period-btn active" onclick="moodManager.changePeriod(7)">7j</button>
           <button class="period-btn" onclick="moodManager.changePeriod(30)">30j</button>
         </div>
       </div>
+      
+      <div class="quick-stats">
+        <div class="stat-box">
+          <div class="stat-number" id="avgIntensity">-</div>
+          <div class="stat-label">Intensité moy.</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" id="avgEnergy">-</div>
+          <div class="stat-label">Énergie moy.</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" id="avgSleep">-</div>
+          <div class="stat-label">Sommeil moy.</div>
+        </div>
+      </div>
+      
       <div class="chart-container">
         <canvas id="moodChart"></canvas>
       </div>
@@ -346,31 +482,156 @@
   </div>
   
   <div class="success-message" id="successMessage">
-    <div class="success-icon">✅</div>
-    <div class="success-text">Humeur enregistrée !</div>
+    <div style="font-size: 60px; margin-bottom: 15px;">✅</div>
+    <div style="font-size: 20px; font-weight: bold; color: var(--text-dark);">État enregistré !</div>
   </div>
   
   <script>
-    const STORAGE_KEY = 'mindflow_moods';
+    const STORAGE_KEY = 'mindflow_moods_v2';
     
+    const emotions = [
+      { emoji: '😊', label: 'Joie' },
+      { emoji: '😔', label: 'Tristesse' },
+      { emoji: '😰', label: 'Anxiété' },
+      { emoji: '😡', label: 'Colère' },
+      { emoji: '😌', label: 'Calme' },
+      { emoji: '😫', label: 'Fatigue' },
+      { emoji: '😖', label: 'Stress' },
+      { emoji: '🥰', label: 'Amour' },
+      { emoji: '😨', label: 'Peur' },
+      { emoji: '😤', label: 'Frustration' },
+      { emoji: '🤗', label: 'Gratitude' },
+      { emoji: '😶', label: 'Vide' }
+    ];
+    
+    const triggers = [
+      '👥 Social',
+      '💼 Travail',
+      '💊 Médicaments',
+      '🍽️ Alimentation',
+      '🏃 Activité physique',
+      '☕ Caféine/Alcool',
+      '📱 Écrans',
+      '🌦️ Météo',
+      '💰 Finances',
+      '❤️ Relations',
+      '🎯 Objectifs',
+      '📰 Actualités'
+    ];
+
     const moodManager = {
       moods: [],
-      selectedMood: null,
+      selectedEmotions: [],
+      selectedTriggers: [],
+      intensity: 5,
+      energy: 3,
+      sleep: 7,
       chart: null,
       currentPeriod: 7,
       
-      moodValues: {
-        '😊': 5,
-        '😐': 4,
-        '😔': 3,
-        '😰': 2,
-        '😡': 1
-      },
-      
       init() {
         this.loadData();
+        this.renderEmotions();
+        this.renderEnergy();
+        this.renderTriggers();
+        this.setupIntensity();
         this.checkTodayMood();
         this.initChart();
+        this.updateStats();
+      },
+      
+      renderEmotions() {
+        const grid = document.getElementById('emotionsGrid');
+        grid.innerHTML = emotions.map((e, i) => `
+          <div class="emotion-btn" onclick="moodManager.toggleEmotion(${i})">
+            <div style="font-size: 36px;">${e.emoji}</div>
+            <div class="emotion-label">${e.label}</div>
+          </div>
+        `).join('');
+      },
+      
+      renderEnergy() {
+        const container = document.getElementById('energyButtons');
+        container.innerHTML = [1,2,3,4,5].map(n => `
+          <div class="energy-btn" onclick="moodManager.selectEnergy(${n})">
+            ${'⚡'.repeat(n)}
+          </div>
+        `).join('');
+      },
+      
+      renderTriggers() {
+        const grid = document.getElementById('triggersGrid');
+        grid.innerHTML = triggers.map((t, i) => `
+          <div class="trigger-btn" onclick="moodManager.toggleTrigger(${i})">
+            ${t}
+          </div>
+        `).join('');
+      },
+      
+      setupIntensity() {
+        const slider = document.getElementById('intensitySlider');
+        slider.addEventListener('input', (e) => {
+          this.intensity = parseInt(e.target.value);
+          document.getElementById('intensityValue').textContent = `${this.intensity}/10`;
+        });
+      },
+      
+      toggleEmotion(index) {
+        const idx = this.selectedEmotions.indexOf(index);
+        if (idx > -1) {
+          this.selectedEmotions.splice(idx, 1);
+        } else {
+          this.selectedEmotions.push(index);
+        }
+        this.updateEmotionsUI();
+      },
+      
+      toggleTrigger(index) {
+        const idx = this.selectedTriggers.indexOf(index);
+        if (idx > -1) {
+          this.selectedTriggers.splice(idx, 1);
+        } else {
+          this.selectedTriggers.push(index);
+        }
+        this.updateTriggersUI();
+      },
+      
+      selectEnergy(level) {
+        this.energy = level;
+        this.updateEnergyUI();
+      },
+      
+      updateEmotionsUI() {
+        const btns = document.querySelectorAll('.emotion-btn');
+        btns.forEach((btn, i) => {
+          if (this.selectedEmotions.includes(i)) {
+            btn.classList.add('selected');
+          } else {
+            btn.classList.remove('selected');
+          }
+        });
+      },
+      
+      updateEnergyUI() {
+        const btns = document.querySelectorAll('.energy-btn');
+        btns.forEach((btn, i) => {
+          if (i + 1 === this.energy) {
+            btn.classList.add('selected');
+          } else {
+            btn.classList.remove('selected');
+          }
+        });
+      },
+      
+      updateTriggersUI() {
+        const btns = document.querySelectorAll('.trigger-btn');
+        btns.forEach((btn, i) => {
+          if (this.selectedTriggers.includes(i)) {
+            btn.classList.add('selected');
+          } else {
+            btn.classList.remove('selected');
+          }
+        });
       },
       
       loadData() {
@@ -386,40 +647,44 @@
         const todayMood = this.moods.find(m => m.date === today);
         
         if (todayMood) {
-          this.selectMood(todayMood.mood);
+          this.selectedEmotions = todayMood.emotions || [];
+          this.selectedTriggers = todayMood.triggers || [];
+          this.intensity = todayMood.intensity || 5;
+          this.energy = todayMood.energy || 3;
+          this.sleep = todayMood.sleep || 7;
+          
+          document.getElementById('intensitySlider').value = this.intensity;
+          document.getElementById('intensityValue').textContent = `${this.intensity}/10`;
+          document.getElementById('sleepHours').value = this.sleep;
           document.getElementById('moodNote').value = todayMood.note || '';
+          
+          this.updateEmotionsUI();
+          this.updateEnergyUI();
+          this.updateTriggersUI();
         }
       },
       
-      selectMood(mood) {
-        this.selectedMood = mood;
-        
-        document.querySelectorAll('.mood-btn').forEach(btn => {
-          btn.classList.remove('selected');
-          if (btn.dataset.mood === mood) {
-            btn.classList.add('selected');
-          }
-        });
-      },
-      
       save() {
-        if (!this.selectedMood) {
-          alert('Choisis d\'abord une humeur ! 💚');
+        if (this.selectedEmotions.length === 0) {
+          alert('Sélectionne au moins une émotion ! 🎭');
           return;
         }
         
         const today = new Date().toISOString().split('T')[0];
-        const note = document.getElementById('moodNote').value.trim();
-        
-        const existingIndex = this.moods.findIndex(m => m.date === today);
+        const sleepValue = parseFloat(document.getElementById('sleepHours').value) || 7;
         
         const entry = {
           date: today,
-          mood: this.selectedMood,
-          note,
+          emotions: this.selectedEmotions,
+          triggers: this.selectedTriggers,
+          intensity: this.intensity,
+          energy: this.energy,
+          sleep: sleepValue,
+          note: document.getElementById('moodNote').value.trim(),
           timestamp: Date.now()
         };
         
+        const existingIndex = this.moods.findIndex(m => m.date === today);
         if (existingIndex > -1) {
           this.moods[existingIndex] = entry;
         } else {
@@ -428,6 +693,7 @@
         
         this.saveData();
         this.updateChart();
+        this.updateStats();
         this.showSuccess();
       },
       
@@ -439,42 +705,31 @@
           type: 'line',
           data: {
             labels: data.labels,
-            datasets: [{
-              label: 'Humeur',
-              data: data.values,
-              borderColor: '#8B7EB8',
-              backgroundColor: 'rgba(139, 126, 184, 0.1)',
-              tension: 0.4,
-              fill: true,
-              pointRadius: 5,
-              pointBackgroundColor: '#8B7EB8'
-            }]
+            datasets: [
+              {
+                label: 'Intensité',
+                data: data.intensity,
+                borderColor: '#8B7EB8',
+                backgroundColor: 'rgba(139, 126, 184, 0.1)',
+                tension: 0.4,
+                fill: true
+              },
+              {
+                label: 'Énergie',
+                data: data.energy,
+                borderColor: '#fbbf24',
+                backgroundColor: 'rgba(251, 191, 36, 0.1)',
+                tension: 0.4,
+                fill: true
+              }
+            ]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                display: false
-              }
-            },
+            plugins: { legend: { display: true, position: 'top' } },
             scales: {
-              y: {
-                beginAtZero: true,
-                max: 5,
-                ticks: {
-                  stepSize: 1,
-                  callback: (value) => {
-                    const emojis = ['', '😡', '😰', '😔', '😐', '😊'];
-                    return emojis[value] || '';
-                  }
-                }
-              },
-              x: {
-                grid: {
-                  display: false
-                }
-              }
+              y: { beginAtZero: true, max: 10 }
             }
           }
         });
@@ -482,7 +737,8 @@
       
       getChartData(days) {
         const labels = [];
-        const values = [];
+        const intensity = [];
+        const energy = [];
         const today = new Date();
         
         for (let i = days - 1; i >= 0; i--) {
@@ -490,36 +746,44 @@
           date.setDate(date.getDate() - i);
           const dateStr = date.toISOString().split('T')[0];
           
-          const dayLabel = date.toLocaleDateString('fr-FR', { 
-            day: 'numeric', 
-            month: 'short' 
-          });
+          labels.push(date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }));
           
-          labels.push(dayLabel);
-          
-          const moodEntry = this.moods.find(m => m.date === dateStr);
-          values.push(moodEntry ? this.moodValues[moodEntry.mood] : null);
+          const entry = this.moods.find(m => m.date === dateStr);
+          intensity.push(entry ? entry.intensity : null);
+          energy.push(entry ? entry.energy * 2 : null);
         }
         
-        return { labels, values };
+        return { labels, intensity, energy };
       },
       
       updateChart() {
         const data = this.getChartData(this.currentPeriod);
         this.chart.data.labels = data.labels;
-        this.chart.data.datasets[0].data = data.values;
+        this.chart.data.datasets[0].data = data.intensity;
+        this.chart.data.datasets[1].data = data.energy;
         this.chart.update();
       },
       
       changePeriod(days) {
         this.currentPeriod = days;
-        
-        document.querySelectorAll('.period-btn').forEach(btn => {
-          btn.classList.remove('active');
-        });
+        document.querySelectorAll('.period-btn').forEach(btn => btn.classList.remove('active'));
         event.target.classList.add('active');
-        
         this.updateChart();
+        this.updateStats();
+      },
+      
+      updateStats() {
+        const recentMoods = this.moods.slice(-this.currentPeriod);
+        
+        if (recentMoods.length > 0) {
+          const avgInt = (recentMoods.reduce((acc, m) => acc + m.intensity, 0) / recentMoods.length).toFixed(1);
+          const avgEn = (recentMoods.reduce((acc, m) => acc + m.energy, 0) / recentMoods.length).toFixed(1);
+          const avgSl = (recentMoods.reduce((acc, m) => acc + m.sleep, 0) / recentMoods.length).toFixed(1);
+          
+          document.getElementById('avgIntensity').textContent = avgInt;
+          document.getElementById('avgEnergy').textContent = avgEn;
+          document.getElementById('avgSleep').textContent = avgSl + 'h';
+        }
       },
       
       showSuccess() {
