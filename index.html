@@ -2,15 +2,17 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🚨 MindFlow - Mode Crise</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>💚 MindFlow</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#ef4444">
+  <meta name="theme-color" content="#8B7EB8">
   
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
   <style>
     * {
@@ -21,23 +23,23 @@
     }
     
     :root {
-      --danger: #ef4444;
-      --danger-dark: #dc2626;
-      --warning: #f59e0b;
-      --success: #10b981;
+      --primary: #8B7EB8;
+      --primary-light: #B8A7D5;
+      --secondary: #A8D8EA;
       --text-dark: #2D2D3A;
       --text-gray: #666;
-      --bg-card: rgba(239, 68, 68, 0.05);
+      --bg-card: rgba(139, 126, 184, 0.05);
       --shadow-sm: 0 4px 20px rgba(0,0,0,0.08);
       --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
       --radius-sm: 12px;
       --radius-md: 20px;
       --radius-lg: 25px;
+      --gold: #FFD700;
     }
     
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, var(--danger) 0%, #f87171 100%);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
       min-height: 100vh;
       padding: 15px;
       padding-bottom: 100px;
@@ -48,6 +50,7 @@
       margin: 0 auto;
     }
     
+    /* Header avec PRO badge */
     .header {
       display: flex;
       justify-content: space-between;
@@ -59,32 +62,82 @@
       box-shadow: var(--shadow-sm);
     }
     
-    .back-btn {
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       font-size: 24px;
-      text-decoration: none;
-      color: var(--text-dark);
-    }
-    
-    .header-title {
-      font-size: 20px;
       font-weight: bold;
-      color: var(--danger);
+      color: var(--primary);
     }
     
-    /* Alert Banner */
-    .alert-banner {
+    .pro-badge-header {
+      background: linear-gradient(135deg, var(--gold) 0%, #FFA500 100%);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(255,215,0,0.3);
+      transition: all 0.3s ease;
+      display: none;
+    }
+    
+    .pro-badge-header.show {
+      display: block;
+    }
+    
+    .pro-badge-header:active {
+      transform: scale(0.95);
+    }
+    
+    .upgrade-header {
       background: white;
-      border-radius: var(--radius-lg);
-      padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: var(--shadow-sm);
-      text-align: center;
-      border: 3px solid var(--danger);
+      color: var(--gold);
+      border: 2px solid var(--gold);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
     
-    .alert-icon {
-      font-size: 60px;
-      margin-bottom: 15px;
+    .upgrade-header:active {
+      transform: scale(0.95);
+    }
+    
+    /* Crisis Button */
+    .crisis-btn {
+      display: block;
+      text-decoration: none;
+      margin-bottom: 20px;
+    }
+    
+    .crisis-inner {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      border-radius: 25px;
+      padding: 20px 25px;
+      box-shadow: 0 8px 30px rgba(239,68,68,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+    }
+    
+    .crisis-inner:active {
+      transform: scale(0.98);
+    }
+    
+    .crisis-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .crisis-icon {
+      font-size: 36px;
       animation: pulse 1.5s infinite;
     }
     
@@ -93,84 +146,95 @@
       50% { transform: scale(1.1); }
     }
     
-    .alert-title {
-      font-size: 24px;
+    .crisis-text-title {
+      font-size: 20px;
       font-weight: bold;
-      color: var(--danger);
-      margin-bottom: 10px;
+      color: white;
+      margin-bottom: 4px;
     }
     
-    .alert-subtitle {
+    .crisis-text-subtitle {
+      font-size: 13px;
+      color: rgba(255,255,255,0.9);
+    }
+    
+    .crisis-arrow {
+      font-size: 28px;
+      color: white;
+    }
+    
+    /* Welcome Card */
+    .welcome-card {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-radius: var(--radius-lg);
+      padding: 30px 25px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+      color: white;
+      text-align: center;
+    }
+    
+    .greeting {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    
+    .date-today {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 20px;
+    }
+    
+    .quote {
       font-size: 15px;
-      color: var(--text-gray);
+      font-style: italic;
+      opacity: 0.95;
       line-height: 1.6;
+      padding: 15px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
     }
     
-    /* Emergency Buttons */
-    .emergency-grid {
+    /* Quick Stats */
+    .stats-grid {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 12px;
       margin-bottom: 20px;
     }
     
-    .emergency-btn {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px;
+    .stat-card {
       background: white;
-      border: none;
       border-radius: var(--radius-sm);
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      color: var(--text-dark);
+      padding: 20px 15px;
       box-shadow: var(--shadow-sm);
+      text-align: center;
+      transition: all 0.3s ease;
     }
     
-    .emergency-btn.red {
-      background: var(--danger);
-      color: white;
-      border: 3px solid var(--danger-dark);
+    .stat-card:active {
+      transform: scale(0.95);
     }
     
-    .emergency-btn:active {
-      transform: scale(0.98);
-    }
-    
-    .btn-left {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    
-    .btn-icon {
+    .stat-icon {
       font-size: 32px;
+      margin-bottom: 8px;
     }
     
-    .btn-text {
-      text-align: left;
-    }
-    
-    .btn-title {
-      font-size: 16px;
-      font-weight: bold;
-      margin-bottom: 3px;
-    }
-    
-    .btn-subtitle {
-      font-size: 12px;
-      opacity: 0.8;
-    }
-    
-    .btn-arrow {
+    .stat-number {
       font-size: 24px;
+      font-weight: bold;
+      color: var(--primary);
+      margin-bottom: 4px;
     }
     
-    /* Card */
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-gray);
+    }
+    
+    /* Quick Actions */
     .card {
       background: white;
       border-radius: var(--radius-lg);
@@ -184,192 +248,191 @@
       font-weight: bold;
       color: var(--text-dark);
       margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
     
-    /* Grounding Exercises */
-    .exercise-item {
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    
+    .action-btn {
+      padding: 20px 15px;
       background: var(--bg-card);
-      padding: 20px;
+      border: none;
       border-radius: var(--radius-sm);
-      margin-bottom: 15px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      text-decoration: none;
+      color: var(--text-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .action-btn:active {
+      transform: scale(0.95);
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--bg-card) 100%);
+    }
+    
+    .action-icon {
+      font-size: 32px;
+    }
+    
+    /* Mood Quick */
+    .mood-quick {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .mood-btn-quick {
+      flex: 1;
+      padding: 15px;
+      background: var(--bg-card);
+      border: 2px solid transparent;
+      border-radius: var(--radius-sm);
+      font-size: 28px;
       cursor: pointer;
       transition: all 0.3s ease;
     }
     
-    .exercise-item:active {
+    .mood-btn-quick:active {
+      transform: scale(0.95);
+      border-color: var(--primary);
+    }
+    
+    /* Mini chart */
+    .mini-chart {
+      height: 150px;
+      margin-bottom: 15px;
+    }
+    
+    .chart-link {
+      display: block;
+      text-align: center;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    /* PRO Features Teaser */
+    .pro-teaser {
+      background: linear-gradient(135deg, var(--gold) 0%, #FFA500 100%);
+      border-radius: var(--radius-lg);
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(255,215,0,0.3);
+      color: white;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .pro-teaser:active {
       transform: scale(0.98);
     }
     
-    .exercise-title {
-      font-size: 16px;
+    .pro-teaser-title {
+      font-size: 22px;
       font-weight: bold;
-      color: var(--danger);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
     
-    .exercise-desc {
+    .pro-teaser-desc {
       font-size: 14px;
-      color: var(--text-gray);
+      opacity: 0.95;
+      margin-bottom: 15px;
       line-height: 1.5;
     }
     
-    /* Breathing Timer */
-    .breathing-container {
-      text-align: center;
-      padding: 30px;
+    .pro-features {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+      text-align: left;
     }
     
-    .breathing-circle {
-      width: 200px;
-      height: 200px;
-      margin: 0 auto 30px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--danger) 0%, #f87171 100%);
+    .pro-feature {
+      font-size: 13px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      font-weight: bold;
-      color: white;
-      transition: all 4s ease;
+      gap: 6px;
     }
     
-    .breathing-circle.inhale {
-      transform: scale(1.3);
-    }
-    
-    .breathing-circle.exhale {
-      transform: scale(0.8);
-    }
-    
-    .breathing-instruction {
-      font-size: 20px;
-      font-weight: bold;
-      color: var(--danger);
-      margin-bottom: 20px;
-    }
-    
-    .breathing-btn {
-      padding: 15px 30px;
-      background: var(--danger);
-      color: white;
+    .try-pro-btn {
+      background: white;
+      color: var(--gold);
+      padding: 12px 25px;
       border: none;
       border-radius: 25px;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
     
-    /* Contacts */
-    .contact-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 15px;
-      background: var(--bg-card);
-      border-radius: var(--radius-sm);
-      margin-bottom: 12px;
-    }
-    
-    .contact-info {
-      flex: 1;
-    }
-    
-    .contact-name {
-      font-size: 16px;
-      font-weight: bold;
-      color: var(--text-dark);
-      margin-bottom: 4px;
-    }
-    
-    .contact-phone {
-      font-size: 14px;
-      color: var(--text-gray);
-    }
-    
-    .call-btn {
-      padding: 10px 20px;
-      background: var(--success);
-      color: white;
-      border: none;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-    }
-    
-    .add-contact-btn {
-      width: 100%;
-      padding: 15px;
-      background: var(--bg-card);
-      border: 2px dashed var(--danger);
-      border-radius: var(--radius-sm);
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--danger);
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    
-    /* Safety Plan */
-    .plan-step {
+    /* Chatbot Luna */
+    .luna-card {
+      background: linear-gradient(135deg, #B8A7D5 0%, #8B7EB8 100%);
+      border-radius: var(--radius-lg);
+      padding: 25px;
       margin-bottom: 20px;
-    }
-    
-    .step-number {
-      display: inline-block;
-      width: 30px;
-      height: 30px;
-      background: var(--danger);
+      box-shadow: var(--shadow-sm);
       color: white;
-      border-radius: 50%;
-      text-align: center;
-      line-height: 30px;
-      font-weight: bold;
-      margin-right: 10px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
     
-    .step-title {
-      font-size: 16px;
+    .luna-card:active {
+      transform: scale(0.98);
+    }
+    
+    .luna-card::before {
+      content: '💫';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      font-size: 80px;
+      opacity: 0.1;
+    }
+    
+    .luna-title {
+      font-size: 20px;
       font-weight: bold;
-      color: var(--text-dark);
       margin-bottom: 8px;
     }
     
-    .step-input {
-      width: 100%;
-      padding: 12px;
-      border: 2px solid #E5E5E5;
-      border-radius: var(--radius-sm);
+    .luna-desc {
       font-size: 14px;
-      font-family: inherit;
-      resize: vertical;
-      min-height: 80px;
-      outline: none;
+      opacity: 0.95;
+      margin-bottom: 15px;
     }
     
-    .step-input:focus {
-      border-color: var(--danger);
-    }
-    
-    .save-plan-btn {
-      width: 100%;
-      padding: 16px;
-      background: var(--danger);
-      color: white;
+    .luna-btn {
+      background: white;
+      color: var(--primary);
+      padding: 12px 20px;
       border: none;
       border-radius: 15px;
-      font-size: 17px;
-      font-weight: bold;
+      font-size: 15px;
+      font-weight: 600;
       cursor: pointer;
-      margin-top: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
     
+    /* Bottom nav */
     .bottom-nav {
       position: fixed;
       bottom: 15px;
@@ -390,6 +453,7 @@
       font-size: 26px;
       opacity: 0.4;
       text-decoration: none;
+      transition: all 0.3s ease;
     }
     
     .nav-item.active {
@@ -397,403 +461,348 @@
       transform: scale(1.15);
     }
     
-    /* Modal */
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      padding: 20px;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     
-    .modal.show {
-      display: flex;
-    }
-    
-    .modal-content {
-      background: white;
-      border-radius: var(--radius-lg);
-      padding: 30px;
-      max-width: 400px;
-      width: 100%;
-    }
-    
-    .modal-close {
-      text-align: right;
-      font-size: 28px;
-      cursor: pointer;
-      margin-bottom: 15px;
+    .fade-in {
+      animation: fadeIn 0.5s ease;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <a href="index.html" class="back-btn">←</a>
-      <div class="header-title">Mode Crise</div>
-      <div style="width: 24px;"></div>
+    <!-- Header -->
+    <div class="header fade-in">
+      <div class="logo">💚 MindFlow</div>
+      <div id="proBadgeHeader" class="pro-badge-header">💎 PRO</div>
+      <div id="upgradeHeader" class="upgrade-header" onclick="dashboard.goToPro()">✨ Upgrade</div>
     </div>
     
-    <!-- Alert Banner -->
-    <div class="alert-banner">
-      <div class="alert-icon">🚨</div>
-      <div class="alert-title">Tu n'es pas seul(e)</div>
-      <div class="alert-subtitle">
-        Si tu es en détresse, appelle les numéros d'urgence ci-dessous. Ils sont là pour t'aider 24h/24.
-      </div>
-    </div>
-    
-    <!-- Emergency Numbers -->
-    <div class="emergency-grid">
-      <a href="tel:3114" class="emergency-btn red">
-        <div class="btn-left">
-          <div class="btn-icon">📞</div>
-          <div class="btn-text">
-            <div class="btn-title">3114</div>
-            <div class="btn-subtitle">Numéro national de prévention du suicide</div>
+    <!-- BOUTON MODE CRISE -->
+    <a href="crise.html" class="crisis-btn fade-in">
+      <div class="crisis-inner">
+        <div class="crisis-left">
+          <div class="crisis-icon">🚨</div>
+          <div>
+            <div class="crisis-text-title">Mode Crise</div>
+            <div class="crisis-text-subtitle">Besoin d'aide immédiate ?</div>
           </div>
         </div>
-        <div class="btn-arrow">→</div>
-      </a>
-      
-      <a href="tel:15" class="emergency-btn red">
-        <div class="btn-left">
-          <div class="btn-icon">🚑</div>
-          <div class="btn-text">
-            <div class="btn-title">15 - SAMU</div>
-            <div class="btn-subtitle">Urgence médicale</div>
-          </div>
-        </div>
-        <div class="btn-arrow">→</div>
-      </a>
-      
-      <a href="tel:0140093900" class="emergency-btn">
-        <div class="btn-left">
-          <div class="btn-icon">💬</div>
-          <div class="btn-text">
-            <div class="btn-title">01 40 09 39 00</div>
-            <div class="btn-subtitle">SOS Amitié - Écoute 24h/24</div>
-          </div>
-        </div>
-        <div class="btn-arrow">→</div>
-      </a>
-      
-      <a href="tel:0800235236" class="emergency-btn">
-        <div class="btn-left">
-          <div class="btn-icon">🎧</div>
-          <div class="btn-text">
-            <div class="btn-title">0800 23 52 36</div>
-            <div class="btn-subtitle">Fil Santé Jeunes (12-25 ans)</div>
-          </div>
-        </div>
-        <div class="btn-arrow">→</div>
-      </a>
+        <div class="crisis-arrow">→</div>
+      </div>
+    </a>
+    
+    <!-- Welcome Card -->
+    <div class="welcome-card fade-in">
+      <div class="greeting" id="greeting">Bienvenue !</div>
+      <div class="date-today" id="dateToday"></div>
+      <div class="quote" id="quote"></div>
     </div>
     
-    <!-- Breathing Exercise -->
-    <div class="card">
-      <div class="card-title">🫁 Exercice de respiration</div>
-      <div class="breathing-container">
-        <div class="breathing-circle" id="breathingCircle">Respire</div>
-        <div class="breathing-instruction" id="breathingText">Prêt à commencer ?</div>
-        <button class="breathing-btn" onclick="criseManager.toggleBreathing()" id="breathingBtn">
-          Démarrer
-        </button>
+    <!-- Quick Stats -->
+    <div class="stats-grid fade-in">
+      <div class="stat-card">
+        <div class="stat-icon">🔥</div>
+        <div class="stat-number" id="streak">0</div>
+        <div class="stat-label">Jours actifs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">😊</div>
+        <div class="stat-number" id="moodCount">0</div>
+        <div class="stat-label">Humeurs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💊</div>
+        <div class="stat-number" id="medRate">0%</div>
+        <div class="stat-label">Observance</div>
       </div>
     </div>
     
-    <!-- Grounding Exercises -->
-    <div class="card">
-      <div class="card-title">🧘 Exercices de grounding</div>
-      
-      <div class="exercise-item" onclick="criseManager.showExercise('54321')">
-        <div class="exercise-title">Technique 5-4-3-2-1</div>
-        <div class="exercise-desc">
-          Reconnecte-toi au moment présent en utilisant tes 5 sens
-        </div>
+    <!-- Quick Mood -->
+    <div class="card fade-in">
+      <div class="card-title">⚡ Comment te sens-tu ?</div>
+      <div class="mood-quick">
+        <button class="mood-btn-quick" onclick="dashboard.quickMood('😊')">😊</button>
+        <button class="mood-btn-quick" onclick="dashboard.quickMood('😔')">😔</button>
+        <button class="mood-btn-quick" onclick="dashboard.quickMood('😰')">😰</button>
+        <button class="mood-btn-quick" onclick="dashboard.quickMood('😡')">😡</button>
+        <button class="mood-btn-quick" onclick="dashboard.quickMood('😌')">😌</button>
       </div>
-      
-      <div class="exercise-item" onclick="criseManager.showExercise('ice')">
-        <div class="exercise-title">Glace sur le visage</div>
-        <div class="exercise-desc">
-          Plonge ton visage dans l'eau froide ou tiens un glaçon
-        </div>
-      </div>
-      
-      <div class="exercise-item" onclick="criseManager.showExercise('muscle')">
-        <div class="exercise-title">Relaxation musculaire</div>
-        <div class="exercise-desc">
-          Contracte et relâche chaque groupe musculaire
-        </div>
-      </div>
-      
-      <div class="exercise-item" onclick="criseManager.showExercise('walk')">
-        <div class="exercise-title">Marche consciente</div>
-        <div class="exercise-desc">
-          Concentre-toi sur chaque pas et chaque sensation
-        </div>
+      <a href="mood.html" class="chart-link">
+        Enregistrer une humeur détaillée →
+      </a>
+    </div>
+    
+    <!-- Mini Chart -->
+    <div class="card fade-in">
+      <div class="card-title">📊 Cette semaine</div>
+      <div class="mini-chart">
+        <canvas id="weekChart"></canvas>
       </div>
     </div>
     
-    <!-- My Contacts -->
-    <div class="card">
-      <div class="card-title">👥 Mes contacts de confiance</div>
-      <div id="contactsList"></div>
-      <button class="add-contact-btn" onclick="criseManager.addContact()">
-        ➕ Ajouter un contact
+    <!-- Quick Actions -->
+    <div class="card fade-in">
+      <div class="card-title">🚀 Actions rapides</div>
+      <div class="quick-actions">
+        <a href="mood.html" class="action-btn">
+          <div class="action-icon">😊</div>
+          <div>Humeur</div>
+        </a>
+        <a href="journal.html" class="action-btn">
+          <div class="action-icon">📝</div>
+          <div>Journal</div>
+        </a>
+        <a href="traitement.html" class="action-btn">
+          <div class="action-icon">💊</div>
+          <div>Médicaments</div>
+        </a>
+        <a href="borderline.html" class="action-btn">
+          <div class="action-icon">🧘</div>
+          <div>Compétences</div>
+        </a>
+      </div>
+    </div>
+    
+    <!-- Luna Chatbot (PRO) -->
+    <div class="luna-card fade-in" onclick="dashboard.openLuna()">
+      <div class="luna-title">💬 Luna - Ton compagnon IA</div>
+      <div class="luna-desc">
+        Parle à Luna 24/7 pour du soutien émotionnel, des conseils et de l'écoute.
+      </div>
+      <button class="luna-btn">
+        <span id="lunaText">💎 Fonctionnalité PRO</span>
       </button>
     </div>
     
-    <!-- Safety Plan -->
-    <div class="card">
-      <div class="card-title">📋 Mon plan de sécurité</div>
-      
-      <div class="plan-step">
-        <div class="step-title">
-          <span class="step-number">1</span>
-          Mes signes d'alerte
-        </div>
-        <textarea class="step-input" id="warning-signs" placeholder="Ex: Pensées négatives récurrentes, isolement social..."></textarea>
+    <!-- PRO Teaser -->
+    <div class="pro-teaser fade-in" onclick="dashboard.goToPro()" id="proTeaser">
+      <div class="pro-teaser-title">✨ Passe à MindFlow PRO</div>
+      <div class="pro-teaser-desc">
+        Débloque toutes les fonctionnalités avancées pour un suivi optimal
       </div>
-      
-      <div class="plan-step">
-        <div class="step-title">
-          <span class="step-number">2</span>
-          Stratégies d'adaptation
-        </div>
-        <textarea class="step-input" id="coping-strategies" placeholder="Ex: Écouter de la musique, appeler un ami, faire du sport..."></textarea>
+      <div class="pro-features">
+        <div class="pro-feature">✓ Émotions illimitées</div>
+        <div class="pro-feature">✓ Stats 30 jours</div>
+        <div class="pro-feature">✓ Luna chatbot IA</div>
+        <div class="pro-feature">✓ Export PDF</div>
+        <div class="pro-feature">✓ Thèmes custom</div>
+        <div class="pro-feature">✓ Sans publicités</div>
       </div>
-      
-      <div class="plan-step">
-        <div class="step-title">
-          <span class="step-number">3</span>
-          Lieux sécurisants
-        </div>
-        <textarea class="step-input" id="safe-places" placeholder="Ex: Bibliothèque, café préféré, parc..."></textarea>
-      </div>
-      
-      <div class="plan-step">
-        <div class="step-title">
-          <span class="step-number">4</span>
-          Raisons de vivre
-        </div>
-        <textarea class="step-input" id="reasons-to-live" placeholder="Ex: Ma famille, mes amis, mes projets futurs..."></textarea>
-      </div>
-      
-      <button class="save-plan-btn" onclick="criseManager.savePlan()">
-        💾 Sauvegarder mon plan
-      </button>
+      <button class="try-pro-btn">Essayer PRO gratuitement</button>
     </div>
   </div>
   
+  <!-- Bottom Nav -->
   <div class="bottom-nav">
-    <a href="index.html" class="nav-item">🏠</a>
+    <a href="index.html" class="nav-item active">🏠</a>
     <a href="mood.html" class="nav-item">😊</a>
     <a href="journal.html" class="nav-item">📝</a>
     <a href="traitement.html" class="nav-item">💊</a>
     <a href="profil.html" class="nav-item">👤</a>
   </div>
   
-  <!-- Exercise Modal -->
-  <div class="modal" id="exerciseModal">
-    <div class="modal-content">
-      <div class="modal-close" onclick="criseManager.closeModal()">×</div>
-      <div id="exerciseContent"></div>
-    </div>
-  </div>
-  
   <script>
-    const CONTACTS_KEY = 'mindflow_crisis_contacts';
-    const PLAN_KEY = 'mindflow_safety_plan';
-    
-    const exercises = {
-      '54321': `
-        <h2 style="color: var(--danger); margin-bottom: 15px;">🧘 Technique 5-4-3-2-1</h2>
-        <p style="margin-bottom: 15px; line-height: 1.6;">Nomme à voix haute ou dans ta tête :</p>
-        <ul style="line-height: 2; margin-left: 20px; margin-bottom: 15px;">
-          <li><strong>5 choses</strong> que tu vois</li>
-          <li><strong>4 choses</strong> que tu touches</li>
-          <li><strong>3 choses</strong> que tu entends</li>
-          <li><strong>2 choses</strong> que tu sens (odeurs)</li>
-          <li><strong>1 chose</strong> que tu goûtes</li>
-        </ul>
-        <p style="color: var(--text-gray);">Prends ton temps avec chaque sens. Cela t'aide à revenir au moment présent.</p>
-      `,
-      'ice': `
-        <h2 style="color: var(--danger); margin-bottom: 15px;">❄️ Glace sur le visage</h2>
-        <p style="margin-bottom: 15px; line-height: 1.6;">Cette technique active ton réflexe de plongée :</p>
-        <ol style="line-height: 2; margin-left: 20px; margin-bottom: 15px;">
-          <li>Remplis un bol d'eau froide avec des glaçons</li>
-          <li>Retiens ta respiration</li>
-          <li>Plonge ton visage pendant 30 secondes</li>
-          <li>Ou tiens un glaçon contre ton front/joues</li>
-        </ol>
-        <p style="color: var(--text-gray);">Le froid ralentit ton rythme cardiaque et calme l'anxiété intense.</p>
-      `,
-      'muscle': `
-        <h2 style="color: var(--danger); margin-bottom: 15px;">💪 Relaxation musculaire</h2>
-        <p style="margin-bottom: 15px; line-height: 1.6;">Contracte puis relâche chaque groupe musculaire :</p>
-        <ol style="line-height: 2; margin-left: 20px; margin-bottom: 15px;">
-          <li>Pieds (5 secondes contracté, 10 relâché)</li>
-          <li>Jambes</li>
-          <li>Abdomen</li>
-          <li>Mains et bras</li>
-          <li>Épaules</li>
-          <li>Visage</li>
-        </ol>
-        <p style="color: var(--text-gray);">Cette tension-détente aide ton corps à relâcher le stress.</p>
-      `,
-      'walk': `
-        <h2 style="color: var(--danger); margin-bottom: 15px;">🚶 Marche consciente</h2>
-        <p style="margin-bottom: 15px; line-height: 1.6;">Marche lentement en te concentrant sur :</p>
-        <ul style="line-height: 2; margin-left: 20px; margin-bottom: 15px;">
-          <li>Le contact de tes pieds avec le sol</li>
-          <li>Le mouvement de tes jambes</li>
-          <li>Ta respiration naturelle</li>
-          <li>Les sensations dans ton corps</li>
-          <li>Les sons autour de toi</li>
-        </ul>
-        <p style="color: var(--text-gray);">Même 5 minutes de marche consciente peuvent t'apaiser.</p>
-      `
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtb4nTMjvlruh0fg5O9_wiAPJI1Nall-g",
+      authDomain: "mindflow-66abc.firebaseapp.com",
+      projectId: "mindflow-66abc",
+      storageBucket: "mindflow-66abc.firebasestorage.app",
+      messagingSenderId: "466651144452",
+      appId: "1:466651144452:web:4b1dc68d4feac189683051",
+      measurementId: "G-B7PEXP45WH"
     };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
     
-    const criseManager = {
-      breathingActive: false,
-      breathingInterval: null,
-      contacts: [],
+    const quotes = [
+      "Chaque jour est une nouvelle chance de progresser. 🌟",
+      "Tu es plus fort que tu ne le penses. 💪",
+      "Prends soin de toi, tu le mérites. 💜",
+      "Un pas à la fois, tu avances. 🚶",
+      "Tes émotions sont valides. 🎭",
+      "La guérison n'est pas linéaire. 🌈",
+      "Tu n'es pas seul(e) dans ce voyage. 🤝",
+      "Respire. Tu gères ça. 🌬️"
+    ];
+    
+    const dashboard = {
+      isPro: false,
+      userName: 'ami',
+      chart: null,
       
-      init() {
-        this.loadContacts();
-        this.loadPlan();
-        this.renderContacts();
+      async init() {
+        await this.checkAuth();
+        this.setGreeting();
+        this.setDate();
+        this.setQuote();
+        this.loadStats();
+        this.initChart();
       },
       
-      loadContacts() {
-        this.contacts = JSON.parse(localStorage.getItem(CONTACTS_KEY) || '[]');
+      async checkAuth() {
+        return new Promise((resolve) => {
+          auth.onAuthStateChanged(async (user) => {
+            if (!user) {
+              window.location.href = 'login.html';
+              return;
+            }
+            
+            this.userName = user.displayName || user.email.split('@')[0];
+            
+            try {
+              const userDoc = await db.collection('users').doc(user.uid).get();
+              this.isPro = userDoc.exists && userDoc.data().isPro === true;
+              this.updateProUI();
+            } catch (error) {
+              console.error('Erreur:', error);
+            }
+            
+            resolve();
+          });
+        });
       },
       
-      saveContacts() {
-        localStorage.setItem(CONTACTS_KEY, JSON.stringify(this.contacts));
-      },
-      
-      renderContacts() {
-        const container = document.getElementById('contactsList');
-        
-        if (this.contacts.length === 0) {
-          container.innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 20px;">Aucun contact ajouté</p>';
-          return;
-        }
-        
-        container.innerHTML = this.contacts.map((c, i) => `
-          <div class="contact-item">
-            <div class="contact-info">
-              <div class="contact-name">${c.name}</div>
-              <div class="contact-phone">${c.phone}</div>
-            </div>
-            <a href="tel:${c.phone}" class="call-btn">📞 Appeler</a>
-          </div>
-        `).join('');
-      },
-      
-      addContact() {
-        const name = prompt('Nom du contact :');
-        if (!name) return;
-        
-        const phone = prompt('Numéro de téléphone :');
-        if (!phone) return;
-        
-        this.contacts.push({ name, phone });
-        this.saveContacts();
-        this.renderContacts();
-      },
-      
-      loadPlan() {
-        const plan = JSON.parse(localStorage.getItem(PLAN_KEY) || '{}');
-        
-        if (plan.warningSigns) document.getElementById('warning-signs').value = plan.warningSigns;
-        if (plan.copingStrategies) document.getElementById('coping-strategies').value = plan.copingStrategies;
-        if (plan.safePlaces) document.getElementById('safe-places').value = plan.safePlaces;
-        if (plan.reasonsToLive) document.getElementById('reasons-to-live').value = plan.reasonsToLive;
-      },
-      
-      savePlan() {
-        const plan = {
-          warningSigns: document.getElementById('warning-signs').value,
-          copingStrategies: document.getElementById('coping-strategies').value,
-          safePlaces: document.getElementById('safe-places').value,
-          reasonsToLive: document.getElementById('reasons-to-live').value
-        };
-        
-        localStorage.setItem(PLAN_KEY, JSON.stringify(plan));
-        alert('✅ Plan de sécurité sauvegardé !');
-      },
-      
-      toggleBreathing() {
-        if (this.breathingActive) {
-          this.stopBreathing();
+      updateProUI() {
+        if (this.isPro) {
+          document.getElementById('proBadgeHeader').classList.add('show');
+          document.getElementById('upgradeHeader').style.display = 'none';
+          document.getElementById('proTeaser').style.display = 'none';
+          document.getElementById('lunaText').textContent = 'Parler à Luna →';
         } else {
-          this.startBreathing();
+          document.getElementById('upgradeHeader').style.display = 'block';
         }
       },
       
-      startBreathing() {
-        this.breathingActive = true;
-        document.getElementById('breathingBtn').textContent = 'Arrêter';
+      setGreeting() {
+        const hour = new Date().getHours();
+        let greeting = 'Bonjour';
         
-        let phase = 0; // 0 = inhale, 1 = hold, 2 = exhale, 3 = hold
-        const circle = document.getElementById('breathingCircle');
-        const text = document.getElementById('breathingText');
+        if (hour < 12) greeting = 'Bonjour';
+        else if (hour < 18) greeting = 'Bon après-midi';
+        else greeting = 'Bonsoir';
         
-        const cycle = () => {
-          switch(phase) {
-            case 0:
-              text.textContent = 'Inspire profondément...';
-              circle.classList.remove('exhale');
-              circle.classList.add('inhale');
-              break;
-            case 1:
-              text.textContent = 'Retiens...';
-              break;
-            case 2:
-              text.textContent = 'Expire lentement...';
-              circle.classList.remove('inhale');
-              circle.classList.add('exhale');
-              break;
-            case 3:
-              text.textContent = 'Retiens...';
-              break;
-          }
+        document.getElementById('greeting').textContent = `${greeting}, ${this.userName} !`;
+      },
+      
+      setDate() {
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const today = new Date().toLocaleDateString('fr-FR', options);
+        document.getElementById('dateToday').textContent = today.charAt(0).toUpperCase() + today.slice(1);
+      },
+      
+      setQuote() {
+        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        document.getElementById('quote').textContent = randomQuote;
+      },
+      
+      loadStats() {
+        // Streak
+        const moods = JSON.parse(localStorage.getItem('mindflow_moods_v2') || '[]');
+        const uniqueDays = new Set(moods.map(m => m.date)).size;
+        document.getElementById('streak').textContent = uniqueDays;
+        
+        // Mood count
+        document.getElementById('moodCount').textContent = moods.length;
+        
+        // Med rate
+        const history = JSON.parse(localStorage.getItem('mindflow_meds_history_v2') || '{}');
+        const taken = Object.values(history).filter(h => h.status === 'taken').length;
+        const total = Object.keys(history).length;
+        const rate = total > 0 ? Math.round((taken / total) * 100) : 0;
+        document.getElementById('medRate').textContent = rate + '%';
+      },
+      
+      initChart() {
+        const ctx = document.getElementById('weekChart').getContext('2d');
+        const moods = JSON.parse(localStorage.getItem('mindflow_moods_v2') || '[]');
+        
+        const labels = [];
+        const data = [];
+        
+        for (let i = 6; i >= 0; i--) {
+          const date = new Date();
+          date.setDate(date.getDate() - i);
+          const dateStr = date.toISOString().split('T')[0];
           
-          phase = (phase + 1) % 4;
-        };
+          labels.push(date.toLocaleDateString('fr-FR', { weekday: 'short' }));
+          
+          const mood = moods.find(m => m.date === dateStr);
+          data.push(mood ? mood.intensity : null);
+        }
         
-        cycle();
-        this.breathingInterval = setInterval(cycle, 4000);
+        this.chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [{
+              label: 'Intensité',
+              data,
+              borderColor: '#8B7EB8',
+              backgroundColor: 'rgba(139, 126, 184, 0.1)',
+              tension: 0.4,
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, max: 10 } }
+          }
+        });
       },
       
-      stopBreathing() {
-        this.breathingActive = false;
-        clearInterval(this.breathingInterval);
-        document.getElementById('breathingBtn').textContent = 'Démarrer';
-        document.getElementById('breathingText').textContent = 'Prêt à recommencer ?';
-        document.getElementById('breathingCircle').classList.remove('inhale', 'exhale');
+      quickMood(emoji) {
+        if (confirm(`Enregistrer ${emoji} comme humeur du moment ?`)) {
+          const moods = JSON.parse(localStorage.getItem('mindflow_moods_v2') || '[]');
+          const today = new Date().toISOString().split('T')[0];
+          
+          const emojiMap = { '😊': 0, '😔': 1, '😰': 2, '😡': 3, '😌': 4 };
+          
+          moods.push({
+            date: today,
+            emotions: [emojiMap[emoji]],
+            triggers: [],
+            intensity: 5,
+            energy: 3,
+            sleep: 7,
+            note: 'Enregistrement rapide',
+            timestamp: Date.now()
+          });
+          
+          localStorage.setItem('mindflow_moods_v2', JSON.stringify(moods));
+          alert('✅ Humeur enregistrée !');
+          this.loadStats();
+          this.initChart();
+        }
       },
       
-      showExercise(type) {
-        document.getElementById('exerciseContent').innerHTML = exercises[type];
-        document.getElementById('exerciseModal').classList.add('show');
+      openLuna() {
+        if (!this.isPro) {
+          if (confirm('💎 Luna est une fonctionnalité PRO.\n\nPasser à PRO maintenant ?')) {
+            window.location.href = 'profil.html';
+          }
+        } else {
+          window.location.href = 'luna.html';
+        }
       },
       
-      closeModal() {
-        document.getElementById('exerciseModal').classList.remove('show');
+      goToPro() {
+        window.location.href = 'profil.html';
       }
     };
     
     document.addEventListener('DOMContentLoaded', () => {
-      criseManager.init();
+      dashboard.init();
     });
   </script>
 </body>
