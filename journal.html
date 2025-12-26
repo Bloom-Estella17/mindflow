@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -661,8 +662,16 @@
           auth.onAuthStateChanged(async (user) => {
             if (user) {
               try {
-                const userDoc = await db.collection('users').doc(user.uid).get();
-                this.isPro = userDoc.exists && userDoc.data().isPro === true;
+                // CHECK si mode preview FREE activé
+                const previewMode = localStorage.getItem('previewFreeMode') === 'true';
+                
+                if (previewMode) {
+                  this.isPro = false;
+                  console.log('👁️ MODE PREVIEW FREE ACTIVÉ');
+                } else {
+                  const userDoc = await db.collection('users').doc(user.uid).get();
+                  this.isPro = userDoc.exists && userDoc.data().isPro === true;
+                }
               } catch (error) {
                 console.error('Erreur vérification PRO:', error);
                 this.isPro = false;
