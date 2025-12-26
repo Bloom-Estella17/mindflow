@@ -472,6 +472,7 @@
       <div class="icons">
         <a href="agenda.html">🔔</a>
         <a href="profil.html">👤</a>
+        <a href="#" onclick="logout(); return false;" title="Déconnexion">🚪</a>
       </div>
     </div>
     
@@ -646,6 +647,17 @@
       
       closeModal();
       displayTasks(tasks);
+    }
+    
+    function logout() {
+      if (confirm('Es-tu sûr de vouloir te déconnecter ?')) {
+        firebase.auth().signOut().then(() => {
+          window.location.href = 'login.html';
+        }).catch((error) => {
+          console.error('Erreur déconnexion:', error);
+          alert('Erreur lors de la déconnexion');
+        });
+      }
     }
   </script>
 </body>
