@@ -2,38 +2,18 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>👤 MindFlow - Profil</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#8B7EB8">
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil - MindFlow</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-    
-    :root {
-      --primary: #8B7EB8;
-      --primary-light: #B8A7D5;
-      --secondary: #A8D8EA;
-      --text-dark: #2D2D3A;
-      --text-gray: #666;
-      --text-light: #888;
-      --bg-card: rgba(139, 126, 184, 0.05);
-      --shadow-sm: 0 4px 20px rgba(0,0,0,0.08);
-      --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
-      --radius-sm: 12px;
-      --radius-md: 20px;
-      --radius-lg: 25px;
-      --transition: all 0.3s ease;
     }
     
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
       min-height: 100vh;
       padding: 15px;
       padding-bottom: 100px;
@@ -42,8 +22,6 @@
     .container {
       max-width: 450px;
       margin: 0 auto;
-      width: 100%;
-      padding: 0 5px;
     }
     
     .header {
@@ -52,172 +30,191 @@
       align-items: center;
       padding: 20px 25px;
       background: white;
-      border-radius: var(--radius-md);
+      border-radius: 20px;
       margin-bottom: 20px;
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #8B7EB8;
     }
     
     .back-btn {
       font-size: 24px;
-      cursor: pointer;
       text-decoration: none;
-      transition: var(--transition);
+      transition: all 0.3s;
     }
     
     .back-btn:active {
       transform: scale(1.2);
     }
     
-    .header-title {
-      font-size: 20px;
-      font-weight: bold;
-      color: var(--primary);
-    }
-    
-    .header-placeholder {
-      width: 24px;
-    }
-    
     .profile-card {
       background: white;
-      border-radius: var(--radius-lg);
-      padding: 30px 25px;
+      border-radius: 25px;
+      padding: 40px 30px;
       margin-bottom: 20px;
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
       text-align: center;
     }
     
     .profile-icon {
       font-size: 80px;
-      margin-bottom: 15px;
-    }
-    
-    .profile-greeting {
-      font-size: 24px;
-      font-weight: bold;
-      color: var(--text-dark);
-      margin-bottom: 8px;
-    }
-    
-    .profile-subtitle {
-      font-size: 14px;
-      color: var(--text-light);
-    }
-    
-    .section-card {
-      background: white;
-      border-radius: var(--radius-lg);
-      padding: 20px 25px;
       margin-bottom: 20px;
-      box-shadow: var(--shadow-sm);
     }
     
-    .section-title {
-      font-size: 18px;
+    .profile-name {
+      font-size: 28px;
       font-weight: bold;
-      color: var(--text-dark);
-      margin-bottom: 15px;
-    }
-    
-    .menu-list {
-      list-style: none;
-    }
-    
-    .menu-item {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      padding: 15px;
-      background: var(--bg-card);
-      border-radius: var(--radius-sm);
+      color: #2D2D3A;
       margin-bottom: 10px;
-      cursor: pointer;
-      transition: var(--transition);
-      text-decoration: none;
-      color: inherit;
     }
     
-    .menu-item:active {
-      transform: scale(0.98);
+    .profile-email {
+      font-size: 16px;
+      color: #888;
+      margin-bottom: 30px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-item {
       background: rgba(139, 126, 184, 0.1);
-    }
-    
-    .menu-icon {
-      font-size: 24px;
-      width: 30px;
+      padding: 20px;
+      border-radius: 15px;
       text-align: center;
     }
     
-    .menu-text {
-      flex: 1;
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--text-dark);
+    .stat-number {
+      font-size: 32px;
+      font-weight: bold;
+      color: #8B7EB8;
+      margin-bottom: 5px;
     }
     
-    .menu-arrow {
-      font-size: 18px;
-      color: var(--text-light);
+    .stat-label {
+      font-size: 14px;
+      color: #666;
     }
     
-    .about-card {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-      border-radius: var(--radius-lg);
+    .settings-section {
+      background: white;
+      border-radius: 25px;
       padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    
+    .section-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 20px;
+    }
+    
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+    
+    .setting-label {
+      font-size: 16px;
+      color: #2D2D3A;
+    }
+    
+    .setting-value {
+      font-size: 14px;
+      color: #888;
+    }
+    
+    .logout-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+      margin-top: 20px;
+    }
+    
+    .logout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+    }
+    
+    .logout-btn:active {
+      transform: translateY(0);
+    }
+    
+    .pro-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    
+    .upgrade-card {
+      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
+      border-radius: 25px;
+      padding: 30px;
       margin-bottom: 20px;
       box-shadow: 0 4px 20px rgba(139, 126, 184, 0.3);
       color: white;
+      text-align: center;
     }
     
-    .about-title {
-      font-size: 20px;
+    .upgrade-title {
+      font-size: 24px;
       font-weight: bold;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
     
-    .about-text {
+    .upgrade-subtitle {
       font-size: 14px;
-      line-height: 1.6;
-      margin-bottom: 12px;
-    }
-    
-    .about-version {
-      font-size: 13px;
-      opacity: 0.8;
-      font-weight: 600;
-    }
-    
-    .danger-zone {
-      background: white;
-      border-radius: var(--radius-lg);
-      padding: 20px 25px;
+      opacity: 0.9;
       margin-bottom: 20px;
-      box-shadow: var(--shadow-sm);
-      border: 2px solid #fee2e2;
     }
     
-    .danger-title {
+    .upgrade-btn {
+      background: white;
+      color: #8B7EB8;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 12px;
       font-size: 16px;
       font-weight: bold;
-      color: #ef4444;
-      margin-bottom: 12px;
-    }
-    
-    .danger-btn {
-      width: 100%;
-      padding: 12px;
-      background: #ef4444;
-      color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      font-size: 15px;
-      font-weight: bold;
       cursor: pointer;
-      transition: var(--transition);
+      transition: all 0.3s;
     }
     
-    .danger-btn:active {
-      transform: scale(0.98);
+    .upgrade-btn:active {
+      transform: scale(0.95);
     }
     
     .bottom-nav {
@@ -226,11 +223,11 @@
       left: 50%;
       transform: translateX(-50%);
       background: white;
-      border-radius: var(--radius-lg);
+      border-radius: 25px;
       padding: 15px 25px;
       display: flex;
       gap: 35px;
-      box-shadow: var(--shadow-md);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
       z-index: 1000;
       max-width: 350px;
       width: calc(100% - 40px);
@@ -240,7 +237,7 @@
     .nav-item {
       font-size: 26px;
       cursor: pointer;
-      transition: var(--transition);
+      transition: all 0.3s;
       opacity: 0.4;
       text-decoration: none;
     }
@@ -259,109 +256,61 @@
   <div class="container">
     <div class="header">
       <a href="index.html" class="back-btn">←</a>
-      <div class="header-title">Mon Profil</div>
-      <div class="header-placeholder"></div>
+      <div class="logo">
+        <span>💚</span>
+        <span>MindFlow</span>
+      </div>
+      <div style="width: 24px;"></div>
     </div>
     
     <div class="profile-card">
-      <div class="profile-icon">💚</div>
-      <div class="profile-greeting">Bonjour !</div>
-      <div class="profile-subtitle">Bienvenue sur MindFlow</div>
-    </div>
-    
-    <div class="section-card">
-      <div class="section-title">Suivi quotidien</div>
-      <ul class="menu-list">
-        <a href="mood.html" class="menu-item">
-          <span class="menu-icon">😊</span>
-          <span class="menu-text">Humeur du jour</span>
-          <span class="menu-arrow">›</span>
-        </a>
-        <a href="journal.html" class="menu-item">
-          <span class="menu-icon">📝</span>
-          <span class="menu-text">Journal intime</span>
-          <span class="menu-arrow">›</span>
-        </a>
-        <a href="traitement.html" class="menu-item">
-          <span class="menu-icon">💊</span>
-          <span class="menu-text">Traitement médical</span>
-          <span class="menu-arrow">›</span>
-        </a>
-        <a href="agenda.html" class="menu-item">
-          <span class="menu-icon">📅</span>
-          <span class="menu-text">Agenda bien-être</span>
-          <span class="menu-arrow">›</span>
-        </a>
-      </ul>
-    </div>
-    
-    <div class="section-card">
-      <div class="section-title">Outils d'urgence</div>
-      <ul class="menu-list">
-        <a href="crise.html" class="menu-item">
-          <span class="menu-icon">🚨</span>
-          <span class="menu-text">Plan de crise</span>
-          <span class="menu-arrow">›</span>
-        </a>
-        <a href="triggers.html" class="menu-item">
-          <span class="menu-icon">⚡</span>
-          <span class="menu-text">Gestion des triggers</span>
-          <span class="menu-arrow">›</span>
-        </a>
-      </ul>
-    </div>
-    
-    <div class="section-card">
-      <div class="section-title">Modules spécialisés</div>
-      <ul class="menu-list">
-        <a href="alters.html" class="menu-item">
-          <span class="menu-icon">🎭</span>
-          <span class="menu-text">TDI / Alters</span>
-          <span class="menu-arrow">›</span>
-        </a>
-        <a href="cycles.html" class="menu-item">
-          <span class="menu-icon">🔄</span>
-          <span class="menu-text">Cycles bipolaires</span>
-          <span class="menu-arrow">›</span>
-        </a>
-        <a href="borderline.html" class="menu-item">
-          <span class="menu-icon">💔</span>
-          <span class="menu-text">Borderline / TPL</span>
-          <span class="menu-arrow">›</span>
-        </a>
-        <a href="anxiete.html" class="menu-item">
-          <span class="menu-icon">😰</span>
-          <span class="menu-text">Anxiété / Crises</span>
-          <span class="menu-arrow">›</span>
-        </a>
-      </ul>
-    </div>
-    
-    <div class="section-card">
-      <div class="section-title">Ressources</div>
-      <ul class="menu-list">
-        <a href="ressources.html" class="menu-item">
-          <span class="menu-icon">📚</span>
-          <span class="menu-text">Documentation DSM-5</span>
-          <span class="menu-arrow">›</span>
-        </a>
-      </ul>
-    </div>
-    
-    <div class="about-card">
-      <div class="about-title">À propos de MindFlow</div>
-      <div class="about-text">
-        MindFlow est ton compagnon de santé mentale. Suivi d'humeur, journal intime, gestion de traitement, plan de crise, agenda bien-être et modules spécialisés pour les troubles de l'humeur.
+      <div class="profile-icon">👤</div>
+      <div class="profile-name" id="userName">Chargement...</div>
+      <div class="profile-email" id="userEmail">...</div>
+      
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">12</div>
+          <div class="stat-label">Jours actifs</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">8</div>
+          <div class="stat-label">Humeurs suivies</div>
+        </div>
       </div>
-      <div class="about-version">Version 1.0 - Décembre 2024</div>
     </div>
     
-    <div class="danger-zone">
-      <div class="danger-title">⚠️ Zone dangereuse</div>
-      <button class="danger-btn" onclick="profilManager.clearData()">
-        🗑️ Effacer toutes mes données
-      </button>
+    <div class="upgrade-card" id="upgradeCard" style="display: none;">
+      <div class="upgrade-title">✨ Passe à PRO</div>
+      <div class="upgrade-subtitle">Accède à toutes les fonctionnalités pour 4,99€/mois</div>
+      <button class="upgrade-btn" onclick="window.location.href='subscribe.html'">Découvrir PRO</button>
     </div>
+    
+    <div class="settings-section">
+      <div class="section-title">Paramètres</div>
+      
+      <div class="setting-item">
+        <div class="setting-label">Notifications</div>
+        <div class="setting-value">Activées</div>
+      </div>
+      
+      <div class="setting-item">
+        <div class="setting-label">Rappels quotidiens</div>
+        <div class="setting-value">9h00</div>
+      </div>
+      
+      <div class="setting-item">
+        <div class="setting-label">Thème</div>
+        <div class="setting-value">Clair</div>
+      </div>
+      
+      <div class="setting-item">
+        <div class="setting-label">Version</div>
+        <div class="setting-value">1.0.0</div>
+      </div>
+    </div>
+    
+    <button class="logout-btn" onclick="logout()">🚪 Se déconnecter</button>
   </div>
   
   <div class="bottom-nav">
@@ -372,45 +321,62 @@
     <a href="profil.html" class="nav-item active">👤</a>
   </div>
   
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
   <script>
-    const profilManager = {
-      clearData() {
-        const confirmation = confirm(
-          '⚠️ ATTENTION !\n\n' +
-          'Tu vas supprimer TOUTES tes données :\n' +
-          '• Humeurs\n' +
-          '• Journal\n' +
-          '• Traitements\n' +
-          '• Rendez-vous\n' +
-          '• Plan de crise\n' +
-          '• Tous les modules\n\n' +
-          'Cette action est IRRÉVERSIBLE !\n\n' +
-          'Es-tu vraiment sûr(e) ?'
-        );
+    window.addEventListener('load', function() {
+      const firebaseConfig = {
+        apiKey: "AIzaSyAtb4nTMjvlruh0fg5O9_wiAPJI1Nall-g",
+        authDomain: "mindflow-66abc.firebaseapp.com",
+        projectId: "mindflow-66abc",
+        storageBucket: "mindflow-66abc.firebasestorage.app",
+        messagingSenderId: "466651144452",
+        appId: "1:466651144452:web:4b1dc68d4feac189683051",
+        measurementId: "G-B7PEXP45WH"
+      };
+      
+      const app = firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+      
+      auth.onAuthStateChanged(async (user) => {
+        if (!user) {
+          window.location.href = 'login.html';
+          return;
+        }
         
-        if (!confirmation) return;
+        document.getElementById('userName').textContent = user.displayName || 'Utilisateur';
+        document.getElementById('userEmail').textContent = user.email;
         
-        const doubleConfirm = confirm(
-          '🚨 DERNIÈRE CONFIRMATION !\n\n' +
-          'Toutes tes données vont être perdues définitivement.\n\n' +
-          'Confirmes-tu la suppression ?'
-        );
-        
-        if (!doubleConfirm) return;
-        
-        // Clear all localStorage data
-        const keys = Object.keys(localStorage);
-        keys.forEach(key => {
-          if (key.startsWith('mindflow_')) {
-            localStorage.removeItem(key);
+        try {
+          const userDoc = await db.collection('users').doc(user.uid).get();
+          if (userDoc.exists) {
+            const userData = userDoc.data();
+            if (userData.isPro) {
+              document.getElementById('userName').innerHTML = 
+                (user.displayName || 'Utilisateur') + '<span class="pro-badge">PRO</span>';
+            } else {
+              document.getElementById('upgradeCard').style.display = 'block';
+            }
           }
+        } catch (error) {
+          console.error('Erreur chargement profil:', error);
+        }
+      });
+    });
+    
+    function logout() {
+      if (confirm('Es-tu sûr de vouloir te déconnecter ?')) {
+        firebase.auth().signOut().then(() => {
+          window.location.href = 'login.html';
+        }).catch((error) => {
+          console.error('Erreur déconnexion:', error);
+          alert('Erreur lors de la déconnexion');
         });
-        
-        alert('✅ Toutes tes données ont été supprimées.\n\nTu vas être redirigé vers l\'accueil.');
-        
-        window.location.href = 'index.html';
       }
-    };
+    }
   </script>
 </body>
 </html>
