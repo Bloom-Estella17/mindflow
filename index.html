@@ -568,6 +568,8 @@
       auth.onAuthStateChanged((user) => {
         if (!user) {
           window.location.href = 'login.html';
+        } else {
+          loadTasks();
         }
       });
     });
@@ -645,8 +647,6 @@
       closeModal();
       displayTasks(tasks);
     }
-    
-    loadTasks();
   </script>
 </body>
 </html>
