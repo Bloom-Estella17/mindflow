@@ -2,10 +2,15 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>💚 MindFlow</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🚨 MindFlow - Mode Crise</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#8B7EB8">
+  <meta name="theme-color" content="#ef4444">
+  
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   
   <style>
     * {
@@ -15,9 +20,24 @@
       -webkit-tap-highlight-color: transparent;
     }
     
+    :root {
+      --danger: #ef4444;
+      --danger-dark: #dc2626;
+      --warning: #f59e0b;
+      --success: #10b981;
+      --text-dark: #2D2D3A;
+      --text-gray: #666;
+      --bg-card: rgba(239, 68, 68, 0.05);
+      --shadow-sm: 0 4px 20px rgba(0,0,0,0.08);
+      --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 25px;
+    }
+    
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      background: linear-gradient(135deg, var(--danger) 0%, #f87171 100%);
       min-height: 100vh;
       padding: 15px;
       padding-bottom: 100px;
@@ -26,8 +46,6 @@
     .container {
       max-width: 450px;
       margin: 0 auto;
-      width: 100%;
-      padding: 0 5px;
     }
     
     .header {
@@ -36,286 +54,320 @@
       align-items: center;
       padding: 20px 25px;
       background: white;
-      border-radius: 20px;
+      border-radius: var(--radius-md);
       margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      box-shadow: var(--shadow-sm);
     }
     
-    .logo {
+    .back-btn {
+      font-size: 24px;
+      text-decoration: none;
+      color: var(--text-dark);
+    }
+    
+    .header-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--danger);
+    }
+    
+    /* Alert Banner */
+    .alert-banner {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+      border: 3px solid var(--danger);
+    }
+    
+    .alert-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    
+    .alert-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--danger);
+      margin-bottom: 10px;
+    }
+    
+    .alert-subtitle {
+      font-size: 15px;
+      color: var(--text-gray);
+      line-height: 1.6;
+    }
+    
+    /* Emergency Buttons */
+    .emergency-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .emergency-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      background: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: var(--text-dark);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .emergency-btn.red {
+      background: var(--danger);
+      color: white;
+      border: 3px solid var(--danger-dark);
+    }
+    
+    .emergency-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .btn-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .btn-icon {
+      font-size: 32px;
+    }
+    
+    .btn-text {
+      text-align: left;
+    }
+    
+    .btn-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 3px;
+    }
+    
+    .btn-subtitle {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+    
+    .btn-arrow {
+      font-size: 24px;
+    }
+    
+    /* Card */
+    .card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .card-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 24px;
-      font-weight: bold;
-      color: #8B7EB8;
     }
     
-    .icons {
-      display: flex;
-      gap: 20px;
-      font-size: 24px;
-    }
-    
-    .icons a {
-      transition: all 0.3s;
-      text-decoration: none;
-    }
-    
-    .icons a:active {
-      transform: scale(1.2);
-    }
-    
-    .main-card {
-      background: white;
-      border-radius: 25px;
-      padding: 30px 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      text-align: center;
-    }
-    
-    .greeting {
-      font-size: 32px;
-      font-weight: bold;
-      color: #2D2D3A;
-      margin-bottom: 10px;
-    }
-    
-    .subtitle {
-      font-size: 16px;
-      color: #888;
-      margin-bottom: 30px;
-    }
-    
-    .mood-section {
-      margin-bottom: 30px;
-    }
-    
-    .mood-question {
-      font-size: 18px;
-      font-weight: 600;
-      color: #2D2D3A;
-      margin-bottom: 20px;
-    }
-    
-    .mood-options {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-    
-    .mood-btn {
-      font-size: 38px;
-      background: none;
-      border: none;
+    /* Grounding Exercises */
+    .exercise-item {
+      background: var(--bg-card);
+      padding: 20px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 15px;
       cursor: pointer;
       transition: all 0.3s ease;
-      padding: 0;
-      border-radius: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 60px;
-      height: 60px;
-      text-decoration: none;
-      line-height: 1;
     }
     
-    .mood-btn:hover {
-      transform: scale(1.15);
+    .exercise-item:active {
+      transform: scale(0.98);
     }
     
-    .mood-btn:active {
-      transform: scale(0.95);
-    }
-    
-    .quick-access {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-    
-    .luna-card, .quick-card {
-      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
-      padding: 25px 20px;
-      border-radius: 20px;
-      text-align: left;
-      cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 4px 15px rgba(139, 126, 184, 0.3);
-      color: white;
-      text-decoration: none;
-      display: block;
-    }
-    
-    .quick-card.crisis {
-      background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
-      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-    }
-    
-    .luna-card:active, .quick-card:active {
-      transform: scale(0.97);
-    }
-    
-    .quick-icon {
-      font-size: 28px;
-      margin-bottom: 10px;
-    }
-    
-    .quick-title {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    
-    .quick-desc {
-      font-size: 13px;
-      opacity: 0.95;
-      line-height: 1.4;
-    }
-    
-    .tasks-section {
-      background: white;
-      border-radius: 25px;
-      padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    }
-    
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    
-    .section-title {
-      font-size: 20px;
-      font-weight: bold;
-      color: #2D2D3A;
-    }
-    
-    .add-task-btn {
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
-      color: white;
-      border: none;
-      font-size: 24px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s;
-    }
-    
-    .add-task-btn:active {
-      transform: scale(0.9);
-    }
-    
-    .task-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 15px;
-      background: rgba(139, 126, 184, 0.05);
-      border-radius: 12px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .task-item:active {
-      background: rgba(139, 126, 184, 0.1);
-    }
-    
-    .task-checkbox {
-      width: 24px;
-      height: 24px;
-      border: 2px solid #8B7EB8;
-      border-radius: 6px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s;
-    }
-    
-    .task-item.done .task-checkbox {
-      background: #8B7EB8;
-    }
-    
-    .task-checkbox::after {
-      content: '✓';
-      color: white;
+    .exercise-title {
       font-size: 16px;
       font-weight: bold;
-      display: none;
+      color: var(--danger);
+      margin-bottom: 8px;
     }
     
-    .task-item.done .task-checkbox::after {
-      display: block;
+    .exercise-desc {
+      font-size: 14px;
+      color: var(--text-gray);
+      line-height: 1.5;
     }
     
-    .task-text {
-      flex: 1;
-      font-size: 15px;
-      color: #2D2D3A;
-      transition: all 0.3s;
+    /* Breathing Timer */
+    .breathing-container {
+      text-align: center;
+      padding: 30px;
     }
     
-    .task-item.done .task-text {
-      text-decoration: line-through;
-      opacity: 0.5;
+    .breathing-circle {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 30px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--danger) 0%, #f87171 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      transition: all 4s ease;
     }
     
-    .task-delete {
-      opacity: 0;
-      transition: all 0.3s;
-      cursor: pointer;
-      font-size: 18px;
+    .breathing-circle.inhale {
+      transform: scale(1.3);
     }
     
-    .task-item:hover .task-delete {
-      opacity: 0.6;
+    .breathing-circle.exhale {
+      transform: scale(0.8);
     }
     
-    .task-delete:hover {
-      opacity: 1 !important;
-    }
-    
-    .graph-section {
-      background: white;
-      border-radius: 25px;
-      padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    }
-    
-    .graph-title {
+    .breathing-instruction {
       font-size: 20px;
       font-weight: bold;
-      color: #2D2D3A;
+      color: var(--danger);
       margin-bottom: 20px;
-      text-align: center;
     }
     
-    .graph-placeholder {
-      text-align: center;
-      padding: 40px 20px;
-      color: #999;
+    .breathing-btn {
+      padding: 15px 30px;
+      background: var(--danger);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
     }
     
-    .graph-icon {
-      font-size: 60px;
-      margin-bottom: 15px;
+    /* Contacts */
+    .contact-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px;
+      background: var(--bg-card);
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
     }
     
-    .graph-text {
+    .contact-info {
+      flex: 1;
+    }
+    
+    .contact-name {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+    
+    .contact-phone {
+      font-size: 14px;
+      color: var(--text-gray);
+    }
+    
+    .call-btn {
+      padding: 10px 20px;
+      background: var(--success);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .add-contact-btn {
+      width: 100%;
+      padding: 15px;
+      background: var(--bg-card);
+      border: 2px dashed var(--danger);
+      border-radius: var(--radius-sm);
       font-size: 15px;
+      font-weight: 600;
+      color: var(--danger);
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    
+    /* Safety Plan */
+    .plan-step {
+      margin-bottom: 20px;
+    }
+    
+    .step-number {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      background: var(--danger);
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 30px;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    
+    .step-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+    
+    .step-input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #E5E5E5;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 80px;
+      outline: none;
+    }
+    
+    .step-input:focus {
+      border-color: var(--danger);
+    }
+    
+    .save-plan-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--danger);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 20px;
     }
     
     .bottom-nav {
@@ -324,21 +376,18 @@
       left: 50%;
       transform: translateX(-50%);
       background: white;
-      border-radius: 25px;
+      border-radius: var(--radius-lg);
       padding: 15px 25px;
       display: flex;
       gap: 35px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      box-shadow: var(--shadow-md);
       z-index: 1000;
       max-width: 350px;
       width: calc(100% - 40px);
-      justify-content: center;
     }
     
     .nav-item {
       font-size: 26px;
-      cursor: pointer;
-      transition: all 0.3s;
       opacity: 0.4;
       text-decoration: none;
     }
@@ -348,438 +397,404 @@
       transform: scale(1.15);
     }
     
-    .nav-item:active {
-      transform: scale(0.9);
-    }
-    
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 2000;
-      display: none;
-    }
-    
-    .modal-overlay.show {
-      display: block;
-      animation: fadeIn 0.3s ease;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
+    /* Modal */
     .modal {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      border-radius: 25px;
-      padding: 30px;
-      max-width: 90%;
-      width: 400px;
-      z-index: 2001;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
       display: none;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 20px;
     }
     
     .modal.show {
-      display: block;
-      animation: slideUp 0.3s ease;
-    }
-    
-    @keyframes slideUp {
-      from { transform: translate(-50%, -40%); opacity: 0; }
-      to { transform: translate(-50%, -50%); opacity: 1; }
-    }
-    
-    .modal-header {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
     }
     
-    .modal-title {
-      font-size: 22px;
-      font-weight: bold;
-      color: #2D2D3A;
+    .modal-content {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      max-width: 400px;
+      width: 100%;
     }
     
     .modal-close {
+      text-align: right;
       font-size: 28px;
       cursor: pointer;
-      color: #888;
-    }
-    
-    .form-group {
-      margin-bottom: 20px;
-    }
-    
-    .form-label {
-      font-size: 15px;
-      font-weight: 600;
-      color: #2D2D3A;
-      margin-bottom: 8px;
-      display: block;
-    }
-    
-    .form-input {
-      width: 100%;
-      padding: 12px 15px;
-      border: 2px solid #E5E5E5;
-      border-radius: 12px;
-      font-size: 15px;
-      font-family: inherit;
-      outline: none;
-      transition: border 0.3s;
-    }
-    
-    .form-input:focus {
-      border-color: #8B7EB8;
-    }
-    
-    .save-btn {
-      width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
-      color: white;
-      border: none;
-      border-radius: 15px;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    
-    .save-btn:active {
-      transform: scale(0.98);
-    }
-    
-    .pro-popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      border-radius: 25px;
-      padding: 40px 30px;
-      max-width: 90%;
-      width: 400px;
-      z-index: 3000;
-      display: none;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      text-align: center;
-    }
-    
-    .pro-popup.show {
-      display: block;
-      animation: slideUp 0.3s ease;
-    }
-    
-    .pro-popup-icon {
-      font-size: 60px;
-      margin-bottom: 20px;
-    }
-    
-    .pro-popup-title {
-      font-size: 24px;
-      font-weight: bold;
-      color: #2D2D3A;
       margin-bottom: 15px;
-    }
-    
-    .pro-popup-text {
-      font-size: 15px;
-      color: #666;
-      line-height: 1.6;
-      margin-bottom: 30px;
-    }
-    
-    .pro-activate-btn {
-      width: 100%;
-      padding: 18px;
-      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-      color: white;
-      border: none;
-      border-radius: 15px;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-    }
-    
-    .pro-activate-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
-    }
-    
-    .pro-activate-btn:active {
-      transform: translateY(0);
-    }
-    
-    .pro-popup-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 2999;
-      display: none;
-    }
-    
-    .pro-popup-overlay.show {
-      display: block;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <div class="logo">
-        <span>💚</span>
-        <span>MindFlow</span>
-      </div>
-      <div class="icons">
-        <a href="agenda.html">🔔</a>
-        <a href="profil.html">👤</a>
-        <a href="#" onclick="logout(); return false;" title="Déconnexion">🚪</a>
+      <a href="index.html" class="back-btn">←</a>
+      <div class="header-title">Mode Crise</div>
+      <div style="width: 24px;"></div>
+    </div>
+    
+    <!-- Alert Banner -->
+    <div class="alert-banner">
+      <div class="alert-icon">🚨</div>
+      <div class="alert-title">Tu n'es pas seul(e)</div>
+      <div class="alert-subtitle">
+        Si tu es en détresse, appelle les numéros d'urgence ci-dessous. Ils sont là pour t'aider 24h/24.
       </div>
     </div>
     
-    <div class="main-card">
-      <div class="greeting">Bonjour ! 🌙</div>
-      <div class="subtitle">Comment te sens-tu aujourd'hui ?</div>
+    <!-- Emergency Numbers -->
+    <div class="emergency-grid">
+      <a href="tel:3114" class="emergency-btn red">
+        <div class="btn-left">
+          <div class="btn-icon">📞</div>
+          <div class="btn-text">
+            <div class="btn-title">3114</div>
+            <div class="btn-subtitle">Numéro national de prévention du suicide</div>
+          </div>
+        </div>
+        <div class="btn-arrow">→</div>
+      </a>
       
-      <div class="mood-section">
-        <div class="mood-question">Choisis ton humeur</div>
-        <div class="mood-options">
-          <a href="mood.html" class="mood-btn">😊</a>
-          <a href="mood.html" class="mood-btn">😐</a>
-          <a href="mood.html" class="mood-btn">😔</a>
-          <a href="mood.html" class="mood-btn">😰</a>
-          <a href="mood.html" class="mood-btn">😡</a>
+      <a href="tel:15" class="emergency-btn red">
+        <div class="btn-left">
+          <div class="btn-icon">🚑</div>
+          <div class="btn-text">
+            <div class="btn-title">15 - SAMU</div>
+            <div class="btn-subtitle">Urgence médicale</div>
+          </div>
+        </div>
+        <div class="btn-arrow">→</div>
+      </a>
+      
+      <a href="tel:0140093900" class="emergency-btn">
+        <div class="btn-left">
+          <div class="btn-icon">💬</div>
+          <div class="btn-text">
+            <div class="btn-title">01 40 09 39 00</div>
+            <div class="btn-subtitle">SOS Amitié - Écoute 24h/24</div>
+          </div>
+        </div>
+        <div class="btn-arrow">→</div>
+      </a>
+      
+      <a href="tel:0800235236" class="emergency-btn">
+        <div class="btn-left">
+          <div class="btn-icon">🎧</div>
+          <div class="btn-text">
+            <div class="btn-title">0800 23 52 36</div>
+            <div class="btn-subtitle">Fil Santé Jeunes (12-25 ans)</div>
+          </div>
+        </div>
+        <div class="btn-arrow">→</div>
+      </a>
+    </div>
+    
+    <!-- Breathing Exercise -->
+    <div class="card">
+      <div class="card-title">🫁 Exercice de respiration</div>
+      <div class="breathing-container">
+        <div class="breathing-circle" id="breathingCircle">Respire</div>
+        <div class="breathing-instruction" id="breathingText">Prêt à commencer ?</div>
+        <button class="breathing-btn" onclick="criseManager.toggleBreathing()" id="breathingBtn">
+          Démarrer
+        </button>
+      </div>
+    </div>
+    
+    <!-- Grounding Exercises -->
+    <div class="card">
+      <div class="card-title">🧘 Exercices de grounding</div>
+      
+      <div class="exercise-item" onclick="criseManager.showExercise('54321')">
+        <div class="exercise-title">Technique 5-4-3-2-1</div>
+        <div class="exercise-desc">
+          Reconnecte-toi au moment présent en utilisant tes 5 sens
+        </div>
+      </div>
+      
+      <div class="exercise-item" onclick="criseManager.showExercise('ice')">
+        <div class="exercise-title">Glace sur le visage</div>
+        <div class="exercise-desc">
+          Plonge ton visage dans l'eau froide ou tiens un glaçon
+        </div>
+      </div>
+      
+      <div class="exercise-item" onclick="criseManager.showExercise('muscle')">
+        <div class="exercise-title">Relaxation musculaire</div>
+        <div class="exercise-desc">
+          Contracte et relâche chaque groupe musculaire
+        </div>
+      </div>
+      
+      <div class="exercise-item" onclick="criseManager.showExercise('walk')">
+        <div class="exercise-title">Marche consciente</div>
+        <div class="exercise-desc">
+          Concentre-toi sur chaque pas et chaque sensation
         </div>
       </div>
     </div>
     
-    <div class="quick-access">
-      <a href="luna.html" class="luna-card">
-        <div class="quick-icon">💬</div>
-        <div class="quick-title">Luna</div>
-        <div class="quick-desc">Compagnon IA empathique 24/7</div>
-      </a>
+    <!-- My Contacts -->
+    <div class="card">
+      <div class="card-title">👥 Mes contacts de confiance</div>
+      <div id="contactsList"></div>
+      <button class="add-contact-btn" onclick="criseManager.addContact()">
+        ➕ Ajouter un contact
+      </button>
+    </div>
+    
+    <!-- Safety Plan -->
+    <div class="card">
+      <div class="card-title">📋 Mon plan de sécurité</div>
       
-      <a href="crise.html" class="quick-card crisis">
-        <div class="quick-icon">🚨</div>
-        <div class="quick-title">Crise</div>
-        <div class="quick-desc">Urgences et stratégies rapides</div>
-      </a>
-    </div>
-    
-    <div class="tasks-section">
-      <div class="section-header">
-        <div class="section-title">Aujourd'hui :</div>
-        <button class="add-task-btn" onclick="openAddTask()">+</button>
+      <div class="plan-step">
+        <div class="step-title">
+          <span class="step-number">1</span>
+          Mes signes d'alerte
+        </div>
+        <textarea class="step-input" id="warning-signs" placeholder="Ex: Pensées négatives récurrentes, isolement social..."></textarea>
       </div>
-      <div id="tasksList"></div>
-    </div>
-    
-    <div class="graph-section">
-      <div class="graph-title">Cette semaine</div>
-      <div class="graph-placeholder">
-        <div class="graph-icon">📊</div>
-        <div class="graph-text">Tes statistiques apparaîtront ici</div>
+      
+      <div class="plan-step">
+        <div class="step-title">
+          <span class="step-number">2</span>
+          Stratégies d'adaptation
+        </div>
+        <textarea class="step-input" id="coping-strategies" placeholder="Ex: Écouter de la musique, appeler un ami, faire du sport..."></textarea>
       </div>
+      
+      <div class="plan-step">
+        <div class="step-title">
+          <span class="step-number">3</span>
+          Lieux sécurisants
+        </div>
+        <textarea class="step-input" id="safe-places" placeholder="Ex: Bibliothèque, café préféré, parc..."></textarea>
+      </div>
+      
+      <div class="plan-step">
+        <div class="step-title">
+          <span class="step-number">4</span>
+          Raisons de vivre
+        </div>
+        <textarea class="step-input" id="reasons-to-live" placeholder="Ex: Ma famille, mes amis, mes projets futurs..."></textarea>
+      </div>
+      
+      <button class="save-plan-btn" onclick="criseManager.savePlan()">
+        💾 Sauvegarder mon plan
+      </button>
     </div>
   </div>
   
   <div class="bottom-nav">
-    <a href="index.html" class="nav-item active">🏠</a>
+    <a href="index.html" class="nav-item">🏠</a>
     <a href="mood.html" class="nav-item">😊</a>
     <a href="journal.html" class="nav-item">📝</a>
     <a href="traitement.html" class="nav-item">💊</a>
     <a href="profil.html" class="nav-item">👤</a>
   </div>
   
-  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
-  <div class="modal" id="addTaskModal">
-    <div class="modal-header">
-      <div class="modal-title">Nouvelle tâche</div>
-      <div class="modal-close" onclick="closeModal()">×</div>
+  <!-- Exercise Modal -->
+  <div class="modal" id="exerciseModal">
+    <div class="modal-content">
+      <div class="modal-close" onclick="criseManager.closeModal()">×</div>
+      <div id="exerciseContent"></div>
     </div>
-    
-    <div class="form-group">
-      <label class="form-label">Nom de la tâche</label>
-      <input type="text" class="form-input" id="taskInput" placeholder="Ex: Méditation 10 min">
-    </div>
-    
-    <button class="save-btn" onclick="addTask()">💚 Ajouter</button>
   </div>
-  
-  <div class="pro-popup-overlay" id="proPopupOverlay"></div>
-  <div class="pro-popup" id="proPopup">
-    <div class="pro-popup-icon">🎉</div>
-    <div class="pro-popup-title">Merci pour ton abonnement !</div>
-    <div class="pro-popup-text">
-      Clique sur "Activer PRO" pour profiter de toutes les fonctionnalités premium : Luna illimitée, historique complet, graphiques avancés et bien plus !
-    </div>
-    <button class="pro-activate-btn" onclick="activatePro()">✨ Activer PRO</button>
-  </div>
-  
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   
   <script>
-    window.addEventListener('load', function() {
-      const firebaseConfig = {
-        apiKey: "AIzaSyAtb4nTMjvlruh0fg5O9_wiAPJI1Nall-g",
-        authDomain: "mindflow-66abc.firebaseapp.com",
-        projectId: "mindflow-66abc",
-        storageBucket: "mindflow-66abc.firebasestorage.app",
-        messagingSenderId: "466651144452",
-        appId: "1:466651144452:web:4b1dc68d4feac189683051",
-        measurementId: "G-B7PEXP45WH"
-      };
+    const CONTACTS_KEY = 'mindflow_crisis_contacts';
+    const PLAN_KEY = 'mindflow_safety_plan';
+    
+    const exercises = {
+      '54321': `
+        <h2 style="color: var(--danger); margin-bottom: 15px;">🧘 Technique 5-4-3-2-1</h2>
+        <p style="margin-bottom: 15px; line-height: 1.6;">Nomme à voix haute ou dans ta tête :</p>
+        <ul style="line-height: 2; margin-left: 20px; margin-bottom: 15px;">
+          <li><strong>5 choses</strong> que tu vois</li>
+          <li><strong>4 choses</strong> que tu touches</li>
+          <li><strong>3 choses</strong> que tu entends</li>
+          <li><strong>2 choses</strong> que tu sens (odeurs)</li>
+          <li><strong>1 chose</strong> que tu goûtes</li>
+        </ul>
+        <p style="color: var(--text-gray);">Prends ton temps avec chaque sens. Cela t'aide à revenir au moment présent.</p>
+      `,
+      'ice': `
+        <h2 style="color: var(--danger); margin-bottom: 15px;">❄️ Glace sur le visage</h2>
+        <p style="margin-bottom: 15px; line-height: 1.6;">Cette technique active ton réflexe de plongée :</p>
+        <ol style="line-height: 2; margin-left: 20px; margin-bottom: 15px;">
+          <li>Remplis un bol d'eau froide avec des glaçons</li>
+          <li>Retiens ta respiration</li>
+          <li>Plonge ton visage pendant 30 secondes</li>
+          <li>Ou tiens un glaçon contre ton front/joues</li>
+        </ol>
+        <p style="color: var(--text-gray);">Le froid ralentit ton rythme cardiaque et calme l'anxiété intense.</p>
+      `,
+      'muscle': `
+        <h2 style="color: var(--danger); margin-bottom: 15px;">💪 Relaxation musculaire</h2>
+        <p style="margin-bottom: 15px; line-height: 1.6;">Contracte puis relâche chaque groupe musculaire :</p>
+        <ol style="line-height: 2; margin-left: 20px; margin-bottom: 15px;">
+          <li>Pieds (5 secondes contracté, 10 relâché)</li>
+          <li>Jambes</li>
+          <li>Abdomen</li>
+          <li>Mains et bras</li>
+          <li>Épaules</li>
+          <li>Visage</li>
+        </ol>
+        <p style="color: var(--text-gray);">Cette tension-détente aide ton corps à relâcher le stress.</p>
+      `,
+      'walk': `
+        <h2 style="color: var(--danger); margin-bottom: 15px;">🚶 Marche consciente</h2>
+        <p style="margin-bottom: 15px; line-height: 1.6;">Marche lentement en te concentrant sur :</p>
+        <ul style="line-height: 2; margin-left: 20px; margin-bottom: 15px;">
+          <li>Le contact de tes pieds avec le sol</li>
+          <li>Le mouvement de tes jambes</li>
+          <li>Ta respiration naturelle</li>
+          <li>Les sensations dans ton corps</li>
+          <li>Les sons autour de toi</li>
+        </ul>
+        <p style="color: var(--text-gray);">Même 5 minutes de marche consciente peuvent t'apaiser.</p>
+      `
+    };
+    
+    const criseManager = {
+      breathingActive: false,
+      breathingInterval: null,
+      contacts: [],
       
-      const app = firebase.initializeApp(firebaseConfig);
-      const auth = firebase.auth();
-      const db = firebase.firestore();
+      init() {
+        this.loadContacts();
+        this.loadPlan();
+        this.renderContacts();
+      },
       
-      auth.onAuthStateChanged((user) => {
-        if (!user) {
-          window.location.href = 'login.html';
-        } else {
-          loadTasks();
-          
-          const urlParams = new URLSearchParams(window.location.search);
-          if (urlParams.get('success') === 'true') {
-            document.getElementById('proPopupOverlay').classList.add('show');
-            document.getElementById('proPopup').classList.add('show');
-            window.history.replaceState({}, document.title, window.location.pathname);
-          }
+      loadContacts() {
+        this.contacts = JSON.parse(localStorage.getItem(CONTACTS_KEY) || '[]');
+      },
+      
+      saveContacts() {
+        localStorage.setItem(CONTACTS_KEY, JSON.stringify(this.contacts));
+      },
+      
+      renderContacts() {
+        const container = document.getElementById('contactsList');
+        
+        if (this.contacts.length === 0) {
+          container.innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 20px;">Aucun contact ajouté</p>';
+          return;
         }
-      });
+        
+        container.innerHTML = this.contacts.map((c, i) => `
+          <div class="contact-item">
+            <div class="contact-info">
+              <div class="contact-name">${c.name}</div>
+              <div class="contact-phone">${c.phone}</div>
+            </div>
+            <a href="tel:${c.phone}" class="call-btn">📞 Appeler</a>
+          </div>
+        `).join('');
+      },
+      
+      addContact() {
+        const name = prompt('Nom du contact :');
+        if (!name) return;
+        
+        const phone = prompt('Numéro de téléphone :');
+        if (!phone) return;
+        
+        this.contacts.push({ name, phone });
+        this.saveContacts();
+        this.renderContacts();
+      },
+      
+      loadPlan() {
+        const plan = JSON.parse(localStorage.getItem(PLAN_KEY) || '{}');
+        
+        if (plan.warningSigns) document.getElementById('warning-signs').value = plan.warningSigns;
+        if (plan.copingStrategies) document.getElementById('coping-strategies').value = plan.copingStrategies;
+        if (plan.safePlaces) document.getElementById('safe-places').value = plan.safePlaces;
+        if (plan.reasonsToLive) document.getElementById('reasons-to-live').value = plan.reasonsToLive;
+      },
+      
+      savePlan() {
+        const plan = {
+          warningSigns: document.getElementById('warning-signs').value,
+          copingStrategies: document.getElementById('coping-strategies').value,
+          safePlaces: document.getElementById('safe-places').value,
+          reasonsToLive: document.getElementById('reasons-to-live').value
+        };
+        
+        localStorage.setItem(PLAN_KEY, JSON.stringify(plan));
+        alert('✅ Plan de sécurité sauvegardé !');
+      },
+      
+      toggleBreathing() {
+        if (this.breathingActive) {
+          this.stopBreathing();
+        } else {
+          this.startBreathing();
+        }
+      },
+      
+      startBreathing() {
+        this.breathingActive = true;
+        document.getElementById('breathingBtn').textContent = 'Arrêter';
+        
+        let phase = 0; // 0 = inhale, 1 = hold, 2 = exhale, 3 = hold
+        const circle = document.getElementById('breathingCircle');
+        const text = document.getElementById('breathingText');
+        
+        const cycle = () => {
+          switch(phase) {
+            case 0:
+              text.textContent = 'Inspire profondément...';
+              circle.classList.remove('exhale');
+              circle.classList.add('inhale');
+              break;
+            case 1:
+              text.textContent = 'Retiens...';
+              break;
+            case 2:
+              text.textContent = 'Expire lentement...';
+              circle.classList.remove('inhale');
+              circle.classList.add('exhale');
+              break;
+            case 3:
+              text.textContent = 'Retiens...';
+              break;
+          }
+          
+          phase = (phase + 1) % 4;
+        };
+        
+        cycle();
+        this.breathingInterval = setInterval(cycle, 4000);
+      },
+      
+      stopBreathing() {
+        this.breathingActive = false;
+        clearInterval(this.breathingInterval);
+        document.getElementById('breathingBtn').textContent = 'Démarrer';
+        document.getElementById('breathingText').textContent = 'Prêt à recommencer ?';
+        document.getElementById('breathingCircle').classList.remove('inhale', 'exhale');
+      },
+      
+      showExercise(type) {
+        document.getElementById('exerciseContent').innerHTML = exercises[type];
+        document.getElementById('exerciseModal').classList.add('show');
+      },
+      
+      closeModal() {
+        document.getElementById('exerciseModal').classList.remove('show');
+      }
+    };
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      criseManager.init();
     });
-    
-    const defaultTasks = [
-      { id: 'checkin', text: 'Check-in du matin', link: 'mood.html' },
-      { id: 'traitement', text: 'Traitement 10h', link: 'traitement.html' },
-      { id: 'gratitude', text: 'Gratitude du soir', link: 'journal.html' }
-    ];
-    
-    function loadTasks() {
-      const today = new Date().toISOString().split('T')[0];
-      const savedDate = localStorage.getItem('mindflow_tasks_date');
-      
-      let tasks = JSON.parse(localStorage.getItem('mindflow_tasks') || '[]');
-      
-      if (savedDate !== today) {
-        tasks = defaultTasks.map(t => ({ ...t, done: false }));
-        localStorage.setItem('mindflow_tasks', JSON.stringify(tasks));
-        localStorage.setItem('mindflow_tasks_date', today);
-      }
-      
-      displayTasks(tasks);
-    }
-    
-    function displayTasks(tasks) {
-      const list = document.getElementById('tasksList');
-      list.innerHTML = tasks.map((task, index) => `
-        <div class="task-item ${task.done ? 'done' : ''}" onclick="toggleTask(${index})">
-          <div class="task-checkbox"></div>
-          <div class="task-text">${task.text}</div>
-          ${!task.id ? `<span class="task-delete" onclick="event.stopPropagation(); deleteTask(${index})">🗑️</span>` : ''}
-        </div>
-      `).join('');
-    }
-    
-    function toggleTask(index) {
-      let tasks = JSON.parse(localStorage.getItem('mindflow_tasks') || '[]');
-      tasks[index].done = !tasks[index].done;
-      localStorage.setItem('mindflow_tasks', JSON.stringify(tasks));
-      displayTasks(tasks);
-    }
-    
-    function deleteTask(index) {
-      if (!confirm('Supprimer cette tâche ?')) return;
-      let tasks = JSON.parse(localStorage.getItem('mindflow_tasks') || '[]');
-      tasks.splice(index, 1);
-      localStorage.setItem('mindflow_tasks', JSON.stringify(tasks));
-      displayTasks(tasks);
-    }
-    
-    function openAddTask() {
-      document.getElementById('modalOverlay').classList.add('show');
-      document.getElementById('addTaskModal').classList.add('show');
-      document.getElementById('taskInput').value = '';
-      document.getElementById('taskInput').focus();
-    }
-    
-    function closeModal() {
-      document.getElementById('modalOverlay').classList.remove('show');
-      document.getElementById('addTaskModal').classList.remove('show');
-    }
-    
-    function addTask() {
-      const text = document.getElementById('taskInput').value.trim();
-      if (!text) {
-        alert('Entre un nom de tâche ! 💚');
-        return;
-      }
-      
-      let tasks = JSON.parse(localStorage.getItem('mindflow_tasks') || '[]');
-      tasks.push({ text, done: false });
-      localStorage.setItem('mindflow_tasks', JSON.stringify(tasks));
-      
-      closeModal();
-      displayTasks(tasks);
-    }
-    
-    function logout() {
-      if (confirm('Es-tu sûr de vouloir te déconnecter ?')) {
-        firebase.auth().signOut().then(() => {
-          window.location.href = 'login.html';
-        }).catch((error) => {
-          console.error('Erreur déconnexion:', error);
-          alert('Erreur lors de la déconnexion');
-        });
-      }
-    }
-    
-    async function activatePro() {
-      const user = firebase.auth().currentUser;
-      if (!user) {
-        alert('Erreur : utilisateur non connecté');
-        return;
-      }
-      
-      try {
-        await firebase.firestore().collection('users').doc(user.uid).update({
-          isPro: true,
-          proActivatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        
-        document.getElementById('proPopupOverlay').classList.remove('show');
-        document.getElementById('proPopup').classList.remove('show');
-        
-        alert('🎉 Bienvenue dans MindFlow PRO !\n\nTu as maintenant accès à toutes les fonctionnalités premium !\n\n✨ Luna illimitée\n📊 Historique complet\n📈 Graphiques avancés\n📄 Export PDF');
-        
-        location.reload();
-      } catch (error) {
-        console.error('Erreur activation PRO:', error);
-        alert('Erreur lors de l\'activation PRO. Contacte le support.');
-      }
-    }
   </script>
 </body>
 </html>
