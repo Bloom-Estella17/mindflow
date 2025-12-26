@@ -460,6 +460,84 @@
     .save-btn:active {
       transform: scale(0.98);
     }
+    
+    .pro-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 25px;
+      padding: 40px 30px;
+      max-width: 90%;
+      width: 400px;
+      z-index: 3000;
+      display: none;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    
+    .pro-popup.show {
+      display: block;
+      animation: slideUp 0.3s ease;
+    }
+    
+    .pro-popup-icon {
+      font-size: 60px;
+      margin-bottom: 20px;
+    }
+    
+    .pro-popup-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2D2D3A;
+      margin-bottom: 15px;
+    }
+    
+    .pro-popup-text {
+      font-size: 15px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+    
+    .pro-activate-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    }
+    
+    .pro-activate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+    }
+    
+    .pro-activate-btn:active {
+      transform: translateY(0);
+    }
+    
+    .pro-popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2999;
+      display: none;
+    }
+    
+    .pro-popup-overlay.show {
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -546,6 +624,16 @@
     <button class="save-btn" onclick="addTask()">💚 Ajouter</button>
   </div>
   
+  <div class="pro-popup-overlay" id="proPopupOverlay"></div>
+  <div class="pro-popup" id="proPopup">
+    <div class="pro-popup-icon">🎉</div>
+    <div class="pro-popup-title">Merci pour ton abonnement !</div>
+    <div class="pro-popup-text">
+      Clique sur "Activer PRO" pour profiter de toutes les fonctionnalités premium : Luna illimitée, historique complet, graphiques avancés et bien plus !
+    </div>
+    <button class="pro-activate-btn" onclick="activatePro()">✨ Activer PRO</button>
+  </div>
+  
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -565,12 +653,20 @@
       
       const app = firebase.initializeApp(firebaseConfig);
       const auth = firebase.auth();
+      const db = firebase.firestore();
       
       auth.onAuthStateChanged((user) => {
         if (!user) {
           window.location.href = 'login.html';
         } else {
           loadTasks();
+          
+          const urlParams = new URLSearchParams(window.location.search);
+          if (urlParams.get('success') === 'true') {
+            document.getElementById('proPopupOverlay').classList.add('show');
+            document.getElementById('proPopup').classList.add('show');
+            window.history.replaceState({}, document.title, window.location.pathname);
+          }
         }
       });
     });
@@ -657,6 +753,31 @@
           console.error('Erreur déconnexion:', error);
           alert('Erreur lors de la déconnexion');
         });
+      }
+    }
+    
+    async function activatePro() {
+      const user = firebase.auth().currentUser;
+      if (!user) {
+        alert('Erreur : utilisateur non connecté');
+        return;
+      }
+      
+      try {
+        await firebase.firestore().collection('users').doc(user.uid).update({
+          isPro: true,
+          proActivatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        document.getElementById('proPopupOverlay').classList.remove('show');
+        document.getElementById('proPopup').classList.remove('show');
+        
+        alert('🎉 Bienvenue dans MindFlow PRO !\n\nTu as maintenant accès à toutes les fonctionnalités premium !\n\n✨ Luna illimitée\n📊 Historique complet\n📈 Graphiques avancés\n📄 Export PDF');
+        
+        location.reload();
+      } catch (error) {
+        console.error('Erreur activation PRO:', error);
+        alert('Erreur lors de l\'activation PRO. Contacte le support.');
       }
     }
   </script>
