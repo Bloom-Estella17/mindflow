@@ -222,122 +222,121 @@
     </div>
   </div>
   
-  <!-- Firebase -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   
   <script>
-    // Firebase Configuration - INTÉGRÉ DIRECTEMENT
-    const firebaseConfig = {
-      apiKey: "AIzaSyAtb4nTMjvLruh0fg5O9_wiAPJI1Nall-g",
-      authDomain: "mindflow-66abc.firebaseapp.com",
-      projectId: "mindflow-66abc",
-      storageBucket: "mindflow-66abc.firebasestorage.app",
-      messagingSenderId: "466651144452",
-      appId: "1:466651144452:web:4b1dc68d4f6ac1896830051",
-      measurementId: "G-B7PEXP45WH"
-    };
-    
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-    
-    const signupForm = document.getElementById('signupForm');
-    const signupBtn = document.getElementById('signupBtn');
-    const errorMessage = document.getElementById('errorMessage');
-    const passwordInput = document.getElementById('password');
-    const passwordStrength = document.getElementById('passwordStrength');
-    
-    // Password strength
-    passwordInput.addEventListener('input', function() {
-      const password = this.value;
-      const strength = getPasswordStrength(password);
+    window.addEventListener('load', function() {
+      const firebaseConfig = {
+        apiKey: "AIzaSyAtb4nTMjvLruh0fg5O9_wiAPJI1Nall-g",
+        authDomain: "mindflow-66abc.firebaseapp.com",
+        projectId: "mindflow-66abc",
+        storageBucket: "mindflow-66abc.firebasestorage.app",
+        messagingSenderId: "466651144452",
+        appId: "1:466651144452:web:4b1dc68d4f6ac1896830051",
+        measurementId: "G-B7PEXP45WH"
+      };
       
-      passwordStrength.className = 'password-strength-bar';
-      if (strength === 'weak') passwordStrength.classList.add('weak');
-      if (strength === 'medium') passwordStrength.classList.add('medium');
-      if (strength === 'strong') passwordStrength.classList.add('strong');
-    });
-    
-    function getPasswordStrength(password) {
-      if (password.length < 6) return 'weak';
-      if (password.length < 10) return 'medium';
-      if (password.length >= 10 && /[A-Z]/.test(password) && /[0-9]/.test(password)) return 'strong';
-      return 'medium';
-    }
-    
-    signupForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
+      const app = firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
       
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
+      const signupForm = document.getElementById('signupForm');
+      const signupBtn = document.getElementById('signupBtn');
+      const errorMessage = document.getElementById('errorMessage');
+      const passwordInput = document.getElementById('password');
+      const passwordStrength = document.getElementById('passwordStrength');
       
-      if (!name || !email || !password) {
-        showError('Tous les champs sont requis');
-        return;
+      passwordInput.addEventListener('input', function() {
+        const password = this.value;
+        const strength = getPasswordStrength(password);
+        
+        passwordStrength.className = 'password-strength-bar';
+        if (strength === 'weak') passwordStrength.classList.add('weak');
+        if (strength === 'medium') passwordStrength.classList.add('medium');
+        if (strength === 'strong') passwordStrength.classList.add('strong');
+      });
+      
+      function getPasswordStrength(password) {
+        if (password.length < 6) return 'weak';
+        if (password.length < 10) return 'medium';
+        if (password.length >= 10 && /[A-Z]/.test(password) && /[0-9]/.test(password)) return 'strong';
+        return 'medium';
       }
       
-      if (password.length < 6) {
-        showError('Le mot de passe doit faire au moins 6 caractères');
-        return;
-      }
-      
-      if (password !== confirmPassword) {
-        showError('Les mots de passe ne correspondent pas');
-        return;
-      }
-      
-      signupBtn.disabled = true;
-      signupBtn.textContent = 'Création en cours...';
-      
-      try {
-        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-        const user = userCredential.user;
+      signupForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
         
-        await db.collection('users').doc(user.uid).set({
-          name: name,
-          email: email,
-          isPro: false,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          lunaMessagesToday: 0,
-          lastLunaReset: new Date().toISOString().split('T')[0]
-        });
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
         
-        await user.updateProfile({
-          displayName: name
-        });
-        
-        window.location.href = 'index.html';
-        
-      } catch (error) {
-        console.error('Erreur inscription:', error);
-        
-        let message = 'Une erreur est survenue';
-        if (error.code === 'auth/email-already-in-use') {
-          message = 'Cet email est déjà utilisé';
-        } else if (error.code === 'auth/invalid-email') {
-          message = 'Email invalide';
-        } else if (error.code === 'auth/weak-password') {
-          message = 'Mot de passe trop faible';
+        if (!name || !email || !password) {
+          showError('Tous les champs sont requis');
+          return;
         }
         
-        showError(message);
-        signupBtn.disabled = false;
-        signupBtn.textContent = '💚 Créer mon compte';
+        if (password.length < 6) {
+          showError('Le mot de passe doit faire au moins 6 caractères');
+          return;
+        }
+        
+        if (password !== confirmPassword) {
+          showError('Les mots de passe ne correspondent pas');
+          return;
+        }
+        
+        signupBtn.disabled = true;
+        signupBtn.textContent = 'Création en cours...';
+        
+        try {
+          const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+          const user = userCredential.user;
+          
+          await db.collection('users').doc(user.uid).set({
+            name: name,
+            email: email,
+            isPro: false,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            lunaMessagesToday: 0,
+            lastLunaReset: new Date().toISOString().split('T')[0]
+          });
+          
+          await user.updateProfile({
+            displayName: name
+          });
+          
+          window.location.href = 'index.html';
+          
+        } catch (error) {
+          console.error('Erreur inscription:', error);
+          
+          let message = 'Une erreur est survenue';
+          if (error.code === 'auth/email-already-in-use') {
+            message = 'Cet email est déjà utilisé';
+          } else if (error.code === 'auth/invalid-email') {
+            message = 'Email invalide';
+          } else if (error.code === 'auth/weak-password') {
+            message = 'Mot de passe trop faible';
+          }
+          
+          showError(message);
+          signupBtn.disabled = false;
+          signupBtn.textContent = '💚 Créer mon compte';
+        }
+      });
+      
+      function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.classList.add('show');
+        setTimeout(() => {
+          errorMessage.classList.remove('show');
+        }, 5000);
       }
     });
-    
-    function showError(message) {
-      errorMessage.textContent = message;
-      errorMessage.classList.add('show');
-      setTimeout(() => {
-        errorMessage.classList.remove('show');
-      }, 5000);
-    }
   </script>
 </body>
 </html>
