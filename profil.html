@@ -98,6 +98,33 @@
       gap: 10px;
     }
     
+    /* Preview FREE mode button */
+    .preview-free-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .preview-free-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .preview-free-btn.active {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+    
     .pro-badge {
       background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
       color: white;
@@ -414,6 +441,11 @@
           <div class="stat-label">Humeurs suivies</div>
         </div>
       </div>
+      
+      <!-- BOUTON PREVIEW FREE MODE -->
+      <button class="preview-free-btn" id="previewBtn" onclick="profilManager.togglePreview()">
+        👁️ <span id="previewText">Prévisualiser en mode gratuit</span>
+      </button>
     </div>
     
     <!-- MES DIAGNOSTICS -->
@@ -891,6 +923,26 @@
           }).catch((error) => {
             alert('Erreur lors de la déconnexion : ' + error.message);
           });
+        }
+      },
+      
+      togglePreview() {
+        const isPreview = localStorage.getItem('previewFreeMode') === 'true';
+        const newState = !isPreview;
+        
+        localStorage.setItem('previewFreeMode', newState);
+        
+        const btn = document.getElementById('previewBtn');
+        const text = document.getElementById('previewText');
+        
+        if (newState) {
+          btn.classList.add('active');
+          text.textContent = 'Retour au mode PRO';
+          alert('👁️ Mode GRATUIT activé !\n\nTu peux maintenant voir toutes les limitations de la version gratuite.\n\nRecharge les pages (Mood, Journal, Traitement) pour voir les changements !');
+        } else {
+          btn.classList.remove('active');
+          text.textContent = 'Prévisualiser en mode gratuit';
+          alert('💎 Mode PRO réactivé !\n\nTu es de retour en version PRO.\n\nRecharge les pages pour voir les changements !');
         }
       }
     };
