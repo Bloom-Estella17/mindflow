@@ -530,7 +530,6 @@
     <a href="profil.html" class="nav-item">👤</a>
   </div>
   
-  <!-- Add Task Modal -->
   <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
   <div class="modal" id="addTaskModal">
     <div class="modal-header">
@@ -546,8 +545,33 @@
     <button class="save-btn" onclick="addTask()">💚 Ajouter</button>
   </div>
   
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
   <script>
-    // Tasks management
+    window.addEventListener('load', function() {
+      const firebaseConfig = {
+        apiKey: "AIzaSyAtb4nTMjvLruh0fg5O9_wiAPJI1Nall-g",
+        authDomain: "mindflow-66abc.firebaseapp.com",
+        projectId: "mindflow-66abc",
+        storageBucket: "mindflow-66abc.firebasestorage.app",
+        messagingSenderId: "466651144452",
+        appId: "1:466651144452:web:4b1dc68d4f6ac1896830051",
+        measurementId: "G-B7PEXP45WH"
+      };
+      
+      const app = firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      
+      auth.onAuthStateChanged((user) => {
+        if (!user) {
+          window.location.href = 'login.html';
+        }
+      });
+    });
+    
     const defaultTasks = [
       { id: 'checkin', text: 'Check-in du matin', link: 'mood.html' },
       { id: 'traitement', text: 'Traitement 10h', link: 'traitement.html' },
@@ -560,7 +584,6 @@
       
       let tasks = JSON.parse(localStorage.getItem('mindflow_tasks') || '[]');
       
-      // Reset if new day
       if (savedDate !== today) {
         tasks = defaultTasks.map(t => ({ ...t, done: false }));
         localStorage.setItem('mindflow_tasks', JSON.stringify(tasks));
@@ -623,24 +646,7 @@
       displayTasks(tasks);
     }
     
-    // Load on start
     loadTasks();
-  </script>
-  
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-  <script src="firebase-config.js"></script>
-  
-  <script>
-    // Vérifier si l'utilisateur est connecté
-    auth.onAuthStateChanged((user) => {
-      if (!user) {
-        // Pas connecté → rediriger vers login
-        window.location.href = 'login.html';
-      }
-    });
   </script>
 </body>
 </html>
