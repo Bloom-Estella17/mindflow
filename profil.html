@@ -2,18 +2,43 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profil - MindFlow</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>👤 MindFlow - Profil</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#8B7EB8">
+  
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    :root {
+      --primary: #8B7EB8;
+      --primary-light: #B8A7D5;
+      --secondary: #A8D8EA;
+      --text-dark: #2D2D3A;
+      --text-gray: #666;
+      --text-light: #888;
+      --bg-card: rgba(139, 126, 184, 0.05);
+      --shadow-sm: 0 4px 20px rgba(0,0,0,0.08);
+      --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 25px;
+      --transition: all 0.3s ease;
     }
     
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
       min-height: 100vh;
       padding: 15px;
       padding-bottom: 100px;
@@ -22,6 +47,8 @@
     .container {
       max-width: 450px;
       margin: 0 auto;
+      width: 100%;
+      padding: 0 5px;
     }
     
     .header {
@@ -30,99 +57,268 @@
       align-items: center;
       padding: 20px 25px;
       background: white;
-      border-radius: 20px;
+      border-radius: var(--radius-md);
       margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    }
-    
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 24px;
-      font-weight: bold;
-      color: #8B7EB8;
+      box-shadow: var(--shadow-sm);
     }
     
     .back-btn {
       font-size: 24px;
+      cursor: pointer;
       text-decoration: none;
-      transition: all 0.3s;
+      transition: var(--transition);
+      color: var(--text-dark);
     }
     
-    .back-btn:active {
-      transform: scale(1.2);
+    .header-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--primary);
     }
+    
+    .header-placeholder { width: 24px; }
     
     .profile-card {
       background: white;
-      border-radius: 25px;
-      padding: 40px 30px;
+      border-radius: var(--radius-lg);
+      padding: 30px 25px;
       margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      box-shadow: var(--shadow-sm);
       text-align: center;
     }
     
-    .profile-icon {
-      font-size: 80px;
-      margin-bottom: 20px;
+    .profile-name {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
     
-    .profile-name {
-      font-size: 28px;
+    .pro-badge {
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
       font-weight: bold;
-      color: #2D2D3A;
-      margin-bottom: 10px;
+      display: none;
+    }
+    
+    .pro-badge.show {
+      display: inline-block;
     }
     
     .profile-email {
-      font-size: 16px;
-      color: #888;
-      margin-bottom: 30px;
+      font-size: 14px;
+      color: var(--text-gray);
+      margin-bottom: 20px;
     }
     
     .stats-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 15px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
     
-    .stat-item {
-      background: rgba(139, 126, 184, 0.1);
+    .stat-box {
+      background: var(--bg-card);
       padding: 20px;
-      border-radius: 15px;
-      text-align: center;
+      border-radius: var(--radius-sm);
     }
     
     .stat-number {
       font-size: 32px;
       font-weight: bold;
-      color: #8B7EB8;
-      margin-bottom: 5px;
+      color: var(--primary);
     }
     
     .stat-label {
+      font-size: 13px;
+      color: var(--text-gray);
+      margin-top: 5px;
+    }
+    
+    .card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .card-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 15px;
+    }
+    
+    .accordion-item {
+      margin-bottom: 12px;
+    }
+    
+    .accordion-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px;
+      background: var(--bg-card);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .accordion-header:active {
+      transform: scale(0.98);
+    }
+    
+    .accordion-header.active {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .accordion-title {
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .accordion-arrow {
+      font-size: 20px;
+      transition: var(--transition);
+    }
+    
+    .accordion-header.active .accordion-arrow {
+      transform: rotate(90deg);
+    }
+    
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: white;
+      border-radius: var(--radius-sm);
+      margin-top: 8px;
+    }
+    
+    .accordion-content.show {
+      max-height: 1000px;
+      padding: 15px;
+      border: 2px solid var(--bg-card);
+    }
+    
+    .question-group {
+      margin-bottom: 15px;
+    }
+    
+    .question-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      display: block;
+    }
+    
+    .question-input {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #E5E5E5;
+      border-radius: var(--radius-sm);
       font-size: 14px;
-      color: #666;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 60px;
+      outline: none;
+      transition: var(--transition);
+    }
+    
+    .question-input:focus {
+      border-color: var(--primary);
+    }
+    
+    .dsm5-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      color: white;
+    }
+    
+    .dsm5-header:active {
+      transform: scale(0.98);
+    }
+    
+    .dsm5-title {
+      font-size: 16px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .dsm5-arrow {
+      font-size: 20px;
+      transition: var(--transition);
+    }
+    
+    .dsm5-header.active .dsm5-arrow {
+      transform: rotate(90deg);
+    }
+    
+    .dsm5-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .dsm5-content.show {
+      max-height: 5000px;
+      padding: 20px;
+      padding-top: 15px;
+    }
+    
+    .dsm5-section {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-dark);
+    }
+    
+    .dsm5-section h4 {
+      font-size: 15px;
+      color: var(--primary);
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    
+    .dsm5-section ul {
+      margin-left: 20px;
+      margin-bottom: 12px;
+    }
+    
+    .dsm5-section li {
+      margin-bottom: 6px;
+    }
+    
+    .dsm5-section p {
+      margin-bottom: 10px;
     }
     
     .settings-section {
-      background: white;
-      border-radius: 25px;
-      padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      margin-top: 15px;
     }
     
-    .section-title {
-      font-size: 20px;
-      font-weight: bold;
-      color: #2D2D3A;
-      margin-bottom: 20px;
-    }
-    
-    .setting-item {
+    .setting-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -130,91 +326,36 @@
       border-bottom: 1px solid #f0f0f0;
     }
     
-    .setting-item:last-child {
+    .setting-row:last-child {
       border-bottom: none;
     }
     
     .setting-label {
-      font-size: 16px;
-      color: #2D2D3A;
+      font-size: 15px;
+      color: var(--text-dark);
     }
     
     .setting-value {
       font-size: 14px;
-      color: #888;
+      color: var(--text-gray);
     }
     
     .logout-btn {
       width: 100%;
-      padding: 18px;
-      background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
+      padding: 15px;
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
       color: white;
       border: none;
       border-radius: 15px;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: bold;
       cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-      margin-top: 20px;
-    }
-    
-    .logout-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+      transition: var(--transition);
+      margin-top: 10px;
     }
     
     .logout-btn:active {
-      transform: translateY(0);
-    }
-    
-    .pro-badge {
-      display: inline-block;
-      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-      color: white;
-      padding: 5px 15px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-      margin-left: 10px;
-    }
-    
-    .upgrade-card {
-      background: linear-gradient(135deg, #8B7EB8 0%, #B8A7D5 100%);
-      border-radius: 25px;
-      padding: 30px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(139, 126, 184, 0.3);
-      color: white;
-      text-align: center;
-    }
-    
-    .upgrade-title {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    
-    .upgrade-subtitle {
-      font-size: 14px;
-      opacity: 0.9;
-      margin-bottom: 20px;
-    }
-    
-    .upgrade-btn {
-      background: white;
-      color: #8B7EB8;
-      padding: 15px 30px;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    
-    .upgrade-btn:active {
-      transform: scale(0.95);
+      transform: scale(0.98);
     }
     
     .bottom-nav {
@@ -223,11 +364,11 @@
       left: 50%;
       transform: translateX(-50%);
       background: white;
-      border-radius: 25px;
+      border-radius: var(--radius-lg);
       padding: 15px 25px;
       display: flex;
       gap: 35px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      box-shadow: var(--shadow-md);
       z-index: 1000;
       max-width: 350px;
       width: calc(100% - 40px);
@@ -237,7 +378,7 @@
     .nav-item {
       font-size: 26px;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: var(--transition);
       opacity: 0.4;
       text-decoration: none;
     }
@@ -246,71 +387,384 @@
       opacity: 1;
       transform: scale(1.15);
     }
-    
-    .nav-item:active {
-      transform: scale(0.9);
-    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
       <a href="index.html" class="back-btn">←</a>
-      <div class="logo">
-        <span>💚</span>
-        <span>MindFlow</span>
-      </div>
-      <div style="width: 24px;"></div>
+      <div class="header-title">Mon Profil</div>
+      <div class="header-placeholder"></div>
     </div>
     
     <div class="profile-card">
-      <div class="profile-icon">👤</div>
-      <div class="profile-name" id="userName">Chargement...</div>
+      <div class="profile-name">
+        <span id="userName">Chargement...</span>
+        <span class="pro-badge" id="proBadge">PRO</span>
+      </div>
       <div class="profile-email" id="userEmail">...</div>
       
       <div class="stats-grid">
-        <div class="stat-item">
+        <div class="stat-box">
           <div class="stat-number">12</div>
           <div class="stat-label">Jours actifs</div>
         </div>
-        <div class="stat-item">
+        <div class="stat-box">
           <div class="stat-number">8</div>
           <div class="stat-label">Humeurs suivies</div>
         </div>
       </div>
     </div>
     
-    <div class="upgrade-card" id="upgradeCard" style="display: none;">
-      <div class="upgrade-title">✨ Passe à PRO</div>
-      <div class="upgrade-subtitle">Accède à toutes les fonctionnalités pour 4,99€/mois</div>
-      <button class="upgrade-btn" onclick="window.location.href='subscribe.html'">Découvrir PRO</button>
+    <!-- MES DIAGNOSTICS -->
+    <div class="card">
+      <div class="card-title">🏥 Mes diagnostics</div>
+      
+      <!-- Borderline -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="profilManager.toggleAccordion('borderline')">
+          <div class="accordion-title">💜 Trouble de personnalité Borderline (TPL)</div>
+          <div class="accordion-arrow">›</div>
+        </div>
+        <div class="accordion-content" id="content-borderline">
+          <div class="question-group">
+            <label class="question-label">Depuis quand as-tu ce diagnostic ?</label>
+            <textarea class="question-input" id="borderline-when"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Quels sont tes symptômes principaux ?</label>
+            <textarea class="question-input" id="borderline-symptoms"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Quel est ton suivi actuel ?</label>
+            <textarea class="question-input" id="borderline-treatment"></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TAG -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="profilManager.toggleAccordion('tag')">
+          <div class="accordion-title">😰 Trouble d'Anxiété Généralisée (TAG)</div>
+          <div class="accordion-arrow">›</div>
+        </div>
+        <div class="accordion-content" id="content-tag">
+          <div class="question-group">
+            <label class="question-label">Depuis quand as-tu ce diagnostic ?</label>
+            <textarea class="question-input" id="tag-when"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Quelles sont tes principales sources d'anxiété ?</label>
+            <textarea class="question-input" id="tag-triggers"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Comment gères-tu ton anxiété ?</label>
+            <textarea class="question-input" id="tag-coping"></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Bipolaire -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="profilManager.toggleAccordion('bipolaire')">
+          <div class="accordion-title">🎭 Trouble Bipolaire</div>
+          <div class="accordion-arrow">›</div>
+        </div>
+        <div class="accordion-content" id="content-bipolaire">
+          <div class="question-group">
+            <label class="question-label">Type de trouble bipolaire (I, II, cyclothymie) ?</label>
+            <textarea class="question-input" id="bipolaire-type"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Fréquence de tes cycles (manie/dépression) ?</label>
+            <textarea class="question-input" id="bipolaire-cycles"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Traitement et suivi actuel ?</label>
+            <textarea class="question-input" id="bipolaire-treatment"></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TDI -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="profilManager.toggleAccordion('tdi')">
+          <div class="accordion-title">🪞 Trouble Dissociatif de l'Identité (TDI)</div>
+          <div class="accordion-arrow">›</div>
+        </div>
+        <div class="accordion-content" id="content-tdi">
+          <div class="question-group">
+            <label class="question-label">Combien d'alters (parties) as-tu identifiés ?</label>
+            <textarea class="question-input" id="tdi-alters"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Comment se manifestent tes dissociations ?</label>
+            <textarea class="question-input" id="tdi-manifestation"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Quel est ton suivi thérapeutique ?</label>
+            <textarea class="question-input" id="tdi-treatment"></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Schizophrénie -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="profilManager.toggleAccordion('schizophrenie')">
+          <div class="accordion-title">🧠 Schizophrénie</div>
+          <div class="accordion-arrow">›</div>
+        </div>
+        <div class="accordion-content" id="content-schizophrenie">
+          <div class="question-group">
+            <label class="question-label">Type de schizophrénie (paranoïde, désorganisée, catatonique) ?</label>
+            <textarea class="question-input" id="schizophrenie-type"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Quels sont tes symptômes (hallucinations, délires, désorganisation) ?</label>
+            <textarea class="question-input" id="schizophrenie-symptoms"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Traitement antipsychotique et suivi ?</label>
+            <textarea class="question-input" id="schizophrenie-treatment"></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Dépression -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="profilManager.toggleAccordion('depression')">
+          <div class="accordion-title">😔 Trouble Dépressif Majeur</div>
+          <div class="accordion-arrow">›</div>
+        </div>
+        <div class="accordion-content" id="content-depression">
+          <div class="question-group">
+            <label class="question-label">Depuis combien de temps souffres-tu de dépression ?</label>
+            <textarea class="question-input" id="depression-duration"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Symptômes principaux (tristesse, fatigue, perte d'intérêt) ?</label>
+            <textarea class="question-input" id="depression-symptoms"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Traitement et thérapie en cours ?</label>
+            <textarea class="question-input" id="depression-treatment"></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TSPT -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="profilManager.toggleAccordion('tspt')">
+          <div class="accordion-title">😱 Trouble de Stress Post-Traumatique (TSPT)</div>
+          <div class="accordion-arrow">›</div>
+        </div>
+        <div class="accordion-content" id="content-tspt">
+          <div class="question-group">
+            <label class="question-label">Nature du trauma (si tu es à l'aise d'en parler) ?</label>
+            <textarea class="question-input" id="tspt-trauma"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Symptômes (flashbacks, cauchemars, évitement, hypervigilance) ?</label>
+            <textarea class="question-input" id="tspt-symptoms"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Type de thérapie (EMDR, TCC trauma, autre) ?</label>
+            <textarea class="question-input" id="tspt-treatment"></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TOC -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="profilManager.toggleAccordion('toc')">
+          <div class="accordion-title">🔄 Trouble Obsessionnel-Compulsif (TOC)</div>
+          <div class="accordion-arrow">›</div>
+        </div>
+        <div class="accordion-content" id="content-toc">
+          <div class="question-group">
+            <label class="question-label">Nature de tes obsessions ?</label>
+            <textarea class="question-input" id="toc-obsessions"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Nature de tes compulsions ?</label>
+            <textarea class="question-input" id="toc-compulsions"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Traitement (TCC, ERP, médicaments) ?</label>
+            <textarea class="question-input" id="toc-treatment"></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TCA -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="profilManager.toggleAccordion('tca')">
+          <div class="accordion-title">🍽️ Troubles du Comportement Alimentaire (TCA)</div>
+          <div class="accordion-arrow">›</div>
+        </div>
+        <div class="accordion-content" id="content-tca">
+          <div class="question-group">
+            <label class="question-label">Type de TCA (anorexie, boulimie, hyperphagie) ?</label>
+            <textarea class="question-input" id="tca-type"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Comportements alimentaires problématiques ?</label>
+            <textarea class="question-input" id="tca-behaviors"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Suivi (nutritionniste, thérapie, hospitalisation) ?</label>
+            <textarea class="question-input" id="tca-treatment"></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <!-- TDAH -->
+      <div class="accordion-item">
+        <div class="accordion-header" onclick="profilManager.toggleAccordion('tdah')">
+          <div class="accordion-title">🎯 Trouble du Déficit de l'Attention (TDAH)</div>
+          <div class="accordion-arrow">›</div>
+        </div>
+        <div class="accordion-content" id="content-tdah">
+          <div class="question-group">
+            <label class="question-label">Type dominant (inattention, hyperactivité, mixte) ?</label>
+            <textarea class="question-input" id="tdah-type"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Impact au quotidien (travail, études, relations) ?</label>
+            <textarea class="question-input" id="tdah-impact"></textarea>
+          </div>
+          <div class="question-group">
+            <label class="question-label">Traitement (méthylphénidate, stratégies, coaching) ?</label>
+            <textarea class="question-input" id="tdah-treatment"></textarea>
+          </div>
+        </div>
+      </div>
+      
     </div>
     
-    <div class="settings-section">
-      <div class="section-title">Paramètres</div>
-      
-      <div class="setting-item">
-        <div class="setting-label">Notifications</div>
-        <div class="setting-value">Activées</div>
+    <!-- DOCUMENTATION DSM-5 -->
+    <div class="card">
+      <div class="dsm5-header" onclick="profilManager.toggleDSM5()">
+        <div class="dsm5-title">📚 Documentation DSM-5</div>
+        <div class="dsm5-arrow">›</div>
       </div>
-      
-      <div class="setting-item">
-        <div class="setting-label">Rappels quotidiens</div>
-        <div class="setting-value">9h00</div>
-      </div>
-      
-      <div class="setting-item">
-        <div class="setting-label">Thème</div>
-        <div class="setting-value">Clair</div>
-      </div>
-      
-      <div class="setting-item">
-        <div class="setting-label">Version</div>
-        <div class="setting-value">1.0.0</div>
+      <div class="dsm5-content" id="dsm5-content">
+        <div class="dsm5-section">
+          
+          <h4>💜 Trouble de personnalité Borderline (TPL)</h4>
+          <p><strong>Critères diagnostiques (DSM-5) :</strong></p>
+          <ul>
+            <li>Efforts effrénés pour éviter un abandon réel ou imaginé</li>
+            <li>Relations interpersonnelles instables et intenses</li>
+            <li>Perturbation de l'identité : image ou notion de soi instable</li>
+            <li>Impulsivité dans au moins deux domaines</li>
+            <li>Répétition de comportements, gestes ou menaces suicidaires, ou automutilations</li>
+            <li>Instabilité affective due à une réactivité marquée de l'humeur</li>
+            <li>Sentiments chroniques de vide</li>
+            <li>Colères intenses et inappropriées</li>
+            <li>Idéation persécutoire transitoire ou symptômes dissociatifs sévères</li>
+          </ul>
+          <p><em>Minimum 5 critères sur 9 requis.</em></p>
+          
+          <h4>😰 Trouble d'Anxiété Généralisée (TAG)</h4>
+          <p><strong>Critères diagnostiques (DSM-5) :</strong></p>
+          <ul>
+            <li>Anxiété et soucis excessifs pendant au moins 6 mois</li>
+            <li>Difficulté à contrôler ces préoccupations</li>
+            <li>Au moins 3 symptômes : agitation, fatigabilité, difficultés de concentration, irritabilité, tension musculaire, perturbation du sommeil</li>
+          </ul>
+          
+          <h4>🎭 Trouble Bipolaire</h4>
+          <p><strong>Type I :</strong> Au moins un épisode maniaque (humeur élevée pendant au moins 1 semaine)</p>
+          <p><strong>Type II :</strong> Au moins un épisode hypomaniaque (4 jours) + au moins un épisode dépressif majeur</p>
+          
+          <h4>🪞 Trouble Dissociatif de l'Identité (TDI)</h4>
+          <ul>
+            <li>Deux ou plusieurs états de personnalité distincts</li>
+            <li>Lacunes récurrentes dans le rappel d'événements</li>
+            <li>Détresse cliniquement significative</li>
+            <li>Souvent associé à des traumatismes sévères durant l'enfance</li>
+          </ul>
+          
+          <h4>🧠 Schizophrénie</h4>
+          <p><strong>Critères diagnostiques (DSM-5) :</strong></p>
+          <ul>
+            <li>Au moins 2 symptômes : délires, hallucinations, discours désorganisé, comportement désorganisé ou catatonique, symptômes négatifs</li>
+            <li>Dysfonctionnement social/professionnel</li>
+            <li>Durée : au moins 6 mois avec au moins 1 mois de symptômes actifs</li>
+          </ul>
+          
+          <h4>😔 Trouble Dépressif Majeur</h4>
+          <p><strong>Critères diagnostiques (DSM-5) :</strong></p>
+          <ul>
+            <li>Au moins 5 symptômes pendant 2 semaines : humeur dépressive, perte d'intérêt, perte/gain de poids, insomnie/hypersomnie, agitation/ralentissement, fatigue, sentiment de dévalorisation, diminution de concentration, idées de mort</li>
+            <li>Au moins un des symptômes doit être humeur dépressive ou perte d'intérêt</li>
+          </ul>
+          
+          <h4>😱 Trouble de Stress Post-Traumatique (TSPT)</h4>
+          <p><strong>Critères diagnostiques (DSM-5) :</strong></p>
+          <ul>
+            <li>Exposition à un événement traumatique</li>
+            <li>Symptômes d'intrusion (flashbacks, cauchemars)</li>
+            <li>Évitement des stimuli associés au trauma</li>
+            <li>Altérations négatives des cognitions et de l'humeur</li>
+            <li>Hyperactivation neurovégétative</li>
+            <li>Durée : plus d'1 mois</li>
+          </ul>
+          
+          <h4>🔄 Trouble Obsessionnel-Compulsif (TOC)</h4>
+          <p><strong>Critères diagnostiques (DSM-5) :</strong></p>
+          <ul>
+            <li>Présence d'obsessions (pensées intrusives récurrentes)</li>
+            <li>Présence de compulsions (comportements répétitifs pour réduire l'anxiété)</li>
+            <li>Les obsessions/compulsions prennent plus d'1 heure par jour</li>
+            <li>Détresse cliniquement significative</li>
+          </ul>
+          
+          <h4>🍽️ Troubles du Comportement Alimentaire</h4>
+          <p><strong>Anorexie mentale :</strong> Restriction alimentaire, peur intense de prendre du poids, perturbation de l'image corporelle</p>
+          <p><strong>Boulimie :</strong> Crises récurrentes de boulimie + comportements compensatoires (vomissements, laxatifs, exercice)</p>
+          <p><strong>Hyperphagie :</strong> Crises récurrentes sans comportements compensatoires</p>
+          
+          <h4>🎯 Trouble du Déficit de l'Attention (TDAH)</h4>
+          <p><strong>Critères diagnostiques (DSM-5) :</strong></p>
+          <ul>
+            <li>Au moins 6 symptômes d'inattention et/ou 6 symptômes d'hyperactivité-impulsivité</li>
+            <li>Présents depuis au moins 6 mois</li>
+            <li>Présents avant l'âge de 12 ans</li>
+            <li>Présents dans au moins 2 contextes (maison, école, travail)</li>
+          </ul>
+          
+        </div>
       </div>
     </div>
     
-    <button class="logout-btn" onclick="logout()">🚪 Se déconnecter</button>
+    <!-- PARAMETRES -->
+    <div class="card">
+      <div class="card-title">Paramètres</div>
+      <div class="settings-section">
+        <div class="setting-row">
+          <div class="setting-label">Notifications</div>
+          <div class="setting-value">Activées</div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label">Rappels quotidiens</div>
+          <div class="setting-value">9h00</div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label">Thème</div>
+          <div class="setting-value">Clair</div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label">Version</div>
+          <div class="setting-value">1.0.0</div>
+        </div>
+      </div>
+      
+      <button class="logout-btn" onclick="profilManager.logout()">
+        🚪 Se déconnecter
+      </button>
+    </div>
   </div>
   
   <div class="bottom-nav">
@@ -321,62 +775,129 @@
     <a href="profil.html" class="nav-item active">👤</a>
   </div>
   
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-  
   <script>
-    window.addEventListener('load', function() {
-      const firebaseConfig = {
-        apiKey: "AIzaSyAtb4nTMjvlruh0fg5O9_wiAPJI1Nall-g",
-        authDomain: "mindflow-66abc.firebaseapp.com",
-        projectId: "mindflow-66abc",
-        storageBucket: "mindflow-66abc.firebasestorage.app",
-        messagingSenderId: "466651144452",
-        appId: "1:466651144452:web:4b1dc68d4feac189683051",
-        measurementId: "G-B7PEXP45WH"
-      };
-      
-      const app = firebase.initializeApp(firebaseConfig);
-      const auth = firebase.auth();
-      const db = firebase.firestore();
-      
-      auth.onAuthStateChanged(async (user) => {
-        if (!user) {
-          window.location.href = 'login.html';
-          return;
-        }
-        
-        document.getElementById('userName').textContent = user.displayName || 'Utilisateur';
-        document.getElementById('userEmail').textContent = user.email;
-        
-        try {
-          const userDoc = await db.collection('users').doc(user.uid).get();
-          if (userDoc.exists) {
-            const userData = userDoc.data();
-            if (userData.isPro) {
-              document.getElementById('userName').innerHTML = 
-                (user.displayName || 'Utilisateur') + '<span class="pro-badge">PRO</span>';
-            } else {
-              document.getElementById('upgradeCard').style.display = 'block';
-            }
-          }
-        } catch (error) {
-          console.error('Erreur chargement profil:', error);
-        }
-      });
-    });
-    
-    function logout() {
-      if (confirm('Es-tu sûr de vouloir te déconnecter ?')) {
-        firebase.auth().signOut().then(() => {
-          window.location.href = 'login.html';
-        }).catch((error) => {
-          console.error('Erreur déconnexion:', error);
-          alert('Erreur lors de la déconnexion');
-        });
-      }
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtb4nTMjvlruh0fg5O9_wiAPJI1Nall-g",
+      authDomain: "mindflow-66abc.firebaseapp.com",
+      projectId: "mindflow-66abc",
+      storageBucket: "mindflow-66abc.firebasestorage.app",
+      messagingSenderId: "466651144452",
+      appId: "1:466651144452:web:4b1dc68d4feac189683051",
+      measurementId: "G-B7PEXP45WH"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
     }
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const ANSWERS_KEY = 'mindflow_pathology_answers';
+
+    const profilManager = {
+      currentAccordion: null,
+      
+      init() {
+        this.checkAuth();
+        this.loadAnswers();
+        this.setupAutoSave();
+      },
+      
+      checkAuth() {
+        auth.onAuthStateChanged(async (user) => {
+          if (!user) {
+            window.location.href = 'login.html';
+            return;
+          }
+          
+          document.getElementById('userName').textContent = user.displayName || user.email.split('@')[0];
+          document.getElementById('userEmail').textContent = user.email;
+          
+          try {
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            if (userDoc.exists && userDoc.data().isPro) {
+              document.getElementById('proBadge').classList.add('show');
+            }
+          } catch (error) {
+            console.error('Erreur vérification PRO:', error);
+          }
+        });
+      },
+      
+      toggleAccordion(id) {
+        const header = event.currentTarget;
+        const content = document.getElementById(`content-${id}`);
+        
+        if (this.currentAccordion && this.currentAccordion !== id) {
+          const prevHeader = document.querySelector(`#content-${this.currentAccordion}`).previousElementSibling;
+          const prevContent = document.getElementById(`content-${this.currentAccordion}`);
+          prevHeader.classList.remove('active');
+          prevContent.classList.remove('show');
+        }
+        
+        header.classList.toggle('active');
+        content.classList.toggle('show');
+        
+        this.currentAccordion = header.classList.contains('active') ? id : null;
+      },
+      
+      toggleDSM5() {
+        const header = event.currentTarget;
+        const content = document.getElementById('dsm5-content');
+        
+        header.classList.toggle('active');
+        content.classList.toggle('show');
+      },
+      
+      setupAutoSave() {
+        const inputs = document.querySelectorAll('.question-input');
+        inputs.forEach(input => {
+          input.addEventListener('input', () => {
+            clearTimeout(this.saveTimeout);
+            this.saveTimeout = setTimeout(() => {
+              this.saveAnswers();
+            }, 2000);
+          });
+        });
+      },
+      
+      loadAnswers() {
+        const saved = localStorage.getItem(ANSWERS_KEY);
+        if (saved) {
+          const answers = JSON.parse(saved);
+          Object.keys(answers).forEach(key => {
+            const input = document.getElementById(key);
+            if (input) {
+              input.value = answers[key];
+            }
+          });
+        }
+      },
+      
+      saveAnswers() {
+        const answers = {};
+        const inputs = document.querySelectorAll('.question-input');
+        inputs.forEach(input => {
+          answers[input.id] = input.value;
+        });
+        localStorage.setItem(ANSWERS_KEY, JSON.stringify(answers));
+      },
+      
+      logout() {
+        if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+          auth.signOut().then(() => {
+            window.location.href = 'login.html';
+          }).catch((error) => {
+            alert('Erreur lors de la déconnexion : ' + error.message);
+          });
+        }
+      }
+    };
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      profilManager.init();
+    });
   </script>
 </body>
 </html>
