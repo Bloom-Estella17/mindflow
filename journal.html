@@ -2,13 +2,12 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>📝 MindFlow - Journal</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#8B7EB8">
   
   <style>
-    /* ===== RESET & BASE ===== */
     * {
       margin: 0;
       padding: 0;
@@ -22,14 +21,12 @@
       --secondary: #A8D8EA;
       --text-dark: #2D2D3A;
       --text-gray: #666;
-      --text-light: #888;
       --bg-card: rgba(139, 126, 184, 0.05);
       --shadow-sm: 0 4px 20px rgba(0,0,0,0.08);
       --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
       --radius-sm: 12px;
       --radius-md: 20px;
       --radius-lg: 25px;
-      --transition: all 0.3s ease;
     }
     
     body {
@@ -43,11 +40,8 @@
     .container {
       max-width: 450px;
       margin: 0 auto;
-      width: 100%;
-      padding: 0 5px;
     }
     
-    /* ===== HEADER ===== */
     .header {
       display: flex;
       justify-content: space-between;
@@ -61,13 +55,8 @@
     
     .back-btn {
       font-size: 24px;
-      cursor: pointer;
       text-decoration: none;
-      transition: var(--transition);
-    }
-    
-    .back-btn:active {
-      transform: scale(1.2);
+      color: var(--text-dark);
     }
     
     .header-title {
@@ -76,81 +65,7 @@
       color: var(--primary);
     }
     
-    .header-placeholder {
-      width: 24px;
-    }
-    
-    /* ===== WRITE CARD ===== */
-    .write-card {
-      background: white;
-      border-radius: var(--radius-lg);
-      padding: 30px 25px;
-      margin-bottom: 20px;
-      box-shadow: var(--shadow-sm);
-    }
-    
-    .write-title {
-      font-size: 24px;
-      font-weight: bold;
-      color: var(--text-dark);
-      margin-bottom: 8px;
-    }
-    
-    .write-subtitle {
-      font-size: 14px;
-      color: var(--text-light);
-      margin-bottom: 25px;
-    }
-    
-    .journal-textarea {
-      width: 100%;
-      min-height: 200px;
-      padding: 15px;
-      border: 2px solid #E5E5E5;
-      border-radius: var(--radius-sm);
-      font-size: 15px;
-      font-family: inherit;
-      line-height: 1.6;
-      resize: vertical;
-      outline: none;
-      transition: var(--transition);
-    }
-    
-    .journal-textarea:focus {
-      border-color: var(--primary);
-    }
-    
-    .journal-textarea::placeholder {
-      color: #ccc;
-    }
-    
-    .word-count {
-      text-align: right;
-      font-size: 13px;
-      color: var(--text-light);
-      margin-top: 8px;
-    }
-    
-    .save-btn {
-      width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-      color: white;
-      border: none;
-      border-radius: 15px;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 15px;
-      transition: var(--transition);
-    }
-    
-    .save-btn:active {
-      transform: scale(0.98);
-    }
-    
-    /* ===== ENTRIES CARD ===== */
-    .entries-card {
+    .card {
       background: white;
       border-radius: var(--radius-lg);
       padding: 25px;
@@ -158,181 +73,216 @@
       box-shadow: var(--shadow-sm);
     }
     
-    .entries-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    
-    .entries-title {
-      font-size: 20px;
+    .card-title {
+      font-size: 18px;
       font-weight: bold;
       color: var(--text-dark);
-    }
-    
-    .entries-stats {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
       margin-bottom: 20px;
     }
     
-    .stat-item {
+    /* Catégories */
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .category-btn {
+      padding: 12px;
       background: var(--bg-card);
-      padding: 15px;
+      border: 2px solid transparent;
       border-radius: var(--radius-sm);
-      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: left;
     }
     
-    .stat-value {
-      font-size: 28px;
-      font-weight: bold;
-      color: var(--primary);
-      margin-bottom: 5px;
+    .category-btn.selected {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--bg-card) 100%);
     }
     
-    .stat-label {
-      font-size: 12px;
-      color: var(--text-gray);
+    /* Mood picker */
+    .mood-picker {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      padding-bottom: 10px;
     }
     
-    /* ===== ENTRIES LIST ===== */
-    .entries-list {
-      list-style: none;
-    }
-    
-    .entry-item {
+    .mood-option {
+      font-size: 32px;
+      padding: 10px;
       background: var(--bg-card);
-      padding: 18px;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    
+    .mood-option.selected {
+      border-color: var(--primary);
+      transform: scale(1.1);
+    }
+    
+    /* Tags */
+    .tags-input {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px;
+      border: 2px solid #E5E5E5;
+      border-radius: var(--radius-sm);
+      margin-bottom: 20px;
+      min-height: 50px;
+    }
+    
+    .tag {
+      background: var(--primary);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .tag-remove {
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .tag-input-field {
+      border: none;
+      outline: none;
+      flex: 1;
+      min-width: 100px;
+      font-size: 14px;
+    }
+    
+    /* Textarea */
+    .journal-textarea {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #E5E5E5;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 200px;
+      outline: none;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .journal-textarea:focus {
+      border-color: var(--primary);
+    }
+    
+    .save-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    /* Recherche */
+    .search-bar {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #E5E5E5;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      outline: none;
+      margin-bottom: 20px;
+    }
+    
+    .search-bar:focus {
+      border-color: var(--primary);
+    }
+    
+    /* Entries list */
+    .entry-item {
+      padding: 15px;
+      background: var(--bg-card);
       border-radius: var(--radius-sm);
       margin-bottom: 12px;
       cursor: pointer;
-      transition: var(--transition);
-      border-left: 4px solid var(--primary);
+      transition: all 0.3s ease;
     }
     
     .entry-item:active {
       transform: scale(0.98);
-      background: rgba(139, 126, 184, 0.1);
+    }
+    
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
     }
     
     .entry-date {
       font-size: 13px;
-      color: var(--primary);
       font-weight: 600;
+      color: var(--primary);
+    }
+    
+    .entry-mood {
+      font-size: 24px;
+    }
+    
+    .entry-category {
+      font-size: 12px;
+      color: var(--text-gray);
       margin-bottom: 8px;
     }
     
     .entry-preview {
-      font-size: 15px;
+      font-size: 14px;
       color: var(--text-dark);
       line-height: 1.5;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
       overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      margin-bottom: 8px;
     }
     
-    .entry-mood {
-      font-size: 20px;
-      margin-top: 8px;
+    .entry-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
     }
     
-    /* ===== EMPTY STATE ===== */
-    .empty-state {
+    .entry-tag {
+      background: white;
+      color: var(--primary);
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    
+    .no-entries {
       text-align: center;
       padding: 40px 20px;
-      color: var(--text-light);
+      color: var(--text-gray);
     }
     
-    .empty-icon {
-      font-size: 60px;
-      margin-bottom: 15px;
-    }
-    
-    .empty-text {
-      font-size: 15px;
-    }
-    
-    /* ===== BOTTOM NAV ===== */
-    .bottom-nav {
-      position: fixed;
-      bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: white;
-      border-radius: var(--radius-lg);
-      padding: 15px 25px;
-      display: flex;
-      gap: 35px;
-      box-shadow: var(--shadow-md);
-      z-index: 1000;
-      max-width: 350px;
-      width: calc(100% - 40px);
-      justify-content: center;
-    }
-    
-    .nav-item {
-      font-size: 26px;
-      cursor: pointer;
-      transition: var(--transition);
-      opacity: 0.4;
-      text-decoration: none;
-    }
-    
-    .nav-item.active {
-      opacity: 1;
-      transform: scale(1.15);
-    }
-    
-    .nav-item:active {
-      transform: scale(0.9);
-    }
-    
-    /* ===== SUCCESS MESSAGE ===== */
-    .success-message {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      padding: 30px 40px;
-      border-radius: var(--radius-md);
-      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-      text-align: center;
-      z-index: 3000;
-      display: none;
-    }
-    
-    .success-message.show {
-      display: block;
-      animation: popup 0.3s ease;
-    }
-    
-    @keyframes popup {
-      from {
-        transform: translate(-50%, -50%) scale(0.8);
-        opacity: 0;
-      }
-      to {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-      }
-    }
-    
-    .success-icon {
-      font-size: 60px;
-      margin-bottom: 15px;
-    }
-    
-    .success-text {
-      font-size: 20px;
-      font-weight: bold;
-      color: var(--text-dark);
-    }
-    
-    /* ===== MODAL ===== */
+    /* Modal */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -343,12 +293,6 @@
     
     .modal-overlay.show {
       display: block;
-      animation: fadeIn 0.3s ease;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
     }
     
     .modal {
@@ -365,23 +309,10 @@
       overflow-y: auto;
       z-index: 2001;
       display: none;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     }
     
     .modal.show {
       display: block;
-      animation: slideUp 0.3s ease;
-    }
-    
-    @keyframes slideUp {
-      from {
-        transform: translate(-50%, -40%);
-        opacity: 0;
-      }
-      to {
-        transform: translate(-50%, -50%);
-        opacity: 1;
-      }
     }
     
     .modal-header {
@@ -391,31 +322,16 @@
       margin-bottom: 20px;
     }
     
-    .modal-title {
-      font-size: 18px;
-      font-weight: bold;
-      color: var(--text-dark);
-    }
-    
     .modal-close {
       font-size: 28px;
       cursor: pointer;
-      color: var(--text-light);
-    }
-    
-    .modal-date {
-      font-size: 14px;
-      color: var(--primary);
-      font-weight: 600;
-      margin-bottom: 15px;
+      color: var(--text-gray);
     }
     
     .modal-content {
       font-size: 15px;
       line-height: 1.7;
       color: var(--text-dark);
-      white-space: pre-wrap;
-      margin-bottom: 20px;
     }
     
     .delete-btn {
@@ -424,73 +340,77 @@
       background: #ef4444;
       color: white;
       border: none;
-      border-radius: var(--radius-sm);
-      font-size: 15px;
-      font-weight: bold;
+      border-radius: 10px;
+      font-weight: 600;
       cursor: pointer;
-      transition: var(--transition);
+      margin-top: 15px;
     }
     
-    .delete-btn:active {
-      transform: scale(0.98);
+    .bottom-nav {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 15px 25px;
+      display: flex;
+      gap: 35px;
+      box-shadow: var(--shadow-md);
+      z-index: 1000;
+      max-width: 350px;
+      width: calc(100% - 40px);
+    }
+    
+    .nav-item {
+      font-size: 26px;
+      opacity: 0.4;
+      text-decoration: none;
+    }
+    
+    .nav-item.active {
+      opacity: 1;
+      transform: scale(1.15);
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- HEADER -->
     <div class="header">
       <a href="index.html" class="back-btn">←</a>
       <div class="header-title">Mon Journal</div>
-      <div class="header-placeholder"></div>
+      <div style="width: 24px;"></div>
     </div>
     
-    <!-- WRITE SECTION -->
-    <div class="write-card">
-      <div class="write-title">Écris ce que tu ressens</div>
-      <div class="write-subtitle">Libère tes pensées, sans jugement 💚</div>
+    <!-- Nouvelle entrée -->
+    <div class="card">
+      <div class="card-title">✍️ Nouvelle entrée</div>
       
-      <textarea 
-        class="journal-textarea" 
-        id="journalText"
-        placeholder="Aujourd'hui, je me sens...
-
-Ce qui s'est passé...
-
-Ce que j'ai appris...
-
-Mes pensées..."
-      ></textarea>
+      <div class="categories" id="categories"></div>
       
-      <div class="word-count" id="wordCount">0 mots</div>
+      <div class="mood-picker" id="moodPicker"></div>
+      
+      <div class="tags-input" id="tagsInput">
+        <input type="text" class="tag-input-field" id="tagField" placeholder="Ajouter des tags... (Appuie sur Entrée)">
+      </div>
+      
+      <textarea class="journal-textarea" id="journalText" placeholder="Écris tes pensées..."></textarea>
       
       <button class="save-btn" onclick="journalManager.save()">
-        💚 Enregistrer dans mon journal
+        💾 Enregistrer l'entrée
       </button>
     </div>
     
-    <!-- ENTRIES SECTION -->
-    <div class="entries-card">
-      <div class="entries-header">
-        <div class="entries-title">Mes entrées</div>
-      </div>
+    <!-- Liste des entrées -->
+    <div class="card">
+      <div class="card-title">📚 Mes entrées</div>
       
-      <div class="entries-stats">
-        <div class="stat-item">
-          <div class="stat-value" id="totalEntries">0</div>
-          <div class="stat-label">Entrées totales</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-value" id="monthEntries">0</div>
-          <div class="stat-label">Ce mois-ci</div>
-        </div>
-      </div>
+      <input type="text" class="search-bar" id="searchBar" placeholder="🔍 Rechercher dans mes entrées...">
       
-      <ul class="entries-list" id="entriesList"></ul>
+      <div id="entriesList"></div>
     </div>
   </div>
   
-  <!-- BOTTOM NAV -->
   <div class="bottom-nav">
     <a href="index.html" class="nav-item">🏠</a>
     <a href="mood.html" class="nav-item">😊</a>
@@ -499,212 +419,254 @@ Mes pensées..."
     <a href="profil.html" class="nav-item">👤</a>
   </div>
   
-  <!-- SUCCESS MESSAGE -->
-  <div class="success-message" id="successMessage">
-    <div class="success-icon">✅</div>
-    <div class="success-text">Entrée enregistrée !</div>
-  </div>
-  
-  <!-- VIEW MODAL -->
+  <!-- Modal détail -->
   <div class="modal-overlay" id="modalOverlay" onclick="journalManager.closeModal()"></div>
-  <div class="modal" id="viewModal">
+  <div class="modal" id="entryModal">
     <div class="modal-header">
-      <div class="modal-title">Entrée du journal</div>
+      <div id="modalDate" style="font-weight: bold; color: var(--primary);"></div>
       <div class="modal-close" onclick="journalManager.closeModal()">×</div>
     </div>
-    <div class="modal-date" id="modalDate"></div>
     <div class="modal-content" id="modalContent"></div>
-    <button class="delete-btn" onclick="journalManager.deleteEntry()">🗑️ Supprimer</button>
   </div>
   
   <script>
-    // ============================================
-    // JOURNAL MANAGER - ES6+ VERSION
-    // ============================================
+    const STORAGE_KEY = 'mindflow_journal_v2';
     
-    const STORAGE_KEY = 'mindflow_journal';
+    const categories = [
+      { emoji: '💭', label: 'Pensées' },
+      { emoji: '📅', label: 'Événements' },
+      { emoji: '🙏', label: 'Gratitude' },
+      { emoji: '🎯', label: 'Objectifs' },
+      { emoji: '💡', label: 'Idées' },
+      { emoji: '🌟', label: 'Victoires' }
+    ];
+    
+    const moods = ['😊', '😔', '😰', '😡', '😌', '🥰', '😫', '😖'];
     
     const journalManager = {
-      // State
       entries: [],
-      currentEntryId: null,
+      currentTags: [],
+      selectedCategory: 0,
+      selectedMood: 0,
+      currentEntry: null,
       
-      // Initialize
       init() {
         this.loadData();
-        this.render();
-        this.updateStats();
-        this.setupWordCounter();
+        this.renderCategories();
+        this.renderMoodPicker();
+        this.setupTagInput();
+        this.setupSearch();
+        this.renderEntries();
       },
       
-      // Load from localStorage
+      renderCategories() {
+        const container = document.getElementById('categories');
+        container.innerHTML = categories.map((c, i) => `
+          <div class="category-btn ${i === 0 ? 'selected' : ''}" onclick="journalManager.selectCategory(${i})">
+            ${c.emoji} ${c.label}
+          </div>
+        `).join('');
+      },
+      
+      renderMoodPicker() {
+        const container = document.getElementById('moodPicker');
+        container.innerHTML = moods.map((m, i) => `
+          <div class="mood-option ${i === 0 ? 'selected' : ''}" onclick="journalManager.selectMood(${i})">
+            ${m}
+          </div>
+        `).join('');
+      },
+      
+      selectCategory(index) {
+        this.selectedCategory = index;
+        document.querySelectorAll('.category-btn').forEach((btn, i) => {
+          btn.classList.toggle('selected', i === index);
+        });
+      },
+      
+      selectMood(index) {
+        this.selectedMood = index;
+        document.querySelectorAll('.mood-option').forEach((opt, i) => {
+          opt.classList.toggle('selected', i === index);
+        });
+      },
+      
+      setupTagInput() {
+        const field = document.getElementById('tagField');
+        field.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' && field.value.trim()) {
+            this.addTag(field.value.trim());
+            field.value = '';
+            e.preventDefault();
+          }
+        });
+      },
+      
+      addTag(tag) {
+        if (!this.currentTags.includes(tag)) {
+          this.currentTags.push(tag);
+          this.renderTags();
+        }
+      },
+      
+      removeTag(tag) {
+        this.currentTags = this.currentTags.filter(t => t !== tag);
+        this.renderTags();
+      },
+      
+      renderTags() {
+        const container = document.getElementById('tagsInput');
+        const field = document.getElementById('tagField');
+        
+        container.innerHTML = this.currentTags.map(tag => `
+          <div class="tag">
+            ${tag}
+            <span class="tag-remove" onclick="journalManager.removeTag('${tag}')">×</span>
+          </div>
+        `).join('') + field.outerHTML;
+        
+        this.setupTagInput();
+      },
+      
+      setupSearch() {
+        const searchBar = document.getElementById('searchBar');
+        searchBar.addEventListener('input', () => {
+          this.renderEntries(searchBar.value);
+        });
+      },
+      
       loadData() {
         this.entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        // Sort by date (newest first)
-        this.entries.sort((a, b) => b.timestamp - a.timestamp);
       },
       
-      // Save to localStorage
       saveData() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(this.entries));
       },
       
-      // Setup word counter
-      setupWordCounter() {
-        const textarea = document.getElementById('journalText');
-        textarea.addEventListener('input', () => {
-          const text = textarea.value.trim();
-          const words = text ? text.split(/\s+/).length : 0;
-          document.getElementById('wordCount').textContent = `${words} mot${words > 1 ? 's' : ''}`;
-        });
-      },
-      
-      // Render entries
-      render() {
-        const list = document.getElementById('entriesList');
-        
-        if (this.entries.length === 0) {
-          list.innerHTML = `
-            <div class="empty-state">
-              <div class="empty-icon">📖</div>
-              <div class="empty-text">Aucune entrée pour l'instant<br>Commence à écrire !</div>
-            </div>
-          `;
-          return;
-        }
-        
-        list.innerHTML = this.entries
-          .map(entry => {
-            const date = new Date(entry.timestamp);
-            const dateStr = date.toLocaleDateString('fr-FR', {
-              weekday: 'long',
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric'
-            });
-            
-            return `
-              <li class="entry-item" onclick="journalManager.viewEntry(${entry.id})">
-                <div class="entry-date">${dateStr}</div>
-                <div class="entry-preview">${entry.text}</div>
-                ${entry.mood ? `<div class="entry-mood">${entry.mood}</div>` : ''}
-              </li>
-            `;
-          })
-          .join('');
-      },
-      
-      // Update statistics
-      updateStats() {
-        const total = this.entries.length;
-        document.getElementById('totalEntries').textContent = total;
-        
-        // Count this month
-        const now = new Date();
-        const thisMonth = this.entries.filter(entry => {
-          const entryDate = new Date(entry.timestamp);
-          return entryDate.getMonth() === now.getMonth() && 
-                 entryDate.getFullYear() === now.getFullYear();
-        }).length;
-        
-        document.getElementById('monthEntries').textContent = thisMonth;
-      },
-      
-      // Save new entry
       save() {
         const text = document.getElementById('journalText').value.trim();
         
         if (!text) {
-          alert('Écris quelque chose avant d\'enregistrer ! 💚');
+          alert('Écris quelque chose d\\'abord ! 📝');
           return;
         }
         
-        // Get mood from today's mood tracker (if available)
-        const mood = this.getTodayMood();
-        
-        // Create entry
         const entry = {
           id: Date.now(),
-          timestamp: Date.now(),
-          text,
-          mood
+          date: new Date().toISOString(),
+          category: this.selectedCategory,
+          mood: this.selectedMood,
+          tags: [...this.currentTags],
+          text: text
         };
         
-        // Add to beginning
         this.entries.unshift(entry);
-        
-        // Save
         this.saveData();
         
-        // Clear textarea
+        // Reset
         document.getElementById('journalText').value = '';
-        document.getElementById('wordCount').textContent = '0 mots';
+        this.currentTags = [];
+        this.renderTags();
+        this.renderEntries();
         
-        // Update UI
-        this.render();
-        this.updateStats();
-        this.showSuccess();
+        alert('Entrée enregistrée ! ✅');
       },
       
-      // Get today's mood (from mood tracker)
-      getTodayMood() {
-        const moodData = JSON.parse(localStorage.getItem('mindflow_moods') || '[]');
-        const today = new Date().toISOString().split('T')[0];
-        const todayMood = moodData.find(m => m.date === today);
-        return todayMood?.mood || null;
+      renderEntries(searchTerm = '') {
+        const container = document.getElementById('entriesList');
+        
+        let filtered = this.entries;
+        if (searchTerm) {
+          filtered = this.entries.filter(e =>
+            e.text.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            e.tags.some(t => t.toLowerCase().includes(searchTerm.toLowerCase()))
+          );
+        }
+        
+        if (filtered.length === 0) {
+          container.innerHTML = '<div class="no-entries">Aucune entrée pour le moment 📝</div>';
+          return;
+        }
+        
+        container.innerHTML = filtered.map(e => {
+          const date = new Date(e.date);
+          const dateStr = date.toLocaleDateString('fr-FR', { 
+            day: 'numeric', 
+            month: 'long', 
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+          
+          return `
+            <div class="entry-item" onclick="journalManager.showEntry(${e.id})">
+              <div class="entry-header">
+                <div class="entry-date">${dateStr}</div>
+                <div class="entry-mood">${moods[e.mood]}</div>
+              </div>
+              <div class="entry-category">${categories[e.category].emoji} ${categories[e.category].label}</div>
+              <div class="entry-preview">${e.text}</div>
+              <div class="entry-tags">
+                ${e.tags.map(t => `<span class="entry-tag">#${t}</span>`).join('')}
+              </div>
+            </div>
+          `;
+        }).join('');
       },
       
-      // View entry
-      viewEntry(id) {
-        this.currentEntryId = id;
+      showEntry(id) {
         const entry = this.entries.find(e => e.id === id);
-        
         if (!entry) return;
         
-        const date = new Date(entry.timestamp);
-        const dateStr = date.toLocaleDateString('fr-FR', {
-          weekday: 'long',
-          day: 'numeric',
-          month: 'long',
+        this.currentEntry = entry;
+        
+        const date = new Date(entry.date);
+        const dateStr = date.toLocaleDateString('fr-FR', { 
+          day: 'numeric', 
+          month: 'long', 
           year: 'numeric',
           hour: '2-digit',
           minute: '2-digit'
         });
         
-        document.getElementById('modalDate').textContent = dateStr;
-        document.getElementById('modalContent').textContent = entry.text;
+        document.getElementById('modalDate').innerHTML = `
+          ${moods[entry.mood]} ${dateStr}
+        `;
+        
+        document.getElementById('modalContent').innerHTML = `
+          <div style="background: var(--bg-card); padding: 12px; border-radius: 10px; margin-bottom: 15px;">
+            <strong>${categories[entry.category].emoji} ${categories[entry.category].label}</strong>
+          </div>
+          <p style="white-space: pre-wrap; margin-bottom: 15px;">${entry.text}</p>
+          ${entry.tags.length > 0 ? `
+            <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 15px;">
+              ${entry.tags.map(t => `<span class="entry-tag">#${t}</span>`).join('')}
+            </div>
+          ` : ''}
+          <button class="delete-btn" onclick="journalManager.deleteEntry(${entry.id})">
+            🗑️ Supprimer cette entrée
+          </button>
+        `;
         
         document.getElementById('modalOverlay').classList.add('show');
-        document.getElementById('viewModal').classList.add('show');
+        document.getElementById('entryModal').classList.add('show');
       },
       
-      // Close modal
+      deleteEntry(id) {
+        if (confirm('Supprimer cette entrée ?')) {
+          this.entries = this.entries.filter(e => e.id !== id);
+          this.saveData();
+          this.renderEntries();
+          this.closeModal();
+        }
+      },
+      
       closeModal() {
         document.getElementById('modalOverlay').classList.remove('show');
-        document.getElementById('viewModal').classList.remove('show');
-        this.currentEntryId = null;
-      },
-      
-      // Delete entry
-      deleteEntry() {
-        if (!confirm('Supprimer cette entrée ?')) return;
-        
-        this.entries = this.entries.filter(e => e.id !== this.currentEntryId);
-        this.saveData();
-        this.closeModal();
-        this.render();
-        this.updateStats();
-      },
-      
-      // Show success message
-      showSuccess() {
-        const msg = document.getElementById('successMessage');
-        msg.classList.add('show');
-        setTimeout(() => msg.classList.remove('show'), 1500);
+        document.getElementById('entryModal').classList.remove('show');
       }
     };
     
-    // Initialize
     document.addEventListener('DOMContentLoaded', () => {
       journalManager.init();
     });
