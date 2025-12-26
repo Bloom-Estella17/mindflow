@@ -155,6 +155,7 @@
       font-size: 13px;
       color: #8B7EB8;
       text-decoration: none;
+      cursor: pointer;
     }
     
     .forgot-password a:hover {
@@ -184,7 +185,7 @@
         <label for="password">Mot de passe</label>
         <input type="password" id="password" placeholder="Ton mot de passe" required>
         <div class="forgot-password">
-          <a href="#" onclick="resetPassword(); return false;">Mot de passe oublié ?</a>
+          <a onclick="resetPassword()">Mot de passe oublié ?</a>
         </div>
       </div>
       
@@ -198,93 +199,93 @@
     </div>
   </div>
   
-  <!-- Firebase -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   
   <script>
-    // Firebase Configuration - INTÉGRÉ DIRECTEMENT
-    const firebaseConfig = {
-      apiKey: "AIzaSyAtb4nTMjvLruh0fg5O9_wiAPJI1Nall-g",
-      authDomain: "mindflow-66abc.firebaseapp.com",
-      projectId: "mindflow-66abc",
-      storageBucket: "mindflow-66abc.firebasestorage.app",
-      messagingSenderId: "466651144452",
-      appId: "1:466651144452:web:4b1dc68d4f6ac1896830051",
-      measurementId: "G-B7PEXP45WH"
-    };
-    
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-    
-    const loginForm = document.getElementById('loginForm');
-    const loginBtn = document.getElementById('loginBtn');
-    const errorMessage = document.getElementById('errorMessage');
-    
-    loginForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
+    window.addEventListener('load', function() {
+      const firebaseConfig = {
+        apiKey: "AIzaSyAtb4nTMjvLruh0fg5O9_wiAPJI1Nall-g",
+        authDomain: "mindflow-66abc.firebaseapp.com",
+        projectId: "mindflow-66abc",
+        storageBucket: "mindflow-66abc.firebasestorage.app",
+        messagingSenderId: "466651144452",
+        appId: "1:466651144452:web:4b1dc68d4f6ac1896830051",
+        measurementId: "G-B7PEXP45WH"
+      };
       
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
+      const app = firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
       
-      if (!email || !password) {
-        showError('Tous les champs sont requis');
-        return;
-      }
+      const loginForm = document.getElementById('loginForm');
+      const loginBtn = document.getElementById('loginBtn');
+      const errorMessage = document.getElementById('errorMessage');
       
-      loginBtn.disabled = true;
-      loginBtn.textContent = 'Connexion...';
-      
-      try {
-        await auth.signInWithEmailAndPassword(email, password);
-        window.location.href = 'index.html';
-      } catch (error) {
-        console.error('Erreur connexion:', error);
+      loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
         
-        let message = 'Email ou mot de passe incorrect';
-        if (error.code === 'auth/user-not-found') {
-          message = 'Aucun compte avec cet email';
-        } else if (error.code === 'auth/wrong-password') {
-          message = 'Mot de passe incorrect';
-        } else if (error.code === 'auth/invalid-email') {
-          message = 'Email invalide';
-        } else if (error.code === 'auth/too-many-requests') {
-          message = 'Trop de tentatives. Réessaye plus tard';
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        
+        if (!email || !password) {
+          showError('Tous les champs sont requis');
+          return;
         }
         
-        showError(message);
-        loginBtn.disabled = false;
-        loginBtn.textContent = '💚 Se connecter';
+        loginBtn.disabled = true;
+        loginBtn.textContent = 'Connexion...';
+        
+        try {
+          await auth.signInWithEmailAndPassword(email, password);
+          window.location.href = 'index.html';
+        } catch (error) {
+          console.error('Erreur connexion:', error);
+          
+          let message = 'Email ou mot de passe incorrect';
+          if (error.code === 'auth/user-not-found') {
+            message = 'Aucun compte avec cet email';
+          } else if (error.code === 'auth/wrong-password') {
+            message = 'Mot de passe incorrect';
+          } else if (error.code === 'auth/invalid-email') {
+            message = 'Email invalide';
+          } else if (error.code === 'auth/too-many-requests') {
+            message = 'Trop de tentatives. Réessaye plus tard';
+          }
+          
+          showError(message);
+          loginBtn.disabled = false;
+          loginBtn.textContent = '💚 Se connecter';
+        }
+      });
+      
+      window.resetPassword = async function() {
+        const email = document.getElementById('email').value.trim();
+        
+        if (!email) {
+          showError('Entre ton email pour réinitialiser ton mot de passe');
+          return;
+        }
+        
+        try {
+          await auth.sendPasswordResetEmail(email);
+          alert('Email de réinitialisation envoyé ! Vérifie ta boîte mail.');
+        } catch (error) {
+          console.error('Erreur reset:', error);
+          showError('Erreur lors de l\'envoi de l\'email');
+        }
+      };
+      
+      function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.classList.add('show');
+        setTimeout(() => {
+          errorMessage.classList.remove('show');
+        }, 5000);
       }
     });
-    
-    async function resetPassword() {
-      const email = document.getElementById('email').value.trim();
-      
-      if (!email) {
-        showError('Entre ton email pour réinitialiser ton mot de passe');
-        return;
-      }
-      
-      try {
-        await auth.sendPasswordResetEmail(email);
-        alert('Email de réinitialisation envoyé ! Vérifie ta boîte mail.');
-      } catch (error) {
-        console.error('Erreur reset:', error);
-        showError('Erreur lors de l\'envoi de l\'email');
-      }
-    }
-    
-    function showError(message) {
-      errorMessage.textContent = message;
-      errorMessage.classList.add('show');
-      setTimeout(() => {
-        errorMessage.classList.remove('show');
-      }, 5000);
-    }
   </script>
 </body>
 </html>
