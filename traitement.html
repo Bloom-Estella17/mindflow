@@ -7,6 +7,11 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#8B7EB8">
   
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
   <style>
     * {
       margin: 0;
@@ -27,6 +32,7 @@
       --radius-sm: 12px;
       --radius-md: 20px;
       --radius-lg: 25px;
+      --gold: #FFD700;
     }
     
     body {
@@ -71,6 +77,7 @@
       padding: 25px;
       margin-bottom: 20px;
       box-shadow: var(--shadow-sm);
+      position: relative;
     }
     
     .card-title {
@@ -78,6 +85,106 @@
       font-weight: bold;
       color: var(--text-dark);
       margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .pro-badge {
+      background: linear-gradient(135deg, var(--gold) 0%, #FFA500 100%);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    
+    /* Limitation FREE */
+    .limit-warning {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      border-radius: var(--radius-sm);
+      padding: 15px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    
+    .limit-warning.show {
+      display: block;
+    }
+    
+    .limit-text {
+      font-size: 14px;
+      color: #92400e;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .limit-subtext {
+      font-size: 12px;
+      color: #78350f;
+      margin-bottom: 10px;
+    }
+    
+    .upgrade-btn-small {
+      background: var(--gold);
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    /* Overlay PRO */
+    .pro-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.95);
+      border-radius: var(--radius-lg);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 30px;
+      text-align: center;
+    }
+    
+    .pro-overlay.show {
+      display: flex;
+    }
+    
+    .pro-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .pro-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+    }
+    
+    .pro-desc {
+      font-size: 14px;
+      color: var(--text-gray);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    
+    .upgrade-btn {
+      background: linear-gradient(135deg, var(--gold) 0%, #FFA500 100%);
+      color: white;
+      padding: 14px 30px;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255,215,0,0.3);
     }
     
     /* Stats observance */
@@ -166,6 +273,11 @@
       font-weight: bold;
       cursor: pointer;
       margin-top: 10px;
+    }
+    
+    .add-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
     
     /* Liste médicaments */
@@ -364,7 +476,30 @@
     
     <!-- Nouveau médicament -->
     <div class="card">
-      <div class="card-title">➕ Ajouter un médicament</div>
+      <div class="pro-overlay" id="newMedOverlay">
+        <div class="pro-icon">💊✨</div>
+        <div class="pro-title">Limite atteinte</div>
+        <div class="pro-desc">
+          Version gratuite : 2 médicaments maximum.<br>
+          Passe à PRO pour un suivi illimité !
+        </div>
+        <button class="upgrade-btn" onclick="medsManager.goToPro()">
+          ✨ Passer à PRO
+        </button>
+      </div>
+      
+      <div class="card-title">
+        ➕ Ajouter un médicament
+        <span class="pro-badge" id="unlimitedBadge" style="display: none;">PRO</span>
+      </div>
+      
+      <div class="limit-warning" id="limitWarning">
+        <div class="limit-text">⚠️ <span id="medsLeft">2</span> médicaments restants</div>
+        <div class="limit-subtext">Version gratuite limitée à 2 médicaments</div>
+        <button class="upgrade-btn-small" onclick="medsManager.goToPro()">
+          Passer à PRO pour illimité
+        </button>
+      </div>
       
       <div class="form-group">
         <label class="form-label">Nom du médicament</label>
@@ -381,7 +516,7 @@
         <div class="times-grid" id="timesGrid"></div>
       </div>
       
-      <button class="add-btn" onclick="medsManager.addMed()">
+      <button class="add-btn" onclick="medsManager.addMed()" id="addBtn">
         💊 Ajouter ce médicament
       </button>
     </div>
@@ -402,8 +537,27 @@
   </div>
   
   <script>
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtb4nTMjvlruh0fg5O9_wiAPJI1Nall-g",
+      authDomain: "mindflow-66abc.firebaseapp.com",
+      projectId: "mindflow-66abc",
+      storageBucket: "mindflow-66abc.firebasestorage.app",
+      messagingSenderId: "466651144452",
+      appId: "1:466651144452:web:4b1dc68d4feac189683051",
+      measurementId: "G-B7PEXP45WH"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    
     const MEDS_KEY = 'mindflow_meds_v2';
     const HISTORY_KEY = 'mindflow_meds_history_v2';
+    const FREE_LIMIT = 2;
     
     const timeSlots = [
       '07:00', '08:00', '09:00',
@@ -416,13 +570,55 @@
       meds: [],
       history: {},
       selectedTimes: [],
+      isPro: false,
       
-      init() {
+      async init() {
+        await this.checkProStatus();
         this.loadData();
         this.renderTimeSlots();
         this.renderMeds();
         this.renderCalendar();
         this.updateStats();
+        this.applyProLimitations();
+      },
+      
+      async checkProStatus() {
+        return new Promise((resolve) => {
+          auth.onAuthStateChanged(async (user) => {
+            if (user) {
+              try {
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                this.isPro = userDoc.exists && userDoc.data().isPro === true;
+              } catch (error) {
+                console.error('Erreur vérification PRO:', error);
+                this.isPro = false;
+              }
+            }
+            resolve();
+          });
+        });
+      },
+      
+      applyProLimitations() {
+        const medsLeft = FREE_LIMIT - this.meds.length;
+        
+        if (!this.isPro) {
+          // Afficher avertissement si proche de la limite
+          if (this.meds.length > 0) {
+            document.getElementById('limitWarning').classList.add('show');
+            document.getElementById('medsLeft').textContent = Math.max(0, medsLeft);
+          }
+          
+          // Bloquer si limite atteinte
+          if (this.meds.length >= FREE_LIMIT) {
+            document.getElementById('newMedOverlay').classList.add('show');
+            document.getElementById('addBtn').disabled = true;
+          }
+        } else {
+          // PRO : tout débloquer
+          document.getElementById('limitWarning').style.display = 'none';
+          document.getElementById('unlimitedBadge').style.display = 'inline-block';
+        }
       },
       
       loadData() {
@@ -462,6 +658,12 @@
       },
       
       addMed() {
+        // LIMITATION FREE
+        if (!this.isPro && this.meds.length >= FREE_LIMIT) {
+          this.showUpgrade('limit-reached');
+          return;
+        }
+        
         const name = document.getElementById('medName').value.trim();
         const dosage = document.getElementById('medDosage').value.trim();
         
@@ -486,6 +688,7 @@
         this.selectedTimes = [];
         this.updateTimeSlotsUI();
         this.renderMeds();
+        this.applyProLimitations();
         
         alert('Médicament ajouté ! ✅');
       },
@@ -579,6 +782,7 @@
           this.renderMeds();
           this.renderCalendar();
           this.updateStats();
+          this.applyProLimitations();
         }
       },
       
@@ -655,6 +859,25 @@
         document.getElementById('takenStat').textContent = takenCount;
         document.getElementById('missedStat').textContent = missedCount;
         document.getElementById('rateStat').textContent = rate + '%';
+      },
+      
+      showUpgrade(feature) {
+        let message = '';
+        switch(feature) {
+          case 'limit-reached':
+            message = '💊 Tu as atteint la limite de 2 médicaments en version gratuite.\n\nPasse à PRO pour un suivi illimité !';
+            break;
+          default:
+            message = '✨ Cette fonctionnalité est réservée aux membres PRO !';
+        }
+        
+        if (confirm(message + '\n\n💎 Passer à PRO maintenant ?')) {
+          this.goToPro();
+        }
+      },
+      
+      goToPro() {
+        window.location.href = 'profil.html';
       }
     };
     
