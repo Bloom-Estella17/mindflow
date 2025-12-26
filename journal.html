@@ -7,6 +7,11 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#8B7EB8">
   
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
   <style>
     * {
       margin: 0;
@@ -27,6 +32,7 @@
       --radius-sm: 12px;
       --radius-md: 20px;
       --radius-lg: 25px;
+      --gold: #FFD700;
     }
     
     body {
@@ -71,6 +77,7 @@
       padding: 25px;
       margin-bottom: 20px;
       box-shadow: var(--shadow-sm);
+      position: relative;
     }
     
     .card-title {
@@ -78,6 +85,106 @@
       font-weight: bold;
       color: var(--text-dark);
       margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .pro-badge {
+      background: linear-gradient(135deg, var(--gold) 0%, #FFA500 100%);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+    
+    /* Limitation FREE */
+    .limit-warning {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      border-radius: var(--radius-sm);
+      padding: 15px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    
+    .limit-warning.show {
+      display: block;
+    }
+    
+    .limit-text {
+      font-size: 14px;
+      color: #92400e;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .limit-subtext {
+      font-size: 12px;
+      color: #78350f;
+      margin-bottom: 10px;
+    }
+    
+    .upgrade-btn-small {
+      background: var(--gold);
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    /* Overlay PRO */
+    .pro-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.95);
+      border-radius: var(--radius-lg);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 30px;
+      text-align: center;
+    }
+    
+    .pro-overlay.show {
+      display: flex;
+    }
+    
+    .pro-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+    
+    .pro-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+    }
+    
+    .pro-desc {
+      font-size: 14px;
+      color: var(--text-gray);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    
+    .upgrade-btn {
+      background: linear-gradient(135deg, var(--gold) 0%, #FFA500 100%);
+      color: white;
+      padding: 14px 30px;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255,215,0,0.3);
     }
     
     /* Catégories */
@@ -197,6 +304,11 @@
       cursor: pointer;
     }
     
+    .save-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
     /* Recherche */
     .search-bar {
       width: 100%;
@@ -210,6 +322,40 @@
     
     .search-bar:focus {
       border-color: var(--primary);
+    }
+    
+    /* Export PDF (PRO only) */
+    .export-section {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .export-btn {
+      flex: 1;
+      padding: 12px;
+      background: var(--bg-card);
+      border: 2px solid var(--primary);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .export-btn.locked {
+      opacity: 0.5;
+      cursor: not-allowed;
+      position: relative;
+    }
+    
+    .export-btn.locked::after {
+      content: '🔒';
+      margin-left: 5px;
     }
     
     /* Entries list */
@@ -384,7 +530,30 @@
     
     <!-- Nouvelle entrée -->
     <div class="card">
-      <div class="card-title">✍️ Nouvelle entrée</div>
+      <div class="pro-overlay" id="newEntryOverlay">
+        <div class="pro-icon">📝✨</div>
+        <div class="pro-title">Limite atteinte</div>
+        <div class="pro-desc">
+          Version gratuite : 3 entrées maximum.<br>
+          Passe à PRO pour des entrées illimitées !
+        </div>
+        <button class="upgrade-btn" onclick="journalManager.goToPro()">
+          ✨ Passer à PRO
+        </button>
+      </div>
+      
+      <div class="card-title">
+        ✍️ Nouvelle entrée
+        <span class="pro-badge" id="unlimitedBadge" style="display: none;">PRO</span>
+      </div>
+      
+      <div class="limit-warning" id="limitWarning">
+        <div class="limit-text">⚠️ <span id="entriesLeft">3</span> entrées restantes</div>
+        <div class="limit-subtext">Version gratuite limitée à 3 entrées</div>
+        <button class="upgrade-btn-small" onclick="journalManager.goToPro()">
+          Passer à PRO pour illimité
+        </button>
+      </div>
       
       <div class="categories" id="categories"></div>
       
@@ -396,7 +565,7 @@
       
       <textarea class="journal-textarea" id="journalText" placeholder="Écris tes pensées..."></textarea>
       
-      <button class="save-btn" onclick="journalManager.save()">
+      <button class="save-btn" onclick="journalManager.save()" id="saveBtn">
         💾 Enregistrer l'entrée
       </button>
     </div>
@@ -404,6 +573,12 @@
     <!-- Liste des entrées -->
     <div class="card">
       <div class="card-title">📚 Mes entrées</div>
+      
+      <div class="export-section">
+        <button class="export-btn" id="exportBtn" onclick="journalManager.exportPDF()">
+          📄 Export PDF
+        </button>
+      </div>
       
       <input type="text" class="search-bar" id="searchBar" placeholder="🔍 Rechercher dans mes entrées...">
       
@@ -430,7 +605,26 @@
   </div>
   
   <script>
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAtb4nTMjvlruh0fg5O9_wiAPJI1Nall-g",
+      authDomain: "mindflow-66abc.firebaseapp.com",
+      projectId: "mindflow-66abc",
+      storageBucket: "mindflow-66abc.firebasestorage.app",
+      messagingSenderId: "466651144452",
+      appId: "1:466651144452:web:4b1dc68d4feac189683051",
+      measurementId: "G-B7PEXP45WH"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    
     const STORAGE_KEY = 'mindflow_journal_v2';
+    const FREE_LIMIT = 3;
     
     const categories = [
       { emoji: '💭', label: 'Pensées' },
@@ -449,14 +643,62 @@
       selectedCategory: 0,
       selectedMood: 0,
       currentEntry: null,
+      isPro: false,
       
-      init() {
+      async init() {
+        await this.checkProStatus();
         this.loadData();
         this.renderCategories();
         this.renderMoodPicker();
         this.setupTagInput();
         this.setupSearch();
         this.renderEntries();
+        this.applyProLimitations();
+      },
+      
+      async checkProStatus() {
+        return new Promise((resolve) => {
+          auth.onAuthStateChanged(async (user) => {
+            if (user) {
+              try {
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                this.isPro = userDoc.exists && userDoc.data().isPro === true;
+              } catch (error) {
+                console.error('Erreur vérification PRO:', error);
+                this.isPro = false;
+              }
+            }
+            resolve();
+          });
+        });
+      },
+      
+      applyProLimitations() {
+        const entriesLeft = FREE_LIMIT - this.entries.length;
+        
+        if (!this.isPro) {
+          // Afficher avertissement si proche de la limite
+          if (this.entries.length > 0) {
+            document.getElementById('limitWarning').classList.add('show');
+            document.getElementById('entriesLeft').textContent = Math.max(0, entriesLeft);
+          }
+          
+          // Bloquer si limite atteinte
+          if (this.entries.length >= FREE_LIMIT) {
+            document.getElementById('newEntryOverlay').classList.add('show');
+            document.getElementById('saveBtn').disabled = true;
+          }
+          
+          // Bloquer export PDF
+          const exportBtn = document.getElementById('exportBtn');
+          exportBtn.classList.add('locked');
+          exportBtn.onclick = () => this.showUpgrade('export-pdf');
+        } else {
+          // PRO : tout débloquer
+          document.getElementById('limitWarning').style.display = 'none';
+          document.getElementById('unlimitedBadge').style.display = 'inline-block';
+          document.getElementById('exportBtn').classList.remove('locked');
+        }
       },
       
       renderCategories() {
@@ -544,10 +786,16 @@
       },
       
       save() {
+        // LIMITATION FREE
+        if (!this.isPro && this.entries.length >= FREE_LIMIT) {
+          this.showUpgrade('limit-reached');
+          return;
+        }
+        
         const text = document.getElementById('journalText').value.trim();
         
         if (!text) {
-          alert('Écris quelque chose d\\'abord ! 📝');
+          alert('Écris quelque chose d\'abord ! 📝');
           return;
         }
         
@@ -568,6 +816,7 @@
         this.currentTags = [];
         this.renderTags();
         this.renderEntries();
+        this.applyProLimitations();
         
         alert('Entrée enregistrée ! ✅');
       },
@@ -657,6 +906,7 @@
           this.entries = this.entries.filter(e => e.id !== id);
           this.saveData();
           this.renderEntries();
+          this.applyProLimitations();
           this.closeModal();
         }
       },
@@ -664,6 +914,37 @@
       closeModal() {
         document.getElementById('modalOverlay').classList.remove('show');
         document.getElementById('entryModal').classList.remove('show');
+      },
+      
+      exportPDF() {
+        if (!this.isPro) {
+          this.showUpgrade('export-pdf');
+          return;
+        }
+        
+        alert('📄 Export PDF en cours de développement...');
+      },
+      
+      showUpgrade(feature) {
+        let message = '';
+        switch(feature) {
+          case 'limit-reached':
+            message = '📝 Tu as atteint la limite de 3 entrées en version gratuite.\n\nPasse à PRO pour des entrées illimitées !';
+            break;
+          case 'export-pdf':
+            message = '📄 L\'export PDF est une fonctionnalité PRO !\n\nPasse à PRO pour exporter ton journal.';
+            break;
+          default:
+            message = '✨ Cette fonctionnalité est réservée aux membres PRO !';
+        }
+        
+        if (confirm(message + '\n\n💎 Passer à PRO maintenant ?')) {
+          this.goToPro();
+        }
+      },
+      
+      goToPro() {
+        window.location.href = 'profil.html';
       }
     };
     
