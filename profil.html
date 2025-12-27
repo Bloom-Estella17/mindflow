@@ -688,6 +688,54 @@
       transform: scale(1.15) translateY(-3px);
       opacity: 0.8;
     }
+    
+    /* ===== DARK MODE TOGGLE SWITCH ===== */
+    
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    
+    .theme-toggle input[type="checkbox"] {
+      display: none;
+    }
+    
+    .toggle-slider {
+      width: 50px;
+      height: 26px;
+      background: #ccc;
+      border-radius: 34px;
+      position: relative;
+      transition: 0.3s;
+    }
+    
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: white;
+      top: 3px;
+      left: 3px;
+      transition: 0.3s;
+    }
+    
+    .theme-toggle input:checked + .toggle-slider {
+      background: #8B7EB8;
+    }
+    
+    .theme-toggle input:checked + .toggle-slider::before {
+      transform: translateX(24px);
+    }
+    
+    .toggle-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
   </style>
 </head>
 <body>
@@ -1059,7 +1107,13 @@
         </div>
         <div class="setting-row">
           <div class="setting-label">Thème</div>
-          <div class="setting-value">Clair</div>
+          <div class="setting-value">
+            <label class="theme-toggle">
+              <input type="checkbox" id="darkModeToggle" onchange="themeManager.toggle()">
+              <span class="toggle-slider"></span>
+              <span class="toggle-label" id="themeLabel">Clair</span>
+            </label>
+          </div>
         </div>
         <div class="setting-row">
           <div class="setting-label">Version</div>
@@ -1221,8 +1275,38 @@
       }
     };
     
+    // ===== DARK MODE MANAGER =====
+    const themeManager = {
+      init() {
+        const savedTheme = localStorage.getItem('mindflow_theme') || 'light';
+        this.setTheme(savedTheme);
+        
+        const toggle = document.getElementById('darkModeToggle');
+        if (toggle) {
+          toggle.checked = savedTheme === 'dark';
+        }
+      },
+      
+      toggle() {
+        const toggle = document.getElementById('darkModeToggle');
+        const newTheme = toggle.checked ? 'dark' : 'light';
+        this.setTheme(newTheme);
+      },
+      
+      setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('mindflow_theme', theme);
+        
+        const label = document.getElementById('themeLabel');
+        if (label) {
+          label.textContent = theme === 'dark' ? 'Sombre' : 'Clair';
+        }
+      }
+    };
+    
     document.addEventListener('DOMContentLoaded', () => {
       profilManager.init();
+      themeManager.init();
     });
   </script>
 </body>
