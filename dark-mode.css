@@ -83,3 +83,41 @@ html[data-theme="dark"] {
 body, .card, .header, input, textarea {
   transition: all 0.3s ease !important;
 }
+/* FIX POUR JOURNAL.HTML */
+[data-theme="dark"] .category-btn {
+  background-color: rgba(139, 126, 184, 0.15) !important;
+  color: #eaeaea !important;
+  border-color: #2d3748 !important;
+}
+
+[data-theme="dark"] .category-btn.selected {
+  background: linear-gradient(135deg, #9d8ec4 0%, rgba(139, 126, 184, 0.15) 100%) !important;
+  color: white !important;
+}
+
+[data-theme="dark"] .mood-option {
+  background-color: rgba(139, 126, 184, 0.15) !important;
+  border-color: #2d3748 !important;
+}
+
+[data-theme="dark"] .mood-option.selected {
+  background: linear-gradient(135deg, #9d8ec4 0%, rgba(139, 126, 184, 0.15) 100%) !important;
+  border-color: #9d8ec4 !important;
+}
+
+[data-theme="dark"] .entry-date {
+  color: #b8b8b8 !important;
+}
+
+[data-theme="dark"] .entry-preview {
+  color: #8a8a8a !important;
+}
+
+[data-theme="dark"] .entry-mood {
+  background-color: rgba(139, 126, 184, 0.2) !important;
+}
+
+[data-theme="dark"] .save-btn {
+  background: linear-gradient(135deg, #9d8ec4 0%, #8B7EB8 100%) !important;
+  color: white !important;
+}
