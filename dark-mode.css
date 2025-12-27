@@ -1,0 +1,249 @@
+/* ===== DARK MODE POUR MINDFLOW ===== */
+
+/* Variables pour le thème clair (défaut) */
+:root {
+  --bg-gradient-start: #8B7EB8;
+  --bg-gradient-end: #A8D8EA;
+  --card-bg: #ffffff;
+  --text-primary: #2D2D3A;
+  --text-secondary: #666666;
+  --text-tertiary: #888888;
+  --border-color: #E5E5E5;
+  --shadow-sm: 0 4px 20px rgba(0,0,0,0.08);
+  --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
+  --input-bg: #ffffff;
+  --hover-bg: rgba(139, 126, 184, 0.05);
+  --primary-light: #B8A7D5;
+}
+
+/* Variables pour le thème sombre */
+[data-theme="dark"] {
+  --bg-gradient-start: #1a1a2e;
+  --bg-gradient-end: #16213e;
+  --card-bg: #16213e;
+  --text-primary: #eaeaea;
+  --text-secondary: #b8b8b8;
+  --text-tertiary: #8a8a8a;
+  --border-color: #2d3748;
+  --shadow-sm: 0 4px 20px rgba(0,0,0,0.4);
+  --shadow-md: 0 8px 30px rgba(0,0,0,0.6);
+  --input-bg: #0f3460;
+  --hover-bg: rgba(139, 126, 184, 0.15);
+  --primary-light: #9d8ec4;
+}
+
+/* Transition smooth entre les thèmes */
+body,
+.card,
+.header,
+.profile-card,
+input,
+textarea,
+button,
+.modal,
+.bottom-nav {
+  transition: background-color 0.3s ease, 
+              color 0.3s ease, 
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+/* Application du thème */
+body {
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+}
+
+.card,
+.header,
+.profile-card,
+.welcome-card,
+.stat-card,
+.action-btn,
+.mood-btn-quick,
+.luna-card,
+.crisis-inner,
+.entry-item,
+.med-item,
+.accordion-content,
+.modal,
+.bottom-nav {
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+}
+
+.card-title,
+.header-title,
+.profile-name,
+.greeting,
+.section-label,
+.question-label,
+.setting-label,
+.dsm5-title,
+.luna-title,
+.crisis-text-title {
+  color: var(--text-primary);
+}
+
+.profile-email,
+.date-today,
+.stat-label,
+.emotion-label,
+.trigger-label,
+.entry-category,
+.med-dosage,
+.setting-value,
+.luna-desc,
+.crisis-text-subtitle {
+  color: var(--text-secondary);
+}
+
+/* Inputs et textareas en dark mode */
+input,
+textarea,
+select {
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+input:focus,
+textarea:focus {
+  border-color: #8B7EB8;
+}
+
+/* Boutons en dark mode */
+.emotion-btn,
+.trigger-btn,
+.category-btn,
+.mood-option,
+.time-slot {
+  background-color: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+.emotion-btn.selected,
+.trigger-btn.selected,
+.category-btn.selected,
+.mood-option.selected,
+.time-slot.selected {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--hover-bg) 100%);
+}
+
+/* Charts en dark mode */
+[data-theme="dark"] canvas {
+  filter: brightness(0.9);
+}
+
+/* Accordéons en dark mode */
+.accordion-header {
+  background-color: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+.accordion-header.active {
+  background: #8B7EB8;
+  color: white;
+}
+
+/* Modal en dark mode */
+.modal-overlay {
+  background: rgba(0,0,0,0.7);
+}
+
+[data-theme="dark"] .modal-overlay {
+  background: rgba(0,0,0,0.85);
+}
+
+/* Luna card en dark mode */
+[data-theme="dark"] .luna-card {
+  background: linear-gradient(135deg, #4a3f6b 0%, #2d2640 100%);
+}
+
+/* Calendar en dark mode */
+[data-theme="dark"] .calendar-day {
+  background-color: var(--hover-bg);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .calendar-day.taken {
+  background: #10b981;
+  color: white;
+}
+
+[data-theme="dark"] .calendar-day.missed {
+  background: #ef4444;
+  color: white;
+}
+
+/* Tags en dark mode */
+.tag,
+.entry-tag {
+  background: #8B7EB8;
+  color: white;
+}
+
+[data-theme="dark"] .tag,
+[data-theme="dark"] .entry-tag {
+  background: #6a5b8c;
+}
+
+/* Stats en dark mode */
+[data-theme="dark"] .stat-number {
+  color: #9d8ec4;
+}
+
+/* Welcome card gradient adapté */
+[data-theme="dark"] .welcome-card {
+  background: linear-gradient(135deg, #4a3f6b 0%, #2d2640 100%);
+}
+
+/* Navigation icons */
+.nav-item {
+  filter: none;
+}
+
+[data-theme="dark"] .nav-item {
+  filter: brightness(1.2);
+}
+
+/* Skeleton loader en dark mode */
+[data-theme="dark"] .skeleton {
+  background: linear-gradient(90deg, #2d3748 25%, #1a202c 50%, #2d3748 75%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Search bar en dark mode */
+.search-bar {
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+/* Toggle label en dark mode */
+[data-theme="dark"] .toggle-label {
+  color: var(--text-primary);
+}
+
+/* Stat boxes en dark mode */
+[data-theme="dark"] .stat-box {
+  background: var(--hover-bg);
+}
+
+/* Crisis button reste rouge */
+.crisis-inner {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+/* Pro elements restent dorés */
+.pro-teaser,
+.pro-badge,
+.pro-badge-header {
+  /* Couleurs dorées préservées */
+}
