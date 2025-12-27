@@ -255,13 +255,13 @@
     
     .question-input {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       border: 2px solid #E5E5E5;
       border-radius: var(--radius-sm);
       font-size: 14px;
       font-family: inherit;
       resize: vertical;
-      min-height: 80px;
+      min-height: 60px;
       outline: none;
       transition: var(--transition);
     }
@@ -270,21 +270,16 @@
       border-color: var(--primary);
     }
     
-    .dsm5-section {
-      margin-top: 30px;
-    }
-    
     .dsm5-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px;
+      padding: 15px;
       background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-      color: white;
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-sm);
       cursor: pointer;
-      margin-bottom: 15px;
       transition: var(--transition);
+      color: white;
     }
     
     .dsm5-header:active {
@@ -294,55 +289,60 @@
     .dsm5-title {
       font-size: 16px;
       font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .dsm5-arrow {
+      font-size: 20px;
+      transition: var(--transition);
+    }
+    
+    .dsm5-header.active .dsm5-arrow {
+      transform: rotate(90deg);
     }
     
     .dsm5-content {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.5s ease;
-      background: white;
-      border-radius: var(--radius-md);
-      padding: 0;
+      transition: max-height 0.3s ease;
     }
     
     .dsm5-content.show {
-      max-height: 3000px;
-      padding: 25px;
-      border: 2px solid var(--bg-card);
+      max-height: 5000px;
+      padding: 20px;
+      padding-top: 15px;
     }
     
-    .dsm5-content h4 {
+    .dsm5-section {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-dark);
+    }
+    
+    .dsm5-section h4 {
+      font-size: 15px;
       color: var(--primary);
-      font-size: 16px;
       margin-top: 20px;
       margin-bottom: 10px;
     }
     
-    .dsm5-content h4:first-child {
-      margin-top: 0;
+    .dsm5-section ul {
+      margin-left: 20px;
+      margin-bottom: 12px;
     }
     
-    .dsm5-content p {
-      font-size: 14px;
-      color: var(--text-dark);
-      line-height: 1.6;
+    .dsm5-section li {
+      margin-bottom: 6px;
+    }
+    
+    .dsm5-section p {
       margin-bottom: 10px;
     }
     
-    .dsm5-content ul {
-      margin-left: 20px;
-      margin-bottom: 15px;
-    }
-    
-    .dsm5-content li {
-      font-size: 14px;
-      color: var(--text-dark);
-      line-height: 1.6;
-      margin-bottom: 8px;
-    }
-    
     .settings-section {
-      padding: 15px 0;
+      margin-top: 15px;
     }
     
     .setting-row {
@@ -413,6 +413,280 @@
     .nav-item.active {
       opacity: 1;
       transform: scale(1.15);
+    }
+    
+    /* ===== ANIMATIONS AJOUTÉES ===== */
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    /* Animation au chargement */
+    .header {
+      animation: fadeInUp 0.5s ease;
+    }
+    
+    .profile-card {
+      animation: fadeInUp 0.6s ease 0.1s backwards;
+    }
+    
+    .card {
+      animation: fadeInUp 0.6s ease;
+    }
+    
+    .card:nth-child(3) { animation-delay: 0.15s; }
+    .card:nth-child(4) { animation-delay: 0.2s; }
+    
+    /* Hover effects */
+    .header {
+      transition: all 0.3s ease;
+    }
+    
+    .header:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    
+    .profile-card {
+      transition: all 0.3s ease;
+    }
+    
+    .profile-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+    
+    .card {
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+    
+    .stat-box {
+      transition: all 0.3s ease;
+    }
+    
+    .stat-box:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--bg-card) 100%);
+    }
+    
+    /* Bouton Preview - Animation spéciale */
+    .preview-free-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 25px rgba(245,158,11,0.4);
+    }
+    
+    .preview-free-btn.active:hover {
+      box-shadow: 0 8px 25px rgba(16,185,129,0.4);
+    }
+    
+    /* Accordion animations */
+    .accordion-header {
+      transition: all 0.3s ease;
+    }
+    
+    .accordion-header:hover:not(.active) {
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--bg-card) 100%);
+      transform: translateX(5px);
+    }
+    
+    /* DSM-5 section */
+    .dsm5-header {
+      transition: all 0.3s ease;
+    }
+    
+    .dsm5-header:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(139,126,184,0.3);
+    }
+    
+    /* Logout button */
+    .logout-btn {
+      transition: all 0.3s ease;
+    }
+    
+    .logout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(239,106,111,0.4);
+    }
+    
+    .bottom-nav {
+      animation: fadeInUp 0.7s ease;
+    }
+    
+    .nav-item {
+      transition: all 0.3s ease;
+    }
+    
+    .nav-item:hover {
+      transform: scale(1.15) translateY(-3px);
+      opacity: 0.8;
+    }
+    
+    /* ===== ANIMATIONS AJOUTÉES ===== */
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    /* Animation au chargement */
+    .header {
+      animation: fadeInUp 0.5s ease;
+    }
+    
+    .profile-card {
+      animation: fadeInUp 0.6s ease 0.1s backwards;
+    }
+    
+    .card {
+      animation: fadeInUp 0.6s ease;
+    }
+    
+    .card:nth-child(3) { animation-delay: 0.2s; }
+    .card:nth-child(4) { animation-delay: 0.3s; }
+    
+    /* Hover effects */
+    .header {
+      transition: all 0.3s ease;
+    }
+    
+    .header:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    
+    .profile-card {
+      transition: all 0.3s ease;
+    }
+    
+    .profile-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+    
+    .card {
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+    
+    .stat-box {
+      transition: all 0.3s ease;
+    }
+    
+    .stat-box:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--bg-card) 100%);
+    }
+    
+    .accordion-header {
+      transition: all 0.3s ease;
+    }
+    
+    .accordion-header:hover:not(.active) {
+      background: linear-gradient(135deg, var(--primary-light) 0%, var(--bg-card) 100%);
+      transform: translateX(5px);
+    }
+    
+    .accordion-content {
+      animation: slideInLeft 0.3s ease;
+    }
+    
+    .preview-free-btn {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .preview-free-btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+    
+    .preview-free-btn:active::after {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .preview-free-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 20px rgba(245,158,11,0.3);
+    }
+    
+    .dsm5-header {
+      transition: all 0.3s ease;
+    }
+    
+    .dsm5-header:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 20px rgba(139,126,184,0.3);
+    }
+    
+    .logout-btn {
+      transition: all 0.3s ease;
+    }
+    
+    .logout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(239,107,107,0.3);
+    }
+    
+    .bottom-nav {
+      animation: fadeInUp 0.7s ease;
+    }
+    
+    .nav-item {
+      transition: all 0.3s ease;
+    }
+    
+    .nav-item:hover {
+      transform: scale(1.15) translateY(-3px);
+      opacity: 0.8;
     }
   </style>
 </head>
@@ -526,46 +800,46 @@
         </div>
         <div class="accordion-content" id="content-tdi">
           <div class="question-group">
-            <label class="question-label">Combien d'alters connais-tu ?</label>
+            <label class="question-label">Combien d'alters (parties) as-tu identifiés ?</label>
             <textarea class="question-input" id="tdi-alters"></textarea>
           </div>
           <div class="question-group">
-            <label class="question-label">Comment gères-tu les switches ?</label>
-            <textarea class="question-input" id="tdi-switches"></textarea>
+            <label class="question-label">Comment se manifestent tes dissociations ?</label>
+            <textarea class="question-input" id="tdi-manifestation"></textarea>
           </div>
           <div class="question-group">
-            <label class="question-label">As-tu des amnésies ? Comment les gères-tu ?</label>
-            <textarea class="question-input" id="tdi-amnesia"></textarea>
+            <label class="question-label">Quel est ton suivi thérapeutique ?</label>
+            <textarea class="question-input" id="tdi-treatment"></textarea>
           </div>
         </div>
       </div>
       
       <!-- Schizophrénie -->
       <div class="accordion-item">
-        <div class="accordion-header" onclick="profilManager.toggleAccordion('schizophrenia')">
+        <div class="accordion-header" onclick="profilManager.toggleAccordion('schizophrenie')">
           <div class="accordion-title">🧠 Schizophrénie</div>
           <div class="accordion-arrow">›</div>
         </div>
-        <div class="accordion-content" id="content-schizophrenia">
+        <div class="accordion-content" id="content-schizophrenie">
           <div class="question-group">
-            <label class="question-label">Type de schizophrénie diagnostiquée ?</label>
-            <textarea class="question-input" id="schizophrenia-type"></textarea>
+            <label class="question-label">Type de schizophrénie (paranoïde, désorganisée, catatonique) ?</label>
+            <textarea class="question-input" id="schizophrenie-type"></textarea>
           </div>
           <div class="question-group">
-            <label class="question-label">Quels sont tes symptômes actuels ?</label>
-            <textarea class="question-input" id="schizophrenia-symptoms"></textarea>
+            <label class="question-label">Quels sont tes symptômes (hallucinations, délires, désorganisation) ?</label>
+            <textarea class="question-input" id="schizophrenie-symptoms"></textarea>
           </div>
           <div class="question-group">
-            <label class="question-label">Ton traitement et suivi ?</label>
-            <textarea class="question-input" id="schizophrenia-treatment"></textarea>
+            <label class="question-label">Traitement antipsychotique et suivi ?</label>
+            <textarea class="question-input" id="schizophrenie-treatment"></textarea>
           </div>
         </div>
       </div>
       
-      <!-- Depression -->
+      <!-- Dépression -->
       <div class="accordion-item">
         <div class="accordion-header" onclick="profilManager.toggleAccordion('depression')">
-          <div class="accordion-title">😔 Dépression Majeure</div>
+          <div class="accordion-title">😔 Trouble Dépressif Majeur</div>
           <div class="accordion-arrow">›</div>
         </div>
         <div class="accordion-content" id="content-depression">
@@ -574,125 +848,129 @@
             <textarea class="question-input" id="depression-duration"></textarea>
           </div>
           <div class="question-group">
-            <label class="question-label">Quels sont tes symptômes principaux ?</label>
+            <label class="question-label">Symptômes principaux (tristesse, fatigue, perte d'intérêt) ?</label>
             <textarea class="question-input" id="depression-symptoms"></textarea>
           </div>
           <div class="question-group">
-            <label class="question-label">Quelles stratégies t'aident le plus ?</label>
-            <textarea class="question-input" id="depression-coping"></textarea>
+            <label class="question-label">Traitement et thérapie en cours ?</label>
+            <textarea class="question-input" id="depression-treatment"></textarea>
           </div>
         </div>
       </div>
       
-      <!-- PTSD -->
+      <!-- TSPT -->
       <div class="accordion-item">
-        <div class="accordion-header" onclick="profilManager.toggleAccordion('ptsd')">
+        <div class="accordion-header" onclick="profilManager.toggleAccordion('tspt')">
           <div class="accordion-title">😱 Trouble de Stress Post-Traumatique (TSPT)</div>
           <div class="accordion-arrow">›</div>
         </div>
-        <div class="accordion-content" id="content-ptsd">
+        <div class="accordion-content" id="content-tspt">
           <div class="question-group">
-            <label class="question-label">Quel type de trauma as-tu vécu ? (si tu veux partager)</label>
-            <textarea class="question-input" id="ptsd-trauma"></textarea>
+            <label class="question-label">Nature du trauma (si tu es à l'aise d'en parler) ?</label>
+            <textarea class="question-input" id="tspt-trauma"></textarea>
           </div>
           <div class="question-group">
-            <label class="question-label">Quels sont tes triggers principaux ?</label>
-            <textarea class="question-input" id="ptsd-triggers"></textarea>
+            <label class="question-label">Symptômes (flashbacks, cauchemars, évitement, hypervigilance) ?</label>
+            <textarea class="question-input" id="tspt-symptoms"></textarea>
           </div>
           <div class="question-group">
-            <label class="question-label">Comment gères-tu les flashbacks ?</label>
-            <textarea class="question-input" id="ptsd-coping"></textarea>
+            <label class="question-label">Type de thérapie (EMDR, TCC trauma, autre) ?</label>
+            <textarea class="question-input" id="tspt-treatment"></textarea>
           </div>
         </div>
       </div>
       
-      <!-- OCD -->
+      <!-- TOC -->
       <div class="accordion-item">
-        <div class="accordion-header" onclick="profilManager.toggleAccordion('ocd')">
+        <div class="accordion-header" onclick="profilManager.toggleAccordion('toc')">
           <div class="accordion-title">🔄 Trouble Obsessionnel-Compulsif (TOC)</div>
           <div class="accordion-arrow">›</div>
         </div>
-        <div class="accordion-content" id="content-ocd">
+        <div class="accordion-content" id="content-toc">
           <div class="question-group">
-            <label class="question-label">Quels sont tes obsessions principales ?</label>
-            <textarea class="question-input" id="ocd-obsessions"></textarea>
+            <label class="question-label">Nature de tes obsessions ?</label>
+            <textarea class="question-input" id="toc-obsessions"></textarea>
           </div>
           <div class="question-group">
-            <label class="question-label">Quelles compulsions effectues-tu ?</label>
-            <textarea class="question-input" id="ocd-compulsions"></textarea>
+            <label class="question-label">Nature de tes compulsions ?</label>
+            <textarea class="question-input" id="toc-compulsions"></textarea>
           </div>
           <div class="question-group">
-            <label class="question-label">Comment résistes-tu aux compulsions ?</label>
-            <textarea class="question-input" id="ocd-resistance"></textarea>
+            <label class="question-label">Traitement (TCC, ERP, médicaments) ?</label>
+            <textarea class="question-input" id="toc-treatment"></textarea>
           </div>
         </div>
       </div>
       
-      <!-- Eating Disorder -->
+      <!-- TCA -->
       <div class="accordion-item">
-        <div class="accordion-header" onclick="profilManager.toggleAccordion('eating')">
-          <div class="accordion-title">🍽️ Troubles du Comportement Alimentaire</div>
+        <div class="accordion-header" onclick="profilManager.toggleAccordion('tca')">
+          <div class="accordion-title">🍽️ Troubles du Comportement Alimentaire (TCA)</div>
           <div class="accordion-arrow">›</div>
         </div>
-        <div class="accordion-content" id="content-eating">
+        <div class="accordion-content" id="content-tca">
           <div class="question-group">
-            <label class="question-label">Type de TCA (anorexie, boulimie, hyperphagie...) ?</label>
-            <textarea class="question-input" id="eating-type"></textarea>
+            <label class="question-label">Type de TCA (anorexie, boulimie, hyperphagie) ?</label>
+            <textarea class="question-input" id="tca-type"></textarea>
           </div>
           <div class="question-group">
-            <label class="question-label">Quels sont tes comportements alimentaires actuels ?</label>
-            <textarea class="question-input" id="eating-behaviors"></textarea>
+            <label class="question-label">Comportements alimentaires problématiques ?</label>
+            <textarea class="question-input" id="tca-behaviors"></textarea>
           </div>
           <div class="question-group">
-            <label class="question-label">Ton suivi nutritionnel/thérapeutique ?</label>
-            <textarea class="question-input" id="eating-treatment"></textarea>
+            <label class="question-label">Suivi (nutritionniste, thérapie, hospitalisation) ?</label>
+            <textarea class="question-input" id="tca-treatment"></textarea>
           </div>
         </div>
       </div>
       
-      <!-- ADHD -->
+      <!-- TDAH -->
       <div class="accordion-item">
-        <div class="accordion-header" onclick="profilManager.toggleAccordion('adhd')">
+        <div class="accordion-header" onclick="profilManager.toggleAccordion('tdah')">
           <div class="accordion-title">🎯 Trouble du Déficit de l'Attention (TDAH)</div>
           <div class="accordion-arrow">›</div>
         </div>
-        <div class="accordion-content" id="content-adhd">
+        <div class="accordion-content" id="content-tdah">
           <div class="question-group">
-            <label class="question-label">Type de TDAH (inattentif, hyperactif, mixte) ?</label>
-            <textarea class="question-input" id="adhd-type"></textarea>
+            <label class="question-label">Type dominant (inattention, hyperactivité, mixte) ?</label>
+            <textarea class="question-input" id="tdah-type"></textarea>
           </div>
           <div class="question-group">
-            <label class="question-label">Comment le TDAH impacte ton quotidien ?</label>
-            <textarea class="question-input" id="adhd-impact"></textarea>
+            <label class="question-label">Impact au quotidien (travail, études, relations) ?</label>
+            <textarea class="question-input" id="tdah-impact"></textarea>
           </div>
           <div class="question-group">
-            <label class="question-label">Quelles stratégies/adaptations utilises-tu ?</label>
-            <textarea class="question-input" id="adhd-strategies"></textarea>
+            <label class="question-label">Traitement (méthylphénidate, stratégies, coaching) ?</label>
+            <textarea class="question-input" id="tdah-treatment"></textarea>
           </div>
         </div>
       </div>
       
-      <!-- DSM-5 Documentation -->
-      <div class="dsm5-section">
-        <div class="dsm5-header" onclick="profilManager.toggleDSM5()">
-          <div class="dsm5-title">📖 Documentation DSM-5</div>
-          <div class="accordion-arrow" style="color: white;">›</div>
-        </div>
-        <div class="dsm5-content" id="dsm5-content">
+    </div>
+    
+    <!-- DOCUMENTATION DSM-5 -->
+    <div class="card">
+      <div class="dsm5-header" onclick="profilManager.toggleDSM5()">
+        <div class="dsm5-title">📚 Documentation DSM-5</div>
+        <div class="dsm5-arrow">›</div>
+      </div>
+      <div class="dsm5-content" id="dsm5-content">
+        <div class="dsm5-section">
           
-          <h4>💜 Trouble de la personnalité Borderline (TPL)</h4>
-          <p><strong>Critères diagnostiques (DSM-5) :</strong> Au moins 5 des 9 critères suivants :</p>
+          <h4>💜 Trouble de personnalité Borderline (TPL)</h4>
+          <p><strong>Critères diagnostiques (DSM-5) :</strong></p>
           <ul>
-            <li>Efforts effrénés pour éviter les abandons réels ou imaginés</li>
+            <li>Efforts effrénés pour éviter un abandon réel ou imaginé</li>
             <li>Relations interpersonnelles instables et intenses</li>
             <li>Perturbation de l'identité : image ou notion de soi instable</li>
-            <li>Impulsivité dans au moins deux domaines potentiellement dommageables</li>
-            <li>Répétition de comportements, gestes ou menaces suicidaires</li>
+            <li>Impulsivité dans au moins deux domaines</li>
+            <li>Répétition de comportements, gestes ou menaces suicidaires, ou automutilations</li>
             <li>Instabilité affective due à une réactivité marquée de l'humeur</li>
             <li>Sentiments chroniques de vide</li>
             <li>Colères intenses et inappropriées</li>
-            <li>Survenue transitoire d'une idéation persécutoire ou de symptômes dissociatifs sévères liés au stress</li>
+            <li>Idéation persécutoire transitoire ou symptômes dissociatifs sévères</li>
           </ul>
+          <p><em>Minimum 5 critères sur 9 requis.</em></p>
           
           <h4>😰 Trouble d'Anxiété Généralisée (TAG)</h4>
           <p><strong>Critères diagnostiques (DSM-5) :</strong></p>
@@ -769,7 +1047,7 @@
     
     <!-- PARAMETRES -->
     <div class="card">
-      <div class="card-title">⚙️ Paramètres</div>
+      <div class="card-title">Paramètres</div>
       <div class="settings-section">
         <div class="setting-row">
           <div class="setting-label">Notifications</div>
@@ -830,7 +1108,6 @@
         this.checkAuth();
         this.loadAnswers();
         this.setupAutoSave();
-        this.checkPreviewMode();
       },
       
       checkAuth() {
@@ -852,17 +1129,6 @@
             console.error('Erreur vérification PRO:', error);
           }
         });
-      },
-      
-      checkPreviewMode() {
-        const isPreview = localStorage.getItem('previewFreeMode') === 'true';
-        const btn = document.getElementById('previewBtn');
-        const text = document.getElementById('previewText');
-        
-        if (isPreview) {
-          btn.classList.add('active');
-          text.textContent = 'Retour au mode PRO';
-        }
       },
       
       toggleAccordion(id) {
