@@ -1,8 +1,7 @@
-/* ===== DARK MODE POUR MINDFLOW - VERSION FORCÉE ===== */
+/* ===== DARK MODE POUR MINDFLOW - VERSION COMPLÈTE ===== */
 
-/* Variables pour le thème sombre - ON FORCE TOUT */
+/* Variables pour le thème sombre */
 html[data-theme="dark"] {
-  /* Backgrounds */
   --bg-gradient-start: #1a1a2e !important;
   --bg-gradient-end: #16213e !important;
   --primary: #9d8ec4 !important;
@@ -16,12 +15,12 @@ html[data-theme="dark"] {
   --shadow-md: 0 8px 30px rgba(0,0,0,0.6) !important;
 }
 
-/* Background principal sombre */
+/* Background principal */
 [data-theme="dark"] body {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
 }
 
-/* Cards deviennent sombres */
+/* Cards et containers */
 [data-theme="dark"] .card,
 [data-theme="dark"] .header,
 [data-theme="dark"] .profile-card,
@@ -33,30 +32,42 @@ html[data-theme="dark"] {
   color: #eaeaea !important;
 }
 
-/* Textes clairs */
+/* Titres et textes */
 [data-theme="dark"] .card-title,
 [data-theme="dark"] .header-title,
 [data-theme="dark"] .profile-name,
 [data-theme="dark"] .section-label,
 [data-theme="dark"] .med-name,
 [data-theme="dark"] .entry-title,
-[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3 {
+[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3,
+[data-theme="dark"] h4, [data-theme="dark"] label {
   color: #eaeaea !important;
 }
 
 [data-theme="dark"] .stat-label,
 [data-theme="dark"] .med-dosage,
-[data-theme="dark"] .entry-category {
+[data-theme="dark"] .entry-category,
+[data-theme="dark"] .med-time,
+[data-theme="dark"] .entry-date {
   color: #b8b8b8 !important;
 }
 
-/* Inputs sombres */
+[data-theme="dark"] .entry-preview {
+  color: #8a8a8a !important;
+}
+
+/* Inputs et textareas */
 [data-theme="dark"] input,
 [data-theme="dark"] textarea,
 [data-theme="dark"] select {
   background-color: #0f3460 !important;
   color: #eaeaea !important;
   border-color: #2d3748 !important;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: #8a8a8a !important;
 }
 
 /* Med items et entry items */
@@ -67,23 +78,51 @@ html[data-theme="dark"] {
   border-color: #2d3748 !important;
 }
 
-/* Boutons d'action */
+/* Boutons d'action génériques */
 [data-theme="dark"] .action-btn,
 [data-theme="dark"] .time-slot {
   background-color: rgba(139, 126, 184, 0.15) !important;
   color: #eaeaea !important;
 }
 
-/* Stats */
-[data-theme="dark"] .stat-number {
-  color: #9d8ec4 !important;
+[data-theme="dark"] .time-slot.selected {
+  background: linear-gradient(135deg, #9d8ec4 0%, rgba(139, 126, 184, 0.15) 100%) !important;
+  border-color: #9d8ec4 !important;
 }
 
-/* Transition smooth */
-body, .card, .header, input, textarea {
-  transition: all 0.3s ease !important;
+/* TRAITEMENT.HTML */
+[data-theme="dark"] .add-btn {
+  background: linear-gradient(135deg, #9d8ec4 0%, #8B7EB8 100%) !important;
+  color: white !important;
 }
-/* FIX POUR JOURNAL.HTML */
+
+[data-theme="dark"] .calendar-day {
+  background-color: rgba(139, 126, 184, 0.15) !important;
+  color: #eaeaea !important;
+  border-color: #2d3748 !important;
+}
+
+[data-theme="dark"] .calendar-day.taken {
+  background: #10b981 !important;
+  color: white !important;
+}
+
+[data-theme="dark"] .calendar-day.missed {
+  background: #ef4444 !important;
+  color: white !important;
+}
+
+[data-theme="dark"] .no-meds {
+  color: #b8b8b8 !important;
+}
+
+[data-theme="dark"] .med-actions button {
+  background-color: rgba(139, 126, 184, 0.15) !important;
+  color: #eaeaea !important;
+  border-color: #2d3748 !important;
+}
+
+/* JOURNAL.HTML */
 [data-theme="dark"] .category-btn {
   background-color: rgba(139, 126, 184, 0.15) !important;
   color: #eaeaea !important;
@@ -93,6 +132,7 @@ body, .card, .header, input, textarea {
 [data-theme="dark"] .category-btn.selected {
   background: linear-gradient(135deg, #9d8ec4 0%, rgba(139, 126, 184, 0.15) 100%) !important;
   color: white !important;
+  border-color: #9d8ec4 !important;
 }
 
 [data-theme="dark"] .mood-option {
@@ -105,19 +145,8 @@ body, .card, .header, input, textarea {
   border-color: #9d8ec4 !important;
 }
 
-[data-theme="dark"] .entry-date {
-  color: #b8b8b8 !important;
-}
-
-[data-theme="dark"] .entry-preview {
-  color: #8a8a8a !important;
-}
-
 [data-theme="dark"] .entry-mood {
   background-color: rgba(139, 126, 184, 0.2) !important;
 }
 
-[data-theme="dark"] .save-btn {
-  background: linear-gradient(135deg, #9d8ec4 0%, #8B7EB8 100%) !important;
-  color: white !important;
-}
+[data-theme="dark"] .save-
