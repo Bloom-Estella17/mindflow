@@ -160,6 +160,12 @@ html[data-theme="dark"] {
   opacity: 1 !important;
   transform: none !important;
 }
+/* FIX MENU CENTRÉ - FORCE */
+.bottom-nav {
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  right: auto !important;
+}
 
 .bottom-nav .nav-item {
   animation: none !important;
