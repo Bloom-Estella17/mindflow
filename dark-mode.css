@@ -169,4 +169,13 @@ html[data-theme="dark"] {
 
 .bottom-nav .nav-item {
   animation: none !important;
+  /* FIX MENU PROFIL.HTML - ULTRA FORCE */
+body .bottom-nav {
+  position: fixed !important;
+  bottom: 15px !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  margin: 0 !important;
+}
 }
