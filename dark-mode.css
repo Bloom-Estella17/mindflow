@@ -154,3 +154,13 @@ html[data-theme="dark"] {
 .bottom-nav {
   animation: none !important;
 }
+/* ===== FIX MENU QUI BOUGE ===== */
+.bottom-nav {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.bottom-nav .nav-item {
+  animation: none !important;
+}
