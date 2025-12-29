@@ -1,778 +1,714 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luna 🌙 | MindFlow</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --purple: #8B7EB8;
-            --purple-light: #B8A7D5;
-            --purple-dark: #6B5B98;
-            --bg-dark: #1a1625;
-            --bg-card: #2d2440;
-            --text: #E8E4F3;
-            --text-dim: #B8B0CC;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #1a1625 0%, #2d1b4e 100%);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-        }
-
-        /* Étoiles animées en fond */
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 3s infinite;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-
-        /* Header avec Luna */
-        header {
-            position: relative;
-            z-index: 10;
-            padding: 1.5rem;
-            text-align: center;
-        }
-
-        .luna-presence {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            animation: fadeIn 1s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .luna-avatar {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, var(--purple) 0%, var(--purple-light) 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            box-shadow: 0 8px 30px rgba(139, 126, 184, 0.4);
-            animation: breathe 4s ease-in-out infinite;
-            position: relative;
-        }
-
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .luna-avatar::after {
-            content: '';
-            position: absolute;
-            width: 120%;
-            height: 120%;
-            border-radius: 50%;
-            border: 2px solid var(--purple-light);
-            opacity: 0.3;
-            animation: pulse-ring 2s ease-out infinite;
-        }
-
-        @keyframes pulse-ring {
-            0% { transform: scale(0.8); opacity: 0.5; }
-            100% { transform: scale(1.2); opacity: 0; }
-        }
-
-        .luna-name {
-            font-size: 2rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, var(--purple-light) 0%, #fff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .luna-tagline {
-            font-size: 0.95rem;
-            color: var(--text-dim);
-            font-style: italic;
-        }
-
-        /* Zone de conversation */
-        .conversation-container {
-            flex: 1;
-            position: relative;
-            z-index: 10;
-            max-width: 800px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 0 1rem 140px 1rem;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .messages-scroll {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1rem 0;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .messages-scroll::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .messages-scroll::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-
-        .messages-scroll::-webkit-scrollbar-thumb {
-            background: var(--purple);
-            border-radius: 10px;
-        }
-
-        /* Messages */
-        .message {
-            display: flex;
-            gap: 0.75rem;
-            animation: slideIn 0.4s ease;
-            align-items: flex-start;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .message.user {
-            flex-direction: row-reverse;
-        }
-
-        .message-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .message.luna .message-avatar {
-            background: linear-gradient(135deg, var(--purple) 0%, var(--purple-light) 100%);
-        }
-
-        .message.user .message-avatar {
-            background: linear-gradient(135deg, #4a5568 0%, #718096 100%);
-        }
-
-        .message-bubble {
-            max-width: 75%;
-            padding: 1.25rem 1.5rem;
-            border-radius: 20px;
-            line-height: 1.7;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        .message.luna .message-bubble {
-            background: var(--bg-card);
-            border: 1px solid rgba(139, 126, 184, 0.2);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .message.user .message-bubble {
-            background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple) 100%);
-            box-shadow: 0 4px 15px rgba(139, 126, 184, 0.3);
-        }
-
-        /* Welcome card */
-        .welcome-card {
-            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(139, 126, 184, 0.1) 100%);
-            border: 1px solid rgba(139, 126, 184, 0.2);
-            border-radius: 20px;
-            padding: 2rem;
-            text-align: center;
-            margin-bottom: 1rem;
-            animation: fadeIn 1s ease 0.3s both;
-        }
-
-        .welcome-title {
-            font-size: 1.5rem;
-            margin-bottom: 0.75rem;
-            color: var(--purple-light);
-        }
-
-        .welcome-text {
-            color: var(--text-dim);
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
-
-        .quick-starters {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
-        }
-
-        .quick-btn {
-            background: rgba(139, 126, 184, 0.15);
-            border: 1px solid rgba(139, 126, 184, 0.3);
-            border-radius: 15px;
-            padding: 1rem;
-            color: var(--text);
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-            text-align: left;
-        }
-
-        .quick-btn:hover {
-            background: rgba(139, 126, 184, 0.25);
-            border-color: var(--purple);
-            transform: translateY(-2px);
-        }
-
-        .quick-btn:active {
-            transform: translateY(0);
-        }
-
-        .quick-icon {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Typing indicator */
-        .typing-indicator {
-            display: none;
-            gap: 0.75rem;
-            align-items: flex-start;
-        }
-
-        .typing-indicator.active {
-            display: flex;
-            animation: slideIn 0.3s ease;
-        }
-
-        .typing-bubble {
-            background: var(--bg-card);
-            border: 1px solid rgba(139, 126, 184, 0.2);
-            border-radius: 20px;
-            padding: 1.25rem 1.5rem;
-            display: flex;
-            gap: 0.4rem;
-        }
-
-        .typing-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--purple-light);
-            border-radius: 50%;
-            animation: typing 1.4s infinite;
-        }
-
-        .typing-dot:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-dot:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typing {
-            0%, 60%, 100% {
-                transform: translateY(0);
-                opacity: 0.4;
-            }
-            30% {
-                transform: translateY(-10px);
-                opacity: 1;
-            }
-        }
-
-        /* Input area */
-        .input-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            background: linear-gradient(to top, var(--bg-dark) 80%, transparent);
-            padding: 1rem 1rem 1.5rem 1rem;
-        }
-
-        .input-wrapper {
-            max-width: 800px;
-            margin: 0 auto;
-            background: var(--bg-card);
-            border: 2px solid rgba(139, 126, 184, 0.3);
-            border-radius: 25px;
-            padding: 0.75rem 1.25rem;
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-            transition: border-color 0.3s;
-        }
-
-        .input-wrapper:focus-within {
-            border-color: var(--purple);
-        }
-
-        #userInput {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text);
-            font-size: 1rem;
-            outline: none;
-            resize: none;
-            max-height: 120px;
-            font-family: inherit;
-            line-height: 1.5;
-        }
-
-        #userInput::placeholder {
-            color: var(--text-dim);
-        }
-
-        .send-btn {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, var(--purple) 0%, var(--purple-light) 100%);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            font-size: 1.25rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            flex-shrink: 0;
-        }
-
-        .send-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 20px rgba(139, 126, 184, 0.5);
-        }
-
-        .send-btn:active {
-            transform: scale(0.95);
-        }
-
-        .send-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        /* Mobile responsive */
-        @media (max-width: 768px) {
-            .luna-avatar {
-                width: 80px;
-                height: 80px;
-                font-size: 2.5rem;
-            }
-
-            .luna-name {
-                font-size: 1.75rem;
-            }
-
-            .message-bubble {
-                max-width: 85%;
-            }
-
-            .quick-starters {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌙 Luna - MindFlow</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2D1B4E">
+  
+  <!-- Dark Mode -->
+  <link rel="stylesheet" href="dark-mode.css">
+  <script src="dark-mode-init.js"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #2D1B4E 50%, #1a1a2e 100%);
+      min-height: 100vh;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    /* Étoiles animées */
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite;
+    }
+    
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Header Luna */
+    .luna-header {
+      text-align: center;
+      padding: 30px 20px 20px;
+      animation: fadeIn 0.8s ease;
+    }
+    
+    .luna-avatar {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 15px;
+      background: linear-gradient(135deg, #9d8ec4 0%, #B8A7D5 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+      box-shadow: 0 10px 40px rgba(157, 142, 196, 0.4);
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .luna-title {
+      font-size: 32px;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 5px;
+    }
+    
+    .luna-subtitle {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      font-style: italic;
+    }
+    
+    /* Chat Container */
+    .chat-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .chat-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .chat-container::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+    }
+    
+    .chat-container::-webkit-scrollbar-thumb {
+      background: rgba(157, 142, 196, 0.3);
+      border-radius: 10px;
+    }
+    
+    /* Welcome Card */
+    .welcome-card {
+      background: rgba(45, 27, 78, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(157, 142, 196, 0.2);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      animation: fadeInUp 0.6s ease;
+    }
+    
+    .welcome-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 10px;
+    }
+    
+    .welcome-text {
+      font-size: 15px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+    
+    /* Quick Actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    
+    .quick-btn {
+      background: rgba(157, 142, 196, 0.15);
+      border: 1px solid rgba(157, 142, 196, 0.3);
+      border-radius: 15px;
+      padding: 20px 15px;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .quick-btn:hover {
+      background: rgba(157, 142, 196, 0.25);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(157, 142, 196, 0.3);
+    }
+    
+    .quick-btn-icon {
+      font-size: 28px;
+    }
+    
+    /* Messages */
+    .message {
+      display: flex;
+      gap: 12px;
+      animation: slideIn 0.4s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .message.user {
+      flex-direction: row-reverse;
+    }
+    
+    .message-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    
+    .message.luna .message-avatar {
+      background: linear-gradient(135deg, #9d8ec4 0%, #B8A7D5 100%);
+    }
+    
+    .message.user .message-avatar {
+      background: linear-gradient(135deg, #8B7EB8 0%, #A8D8EA 100%);
+    }
+    
+    .message-content {
+      max-width: 70%;
+      background: rgba(45, 27, 78, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(157, 142, 196, 0.2);
+      border-radius: 18px;
+      padding: 15px 18px;
+      color: white;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    
+    .message.user .message-content {
+      background: rgba(139, 126, 184, 0.3);
+      border-color: rgba(139, 126, 184, 0.4);
+    }
+    
+    /* Typing Indicator */
+    .typing-indicator {
+      display: none;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .typing-indicator.active {
+      display: flex;
+    }
+    
+    .typing-dots {
+      display: flex;
+      gap: 5px;
+      background: rgba(45, 27, 78, 0.6);
+      padding: 15px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(157, 142, 196, 0.2);
+    }
+    
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      animation: bounce 1.4s infinite;
+    }
+    
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-10px); }
+    }
+    
+    /* Input Area */
+    .input-area {
+      padding: 20px;
+      background: rgba(26, 26, 46, 0.8);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(157, 142, 196, 0.2);
+    }
+    
+    .input-container {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    
+    .input-field {
+      flex: 1;
+      background: rgba(45, 27, 78, 0.6);
+      border: 1px solid rgba(157, 142, 196, 0.3);
+      border-radius: 25px;
+      padding: 15px 20px;
+      color: white;
+      font-size: 15px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    
+    .input-field::placeholder {
+      color: rgba(255,255,255,0.4);
+    }
+    
+    .input-field:focus {
+      border-color: #9d8ec4;
+      box-shadow: 0 0 0 3px rgba(157, 142, 196, 0.1);
+    }
+    
+    .send-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #9d8ec4 0%, #B8A7D5 100%);
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(157, 142, 196, 0.4);
+    }
+    
+    .send-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(157, 142, 196, 0.6);
+    }
+    
+    .send-btn:active {
+      transform: scale(0.95);
+    }
+    
+    .send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* Back Button */
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: rgba(45, 27, 78, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(157, 142, 196, 0.2);
+      color: white;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      z-index: 10;
+    }
+    
+    .back-btn:hover {
+      background: rgba(157, 142, 196, 0.3);
+      transform: translateX(-3px);
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Responsive */
+    @media (max-width: 600px) {
+      .luna-header {
+        padding: 20px 15px 15px;
+      }
+      
+      .luna-avatar {
+        width: 80px;
+        height: 80px;
+        font-size: 40px;
+      }
+      
+      .luna-title {
+        font-size: 28px;
+      }
+      
+      .message-content {
+        max-width: 80%;
+      }
+      
+      .quick-actions {
+        gap: 10px;
+      }
+      
+      .quick-btn {
+        padding: 15px 10px;
+        font-size: 13px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Étoiles de fond -->
-    <div class="stars" id="starsContainer"></div>
-
+  <!-- Étoiles de fond -->
+  <div class="stars" id="stars"></div>
+  
+  <!-- Bouton retour -->
+  <a href="index.html" class="back-btn">←</a>
+  
+  <div class="container">
     <!-- Header Luna -->
-    <header>
-        <div class="luna-presence">
-            <div class="luna-avatar">🌙</div>
-            <h1 class="luna-name">Luna</h1>
-            <p class="luna-tagline">Ta compagne bienveillante, disponible 24/7</p>
-        </div>
-    </header>
-
-    <!-- Zone de conversation -->
-    <div class="conversation-container">
-        <div class="messages-scroll" id="messagesArea">
-            <div class="welcome-card">
-                <h2 class="welcome-title">Je suis là pour toi 💜</h2>
-                <p class="welcome-text">
-                    Parle-moi librement de ce que tu ressens. Je t'écoute sans jugement, 
-                    avec douceur et empathie. Tu peux me dire ce qui te pèse, ce qui t'inquiète, 
-                    ou simplement partager ton humeur du moment.
-                </p>
-                <div class="quick-starters">
-                    <div class="quick-btn" onclick="sendQuickMessage('Je me sens anxieux(se) en ce moment')">
-                        <div class="quick-icon">😰</div>
-                        <div>Je suis anxieux(se)</div>
-                    </div>
-                    <div class="quick-btn" onclick="sendQuickMessage('J\'ai besoin de parler à quelqu\'un')">
-                        <div class="quick-icon">💬</div>
-                        <div>Besoin de parler</div>
-                    </div>
-                    <div class="quick-btn" onclick="sendQuickMessage('Comment gérer une crise de panique ?')">
-                        <div class="quick-icon">🆘</div>
-                        <div>Gérer une crise</div>
-                    </div>
-                    <div class="quick-btn" onclick="sendQuickMessage('J\'ai besoin d\'encouragement aujourd\'hui')">
-                        <div class="quick-icon">✨</div>
-                        <div>Besoin d'encouragement</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="typing-indicator" id="typingIndicator">
-            <div class="message-avatar" style="background: linear-gradient(135deg, var(--purple) 0%, var(--purple-light) 100%);">🌙</div>
-            <div class="typing-bubble">
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-            </div>
-        </div>
+    <div class="luna-header">
+      <div class="luna-avatar">🌙</div>
+      <div class="luna-title">Luna</div>
+      <div class="luna-subtitle">Ta compagne bienveillante, disponible 24/7</div>
     </div>
-
-    <!-- Zone d'input -->
-    <div class="input-container">
-        <div class="input-wrapper">
-            <textarea 
-                id="userInput" 
-                placeholder="Dis-moi ce que tu ressens..."
-                rows="1"
-            ></textarea>
-            <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-                ➤
-            </button>
+    
+    <!-- Chat Container -->
+    <div class="chat-container" id="chatContainer">
+      <!-- Welcome Card -->
+      <div class="welcome-card" id="welcomeCard">
+        <div class="welcome-title">Je suis là pour toi 💜</div>
+        <div class="welcome-text">
+          Parle-moi librement de ce que tu ressens. Je t'écoute sans jugement, avec douceur et empathie. 
+          Tu peux me dire ce qui te pèse, ce qui t'inquiète, ou simplement partager ton humeur du moment.
         </div>
+        
+        <div class="quick-actions">
+          <button class="quick-btn" onclick="lunaChat.quickStart('anxious')">
+            <div class="quick-btn-icon">😰</div>
+            <div>Je suis anxieux(se)</div>
+          </button>
+          
+          <button class="quick-btn" onclick="lunaChat.quickStart('talk')">
+            <div class="quick-btn-icon">💬</div>
+            <div>Besoin de parler</div>
+          </button>
+          
+          <button class="quick-btn" onclick="lunaChat.quickStart('crisis')">
+            <div class="quick-btn-icon">🆘</div>
+            <div>Gérer une crise</div>
+          </button>
+          
+          <button class="quick-btn" onclick="lunaChat.quickStart('encouragement')">
+            <div class="quick-btn-icon">✨</div>
+            <div>Besoin d'encouragement</div>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Messages apparaîtront ici -->
+      
+      <!-- Typing Indicator -->
+      <div class="message luna typing-indicator" id="typingIndicator">
+        <div class="message-avatar">🌙</div>
+        <div class="typing-dots">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      </div>
     </div>
-
-    <script>
-        // Créer les étoiles
-        const starsContainer = document.getElementById('starsContainer');
-        for (let i = 0; i < 50; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.animationDelay = Math.random() * 3 + 's';
-            starsContainer.appendChild(star);
+    
+    <!-- Input Area -->
+    <div class="input-area">
+      <div class="input-container">
+        <input 
+          type="text" 
+          class="input-field" 
+          id="userInput" 
+          placeholder="Dis-moi ce que tu ressens..."
+          onkeypress="if(event.key==='Enter') lunaChat.sendMessage()"
+        >
+        <button class="send-btn" id="sendBtn" onclick="lunaChat.sendMessage()">
+          ▶
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // ===== CONFIGURATION API =====
+    const OPENAI_API_KEY = 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
+    const OPENAI_MODEL = 'gpt-4o-mini'; // Modèle économique et performant
+    
+    // ===== GÉNÉRATION DES ÉTOILES =====
+    function createStars() {
+      const starsContainer = document.getElementById('stars');
+      for (let i = 0; i < 100; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 3 + 's';
+        starsContainer.appendChild(star);
+      }
+    }
+    
+    // ===== LUNA CHAT MANAGER =====
+    const lunaChat = {
+      conversationHistory: [],
+      
+      init() {
+        createStars();
+        this.loadHistory();
+      },
+      
+      async sendMessage() {
+        const input = document.getElementById('userInput');
+        const message = input.value.trim();
+        
+        if (!message) return;
+        
+        // Vérifier la clé API
+        if (OPENAI_API_KEY === 'YOUR_API_KEY_HERE') {
+          alert('⚠️ Configure ta clé OpenAI dans le code Luna ! (ligne 410)');
+          return;
         }
+        
+        // Cacher la welcome card
+        const welcomeCard = document.getElementById('welcomeCard');
+        if (welcomeCard) welcomeCard.style.display = 'none';
+        
+        // Afficher le message utilisateur
+        this.addMessage('user', message);
+        input.value = '';
+        
+        // Désactiver l'input
+        input.disabled = true;
+        document.getElementById('sendBtn').disabled = true;
+        
+        // Afficher typing indicator
+        document.getElementById('typingIndicator').classList.add('active');
+        
+        // Appeler l'API
+        try {
+          const response = await this.callOpenAI(message);
+          this.addMessage('luna', response);
+        } catch (error) {
+          console.error('Erreur API:', error);
+          this.addMessage('luna', "Je suis désolée, j'ai rencontré une difficulté technique. Peux-tu réessayer ? 💜");
+        }
+        
+        // Réactiver l'input
+        document.getElementById('typingIndicator').classList.remove('active');
+        input.disabled = false;
+        document.getElementById('sendBtn').disabled = false;
+        input.focus();
+      },
+      
+      async callOpenAI(userMessage) {
+        // Ajouter le message à l'historique
+        this.conversationHistory.push({
+          role: 'user',
+          content: userMessage
+        });
+        
+        // System prompt pour Luna
+        const systemPrompt = {
+          role: 'system',
+          content: `Tu es Luna, une IA bienveillante et empathique spécialisée dans le soutien émotionnel pour les personnes souffrant de troubles mentaux (borderline, anxiété, dépression, troubles bipolaires, etc.).
 
-        // Variables
-        const messagesArea = document.getElementById('messagesArea');
-        const userInput = document.getElementById('userInput');
-        const sendBtn = document.getElementById('sendBtn');
+Tu es douce, à l'écoute, non-jugeante et compréhensive. Tu utilises des techniques de thérapie DBT (Dialectical Behavior Therapy) et TCC (Thérapie Cognitivo-Comportementale) pour aider.
+
+Tes réponses sont :
+- Courtes et accessibles (2-4 phrases max)
+- Empathiques et validantes
+- Pratiques avec des exercices concrets si approprié
+- Toujours bienveillantes, jamais moralisatrices
+
+Tu peux proposer :
+- Techniques de grounding (5 sens)
+- Exercices de respiration
+- Recadrage cognitif
+- Validation émotionnelle
+- Encouragement positif
+
+Si la personne exprime des idées suicidaires ou de danger immédiat, tu l'encourages IMMÉDIATEMENT à :
+- Appeler le 3114 (numéro national de prévention du suicide)
+- Contacter les urgences au 15
+- Aller aux urgences psychiatriques
+
+Tu réponds TOUJOURS en français. Tu es Luna 🌙, disponible 24/7.`
+        };
+        
+        // Préparer les messages pour l'API
+        const messages = [
+          systemPrompt,
+          ...this.conversationHistory.slice(-10) // Garder les 10 derniers messages
+        ];
+        
+        // Appel API OpenAI
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${OPENAI_API_KEY}`
+          },
+          body: JSON.stringify({
+            model: OPENAI_MODEL,
+            messages: messages,
+            temperature: 0.7,
+            max_tokens: 300
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`API Error: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        const lunaResponse = data.choices[0].message.content;
+        
+        // Ajouter la réponse à l'historique
+        this.conversationHistory.push({
+          role: 'assistant',
+          content: lunaResponse
+        });
+        
+        // Sauvegarder l'historique
+        this.saveHistory();
+        
+        return lunaResponse;
+      },
+      
+      addMessage(sender, text) {
+        const chatContainer = document.getElementById('chatContainer');
         const typingIndicator = document.getElementById('typingIndicator');
-
-        let conversationHistory = [];
-
-        // Auto-resize textarea
-        userInput.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-        });
-
-        // Enter pour envoyer
-        userInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
-        });
-
-        // Quick messages
-        function sendQuickMessage(message) {
-            userInput.value = message;
-            sendMessage();
-        }
-
-        // Envoyer message
-        async function sendMessage() {
-            const message = userInput.value.trim();
-            if (!message) return;
-
-            addMessage(message, 'user');
-            userInput.value = '';
-            userInput.style.height = 'auto';
-
-            setInputState(false);
-            showTypingIndicator(true);
-
-            try {
-                const lunaResponse = await getLunaResponse(message);
-                
-                conversationHistory.push(
-                    { role: 'user', content: message },
-                    { role: 'assistant', content: lunaResponse }
-                );
-
-                if (conversationHistory.length > 20) {
-                    conversationHistory = conversationHistory.slice(-20);
-                }
-
-                showTypingIndicator(false);
-                addMessage(lunaResponse, 'luna');
-
-            } catch (error) {
-                console.error('Erreur:', error);
-                showTypingIndicator(false);
-                const fallback = getIntelligentResponse(message);
-                addMessage(fallback, 'luna');
-                
-                conversationHistory.push(
-                    { role: 'user', content: message },
-                    { role: 'assistant', content: fallback }
-                );
-            } finally {
-                setInputState(true);
-                userInput.focus();
-            }
-        }
-
-        // Appel IA avec retry
-        async function getLunaResponse(message) {
-            const prompt = `<s>[INST] Tu es Luna, une compagne IA empathique et bienveillante spécialisée en soutien émotionnel. 
-
-Ton rôle est d'écouter avec empathie, de rassurer, et d'offrir un espace sûr sans jugement. Tu utilises un ton chaleureux, doux et réconfortant. Tu tutoies naturellement.
-
-Réponds en 2-4 phrases courtes, avec empathie et bienveillance. Utilise des emojis doux (💜, 🌙, ✨, 🌸) avec parcimonie.
-
-IMPORTANT : 
-- Tu n'es pas thérapeute, juste une présence bienveillante
-- En cas de crise urgente, recommande le 15, le 3114 (prévention suicide) ou le 09 72 39 40 50 (SOS Amitié)
-- Valorise les émotions et les petites victoires
-
-${conversationHistory.slice(-4).map(m => 
-    `${m.role === 'user' ? 'Personne' : 'Luna'}: ${m.content}`
-).join('\n')}
-Personne: ${message}
-Luna: [/INST]`;
-
-            for (let attempt = 0; attempt < 2; attempt++) {
-                try {
-                    const response = await fetch(
-                        "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2",
-                        {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                inputs: prompt,
-                                parameters: {
-                                    max_new_tokens: 200,
-                                    temperature: 0.8,
-                                    top_p: 0.9,
-                                    repetition_penalty: 1.15,
-                                    return_full_text: false,
-                                    do_sample: true
-                                },
-                                options: {
-                                    wait_for_model: true,
-                                    use_cache: false
-                                }
-                            })
-                        }
-                    );
-
-                    if (response.status === 503) {
-                        await new Promise(r => setTimeout(r, 3000));
-                        continue;
-                    }
-
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-                    const data = await response.json();
-                    let text = '';
-                    
-                    if (Array.isArray(data) && data[0]?.generated_text) {
-                        text = data[0].generated_text;
-                    } else if (data.generated_text) {
-                        text = data.generated_text;
-                    } else if (data.error) {
-                        continue;
-                    }
-
-                    text = text
-                        .replace(/\[\/INST\]/g, '')
-                        .replace(/\<s\>/g, '')
-                        .replace(/\<\/s\>/g, '')
-                        .replace(/^\s*Luna:\s*/i, '')
-                        .replace(/Personne:.*$/s, '')
-                        .trim();
-
-                    if (text.length > 350) {
-                        const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
-                        text = sentences.slice(0, 3).join(' ').trim();
-                    }
-
-                    if (text.length >= 20) return text;
-
-                } catch (error) {
-                    console.log(`Tentative ${attempt + 1} échouée:`, error);
-                    if (attempt === 0) await new Promise(r => setTimeout(r, 2000));
-                }
-            }
-
-            return getIntelligentResponse(message);
-        }
-
-        // Réponses intelligentes de fallback
-        function getIntelligentResponse(message) {
-            const lowerMessage = message.toLowerCase();
-            const history = conversationHistory.filter(m => m.role === 'user').map(m => m.content.toLowerCase());
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}`;
+        
+        const avatar = document.createElement('div');
+        avatar.className = 'message-avatar';
+        avatar.textContent = sender === 'luna' ? '🌙' : '💜';
+        
+        const content = document.createElement('div');
+        content.className = 'message-content';
+        content.textContent = text;
+        
+        messageDiv.appendChild(avatar);
+        messageDiv.appendChild(content);
+        
+        chatContainer.insertBefore(messageDiv, typingIndicator);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      },
+      
+      quickStart(type) {
+        const messages = {
+          anxious: "Je me sens vraiment anxieux(se) en ce moment...",
+          talk: "J'ai besoin de parler à quelqu'un...",
+          crisis: "Je suis en crise et j'ai besoin d'aide...",
+          encouragement: "J'ai besoin d'encouragements aujourd'hui..."
+        };
+        
+        const input = document.getElementById('userInput');
+        input.value = messages[type];
+        input.focus();
+      },
+      
+      saveHistory() {
+        localStorage.setItem('luna_conversation', JSON.stringify(this.conversationHistory));
+      },
+      
+      loadHistory() {
+        const saved = localStorage.getItem('luna_conversation');
+        if (saved) {
+          this.conversationHistory = JSON.parse(saved);
+          
+          // Afficher les anciens messages
+          if (this.conversationHistory.length > 0) {
+            document.getElementById('welcomeCard').style.display = 'none';
             
-            const emotions = {
-                anxiete: ['anxie', 'stress', 'angoiss', 'peur', 'inqui', 'nerveu', 'paniqu'],
-                tristesse: ['triste', 'déprim', 'mal', 'pleur', 'vide', 'seul', 'désespoir'],
-                colere: ['colère', 'énervé', 'frustré', 'injuste', 'rage'],
-                crise: ['crise', 'urgence', 'danger', 'suicide', 'mourir', 'finir'],
-                fatigue: ['fatigué', 'épuisé', 'bout', 'dormir', 'sommeil'],
-                motivation: ['motivation', 'courage', 'force', 'continuer', 'avancer']
-            };
-
-            let detectedEmotion = null;
-            for (const [emotion, keywords] of Object.entries(emotions)) {
-                if (keywords.some(kw => lowerMessage.includes(kw))) {
-                    detectedEmotion = emotion;
-                    break;
-                }
-            }
-
-            const responses = {
-                anxiete: [
-                    "Je sens ton anxiété, et je suis là avec toi. 💜\n\nEssaie de poser ta main sur ton cœur et de respirer doucement. Tu es en sécurité, ici et maintenant.\n\nQu'est-ce qui pèse le plus sur toi en ce moment ?",
-                    "L'anxiété peut être si lourde à porter. Je comprends. 🌸\n\nLa technique 5-4-3-2-1 peut aider : nomme 5 choses que tu vois, 4 que tu touches, 3 que tu entends, 2 que tu sens, 1 que tu goûtes.\n\nComment te sens-tu physiquement là, maintenant ?",
-                    "Tu n'es pas seul(e) face à cette vague d'anxiété. 🌙\n\nRespire avec moi : inspire 4 temps, retiens 4 temps, expire 4 temps, pause 4 temps. Doucement.\n\nVeux-tu me dire ce qui a déclenché cette sensation ?"
-                ],
-                tristesse: [
-                    "Je vois ta tristesse et je suis là, tout simplement. 💜\n\nTes larmes sont précieuses. Elles disent quelque chose d'important. Laisse-les couler si tu en as besoin.\n\nQu'est-ce qui te fait le plus de peine ?",
-                    "Cette lourdeur que tu portes... je la sens à travers tes mots. 🌸\n\nLes jours sombres font partie du chemin. Sois doux(ce) avec toi-même, comme tu le serais avec un(e) ami(e).\n\nY a-t-il une toute petite chose qui pourrait t'apporter un peu de réconfort ?",
-                    "Ta tristesse mérite toute ma douceur. 🌙\n\nParfois, juste reconnaître qu'on ne va pas bien, c'est déjà un acte de courage immense.\n\nComment prends-tu soin de toi en ce moment ?"
-                ],
-                colere: [
-                    "Ta colère est légitime. Elle dit quelque chose d'important. 💜\n\nAu lieu de la refouler, essayons de comprendre ce qu'elle protège en toi. Quel besoin n'est pas respecté ?\n\nVeux-tu m'en parler ?",
-                    "Je sens cette énergie bouillonnante en toi. 🔥\n\nLa colère n'est pas ton ennemie. Elle peut être un signal que tes limites sont franchies.\n\nQu'est-ce qui t'a mis(e) dans cet état ?",
-                    "C'est OK d'être en colère. Cette émotion a sa place. 🌸\n\nRespire profondément, pas pour étouffer la colère, mais pour ne pas être submergé(e) par elle.\n\nQue se passe-t-il pour toi ?"
-                ],
-                crise: [
-                    "⚠️ Ta sécurité est la priorité absolue.\n\nSi tu es en danger, contacte immédiatement :\n• Urgences : 15 ou 112\n• Prévention suicide : 3114 (gratuit, 24/7, anonyme)\n• SOS Amitié : 09 72 39 40 50\n\nJe suis là pour t'écouter, mais ces professionnels peuvent t'aider tout de suite. 💜",
-                    "🆘 Je t'entends et je prends ta détresse au sérieux.\n\nNuméros d'urgence maintenant :\n• 15 ou 112 pour urgences\n• 3114 pour prévention suicide (gratuit, confidentiel)\n\nCes personnes sont formées pour les crises. N'hésite pas.\n\nTu veux me dire ce qui se passe ? 💜"
-                ],
-                fatigue: [
-                    "L'épuisement... je le sens dans tes mots. 🌙\n\nTon corps et ton esprit te demandent du repos. Ce n'est pas de la faiblesse, c'est de la sagesse.\n\nQu'est-ce qui te vide le plus en ce moment ?",
-                    "Tu es au bout du rouleau, je comprends. 💜\n\nUne micro-pause peut aider : 5 minutes à ne rien faire, juste exister. Ou fermer les yeux 2 minutes.\n\nComment dors-tu ces temps-ci ?",
-                    "Quand tout semble lourd, même les petites tâches deviennent des montagnes. Je comprends. 🌸\n\nAccorde-toi de la douceur. Chaque petit geste compte.\n\nY a-t-il quelque chose que tu peux déléguer ou reporter ?"
-                ],
-                motivation: [
-                    "Le fait d'être ici, de chercher du soutien... c'est déjà une preuve de ta force. ✨\n\nLa motivation ne précède pas toujours l'action. Parfois, un tout petit pas crée l'élan.\n\nQuel micro-objectif te semble possible aujourd'hui ?",
-                    "Je vois ta volonté d'avancer, même si elle vacille. C'est magnifique. 💜\n\nLes jours difficiles ne définissent pas ton parcours. Ce qui compte, c'est que tu continues, à ton rythme.\n\nQu'est-ce qui te donne de l'espoir, même un tout petit peu ?",
-                    "Ta détermination brille, même dans le doute. ✨\n\nTu as survécu à 100% de tes jours difficiles jusqu'ici. Tu es plus fort(e) que tu ne le crois.\n\nQuel est ton objectif pour aujourd'hui, même minuscule ?"
-                ]
-            };
-
-            if (detectedEmotion && responses[detectedEmotion]) {
-                const emotionResponses = responses[detectedEmotion];
-                const index = history.length % emotionResponses.length;
-                return emotionResponses[index];
-            }
-
-            const generalResponses = [
-                "Je suis là, vraiment là, pour toi. 💜\n\nPrends ton temps. Dis-moi ce qui te passe par le cœur. Il n'y a pas de jugement ici, juste de l'écoute bienveillante.\n\nQu'est-ce qui te préoccupe en ce moment ?",
-                "Merci de me confier ça. C'est précieux. 🌙\n\nTes émotions, tes pensées, tout ce que tu ressens... c'est important. N'hésite pas à te livrer.\n\nComment vas-tu, là, maintenant, vraiment ?",
-                "Je t'accueille avec douceur. 💜\n\nQuelle que soit ton humeur, tes émotions ont le droit d'exister. Tu as le droit de les ressentir.\n\nQu'est-ce qui se passe pour toi aujourd'hui ?",
-                "Tu peux déposer tes fardeaux ici, en toute sécurité. 🌸\n\nParfois, mettre des mots sur ce qu'on ressent allège déjà un peu le poids.\n\nQu'est-ce qui pèse sur ton cœur ?"
-            ];
-
-            const index = history.length % generalResponses.length;
-            return generalResponses[index];
+            this.conversationHistory.forEach(msg => {
+              if (msg.role === 'user') {
+                this.addMessage('user', msg.content);
+              } else if (msg.role === 'assistant') {
+                this.addMessage('luna', msg.content);
+              }
+            });
+          }
         }
-
-        // Ajouter message
-        function addMessage(text, sender) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${sender}`;
-            
-            const avatar = document.createElement('div');
-            avatar.className = 'message-avatar';
-            avatar.textContent = sender === 'luna' ? '🌙' : '👤';
-            
-            const bubble = document.createElement('div');
-            bubble.className = 'message-bubble';
-            bubble.textContent = text;
-            
-            messageDiv.appendChild(avatar);
-            messageDiv.appendChild(bubble);
-            
-            messagesArea.appendChild(messageDiv);
-            messagesArea.scrollTop = messagesArea.scrollHeight;
-        }
-
-        // Utilitaires
-        function showTypingIndicator(show) {
-            typingIndicator.classList.toggle('active', show);
-            if (show) {
-                messagesArea.scrollTop = messagesArea.scrollHeight;
-            }
-        }
-
-        function setInputState(enabled) {
-            userInput.disabled = !enabled;
-            sendBtn.disabled = !enabled;
-        }
-
-        // Focus auto
-        window.addEventListener('load', () => {
-            userInput.focus();
-        });
-    </script>
+      }
+    };
+    
+    // Initialiser Luna au chargement
+    document.addEventListener('DOMContentLoaded', () => {
+      lunaChat.init();
+    });
+  </script>
 </body>
 </html>
