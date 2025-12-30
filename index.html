@@ -125,6 +125,8 @@
     .fade-in:nth-child(5) { animation-delay: 0.5s; }
     .fade-in:nth-child(6) { animation-delay: 0.6s; }
     .fade-in:nth-child(7) { animation-delay: 0.7s; }
+    .fade-in:nth-child(8) { animation-delay: 0.8s; }
+    .fade-in:nth-child(9) { animation-delay: 0.9s; }
     
     /* Header */
     .header {
@@ -509,9 +511,9 @@
       color: var(--primary-light);
     }
     
-    /* Luna Card */
-    .luna-card {
-      background: linear-gradient(135deg, #B8A7D5 0%, #8B7EB8 100%);
+    /* Journal Guidé Card */
+    .journal-guided-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       border-radius: var(--radius-lg);
       padding: 25px;
       margin-bottom: 20px;
@@ -523,36 +525,44 @@
       transition: all 0.3s ease;
     }
     
-    .luna-card::before {
-      content: '💫';
+    .journal-guided-card::before {
+      content: '✨';
       position: absolute;
       top: -10px;
       right: -10px;
       font-size: 80px;
-      opacity: 0.1;
+      opacity: 0.15;
       animation: bounce 3s infinite;
     }
     
-    .luna-card:hover {
+    .journal-guided-card:hover {
       transform: translateY(-5px) scale(1.02);
-      box-shadow: 0 15px 40px rgba(139,126,184,0.4);
+      box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
     }
     
-    .luna-title {
+    .journal-guided-title {
       font-size: 20px;
       font-weight: bold;
       margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     
-    .luna-desc {
-      font-size: 14px;
+    .journal-guided-prompt {
+      font-size: 15px;
       opacity: 0.95;
       margin-bottom: 15px;
+      font-style: italic;
+      line-height: 1.5;
+      padding: 15px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
     }
     
-    .luna-btn {
+    .journal-guided-btn {
       background: white;
-      color: var(--primary);
+      color: #667eea;
       padding: 12px 20px;
       border: none;
       border-radius: 15px;
@@ -565,9 +575,76 @@
       transition: all 0.3s ease;
     }
     
-    .luna-btn:hover {
+    .journal-guided-btn:hover {
       transform: scale(1.05);
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    /* Insights Card */
+    .insights-card {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      border-radius: var(--radius-lg);
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+      color: white;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .insights-card::before {
+      content: '📊';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      font-size: 80px;
+      opacity: 0.15;
+      animation: pulse 3s infinite;
+    }
+    
+    .insights-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(240, 147, 251, 0.4);
+    }
+    
+    .insights-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .insight-item {
+      background: rgba(255,255,255,0.15);
+      padding: 12px 15px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .insight-item:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateX(5px);
+    }
+    
+    .insight-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    
+    .no-insights {
+      text-align: center;
+      padding: 20px;
+      opacity: 0.9;
+      font-size: 14px;
     }
     
     /* PRO Teaser */
@@ -812,15 +889,25 @@
       </div>
     </div>
     
-    <!-- Luna Chatbot (PRO) -->
-    <div class="luna-card fade-in ripple" onclick="dashboard.openLuna()">
-      <div class="luna-title">💬 Luna - Ton compagnon IA</div>
-      <div class="luna-desc">
-        Parle à Luna 24/7 pour du soutien émotionnel, des conseils et de l'écoute.
+    <!-- Journal Guidé Card -->
+    <div class="journal-guided-card fade-in ripple" onclick="dashboard.openGuidedJournal()">
+      <div class="journal-guided-title">🌙 Journal Guidé</div>
+      <div class="journal-guided-prompt" id="journalPrompt">
+        Chargement du prompt du jour...
       </div>
-      <button class="luna-btn">
-        <span id="lunaText">💎 Fonctionnalité PRO</span>
+      <button class="journal-guided-btn">
+        ✍️ Écrire maintenant
       </button>
+    </div>
+    
+    <!-- Insights & Patterns Card -->
+    <div class="insights-card fade-in">
+      <div class="insights-title">📊 Insights & Patterns</div>
+      <div id="insightsContainer">
+        <div class="no-insights">
+          Continue d'utiliser MindFlow pour découvrir des insights personnalisés sur tes patterns émotionnels ! 📈
+        </div>
+      </div>
     </div>
     
     <!-- PRO Teaser -->
@@ -832,7 +919,7 @@
       <div class="pro-features">
         <div class="pro-feature">✓ Émotions illimitées</div>
         <div class="pro-feature">✓ Stats 30 jours</div>
-        <div class="pro-feature">✓ Luna chatbot IA</div>
+        <div class="pro-feature">✓ Insights avancés</div>
         <div class="pro-feature">✓ Export PDF</div>
         <div class="pro-feature">✓ Thèmes custom</div>
         <div class="pro-feature">✓ Sans publicités</div>
@@ -880,6 +967,114 @@
       "Respire. Tu gères ça. 🌬️"
     ];
     
+    // 100+ Journal Prompts
+    const journalPrompts = [
+      "Qu'est-ce qui t'a apporté de la joie aujourd'hui, même si c'était quelque chose de petit ?",
+      "Décris une situation difficile que tu as traversée récemment. Comment t'es-tu senti(e) ?",
+      "Quelles sont trois choses pour lesquelles tu es reconnaissant(e) en ce moment ?",
+      "Quelle émotion as-tu du mal à accueillir ces derniers temps ? Pourquoi selon toi ?",
+      "Si tu pouvais donner un conseil à ton toi du passé, que dirais-tu ?",
+      "Qu'est-ce qui te donne de l'énergie ? Qu'est-ce qui t'en enlève ?",
+      "Décris un moment où tu t'es senti(e) vraiment toi-même.",
+      "Quelles sont les pensées qui reviennent souvent dans ta tête ? Sont-elles aidantes ?",
+      "Comment te sens-tu dans ton corps aujourd'hui ?",
+      "Quelle peur aimerais-tu dépasser ? Qu'est-ce qui te retient ?",
+      "Écris une lettre à quelqu'un qui t'a blessé(e), sans l'intention de l'envoyer.",
+      "Qu'est-ce que tu aurais aimé entendre aujourd'hui ?",
+      "Décris ta journée idéale, sans limites.",
+      "Quelles limites as-tu besoin de poser dans ta vie en ce moment ?",
+      "Comment as-tu pris soin de toi cette semaine ?",
+      "Quelle partie de toi as-tu tendance à cacher aux autres ?",
+      "Si tes émotions pouvaient parler, que te diraient-elles ?",
+      "Qu'est-ce qui te fait te sentir en sécurité ?",
+      "Quels sont les signes que tu vas mieux ? Et ceux que tu vas moins bien ?",
+      "Écris sur un moment où tu as été fier(ère) de toi.",
+      "Quelles croyances sur toi-même aimerais-tu changer ?",
+      "Comment te traites-tu quand tu fais une erreur ?",
+      "Qu'est-ce que tu attends des autres ? Est-ce réaliste ?",
+      "Décris quelqu'un qui t'inspire. Qu'est-ce que tu admires chez cette personne ?",
+      "Quelle habitude aimerais-tu développer ? Quel premier pas peux-tu faire ?",
+      "Comment ton humeur a-t-elle évolué cette semaine ?",
+      "Qu'est-ce qui te fait sentir vivant(e) ?",
+      "Écris sur une conversation difficile que tu dois avoir.",
+      "Quelles sont tes forces ? Comment peux-tu les utiliser davantage ?",
+      "Qu'est-ce qui te manque dans ta vie actuellement ?",
+      "Décris un endroit où tu te sens bien.",
+      "Comment gères-tu le stress en ce moment ? Est-ce efficace ?",
+      "Qu'est-ce que tu aimerais lâcher prise ?",
+      "Écris une liste de choses que tu aimes chez toi.",
+      "Quelle relation dans ta vie mérite plus d'attention ?",
+      "Comment ton enfant intérieur se sent-il aujourd'hui ?",
+      "Qu'est-ce que tu repousses depuis longtemps ? Pourquoi ?",
+      "Décris ta relation avec tes émotions.",
+      "Quels sont tes besoins non satisfaits en ce moment ?",
+      "Comment te sens-tu par rapport à ton avenir ?",
+      "Qu'est-ce qui te fait te sentir coupable ? Est-ce justifié ?",
+      "Écris sur un changement que tu as récemment vécu.",
+      "Quelles sont tes valeurs les plus importantes ?",
+      "Comment pourrais-tu être plus gentil(le) avec toi-même ?",
+      "Qu'est-ce qui te stresse le plus actuellement ?",
+      "Décris une victoire récente, même petite.",
+      "Quels patterns remarques-tu dans tes relations ?",
+      "Comment exprimes-tu ta colère ? Est-ce sain ?",
+      "Qu'est-ce que tu aimerais dire à quelqu'un mais que tu n'oses pas ?",
+      "Écris sur un rêve ou un objectif qui te tient à cœur.",
+      "Comment te sens-tu quand tu es seul(e) ?",
+      "Quelles sont les pensées automatiques qui surgissent dans les moments difficiles ?",
+      "Décris ta routine matinale. Te sert-elle bien ?",
+      "Qu'est-ce qui t'empêche d'être pleinement toi-même ?",
+      "Comment célèbres-tu tes réussites ?",
+      "Écris une lettre d'amour à toi-même.",
+      "Qu'est-ce qui a changé en toi depuis un an ?",
+      "Comment te sens-tu par rapport à ton passé ?",
+      "Quelles sont les choses que tu fais par obligation plutôt que par envie ?",
+      "Décris ta relation avec le sommeil.",
+      "Qu'est-ce qui te fait sentir compris(e) ?",
+      "Comment gères-tu les critiques ?",
+      "Écris sur une personne qui te manque.",
+      "Quelles sont tes peurs les plus profondes ?",
+      "Comment ta santé mentale affecte-t-elle ta vie quotidienne ?",
+      "Qu'est-ce que tu aimerais apprendre sur toi-même ?",
+      "Décris un moment où tu t'es senti(e) dépassé(e). Comment as-tu fait face ?",
+      "Quelles activités te font oublier tes soucis ?",
+      "Comment te sens-tu par rapport à ton corps ?",
+      "Qu'est-ce qui te donne de l'espoir ?",
+      "Écris sur une habitude toxique que tu aimerais changer.",
+      "Comment tes émotions influencent-elles tes décisions ?",
+      "Qu'est-ce que tu as appris sur toi récemment ?",
+      "Décris ta relation avec la nourriture.",
+      "Comment pourrais-tu mieux écouter tes besoins ?",
+      "Qu'est-ce qui te fait te sentir incompris(e) ?",
+      "Écris sur un conflit intérieur que tu vis.",
+      "Quelles sont les choses que tu fais pour fuir tes émotions ?",
+      "Comment te sens-tu dans tes relations actuelles ?",
+      "Qu'est-ce que tu attends de la thérapie ou du soutien ?",
+      "Décris un moment où tu as ressenti de la paix.",
+      "Comment gères-tu l'incertitude ?",
+      "Qu'est-ce qui te fait te sentir en vie ?",
+      "Écris sur une déception récente.",
+      "Comment ta famille d'origine a-t-elle influencé qui tu es ?",
+      "Quelles sont les phrases que tu te répètes souvent ?",
+      "Décris ta relation avec l'argent et le travail.",
+      "Comment exprimes-tu ton amour aux autres ?",
+      "Qu'est-ce qui te fait sentir vulnérable ?",
+      "Écris sur une blessure émotionnelle qui cicatrise.",
+      "Comment te sens-tu quand tu demandes de l'aide ?",
+      "Quelles sont tes attentes envers toi-même ? Sont-elles réalistes ?",
+      "Décris un moment de connexion authentique avec quelqu'un.",
+      "Comment gères-tu la solitude ?",
+      "Qu'est-ce qui te donne du sens dans la vie ?",
+      "Écris sur une perte que tu as vécue.",
+      "Comment ta santé mentale s'améliore-t-elle ?",
+      "Quelles sont les choses que tu fais en pilote automatique ?",
+      "Décris ta relation avec les réseaux sociaux.",
+      "Comment te sens-tu par rapport aux changements ?",
+      "Qu'est-ce qui te fait te sentir coincé(e) ?",
+      "Écris une liste de tes accomplissements cette année.",
+      "Comment honores-tu tes limites ?",
+      "Qu'est-ce que tu aimerais pardonner chez toi ou chez quelqu'un d'autre ?"
+    ];
+    
     const dashboard = {
       isPro: false,
       userName: 'ami',
@@ -890,7 +1085,9 @@
         this.setGreeting();
         this.setDate();
         this.setQuote();
+        this.setJournalPrompt();
         this.loadStats();
+        this.generateInsights();
         this.initChart();
         this.hideLoading();
       },
@@ -923,7 +1120,6 @@
           document.getElementById('proBadgeHeader').classList.add('show');
           document.getElementById('upgradeHeader').style.display = 'none';
           document.getElementById('proTeaser').style.display = 'none';
-          document.getElementById('lunaText').textContent = 'Parler à Luna →';
         } else {
           document.getElementById('upgradeHeader').style.display = 'block';
         }
@@ -951,6 +1147,20 @@
         document.getElementById('quote').textContent = randomQuote;
       },
       
+      setJournalPrompt() {
+        // Get day of year to have consistent daily prompt
+        const now = new Date();
+        const start = new Date(now.getFullYear(), 0, 0);
+        const diff = now - start;
+        const oneDay = 1000 * 60 * 60 * 24;
+        const dayOfYear = Math.floor(diff / oneDay);
+        
+        const promptIndex = dayOfYear % journalPrompts.length;
+        const prompt = journalPrompts[promptIndex];
+        
+        document.getElementById('journalPrompt').textContent = `"${prompt}"`;
+      },
+      
       loadStats() {
         // Streak
         const moods = JSON.parse(localStorage.getItem('mindflow_moods_v2') || '[]');
@@ -966,6 +1176,111 @@
         const total = Object.keys(history).length;
         const rate = total > 0 ? Math.round((taken / total) * 100) : 0;
         document.getElementById('medRate').textContent = rate + '%';
+      },
+      
+      generateInsights() {
+        const moods = JSON.parse(localStorage.getItem('mindflow_moods_v2') || '[]');
+        
+        if (moods.length < 5) {
+          return; // Not enough data
+        }
+        
+        const insights = [];
+        
+        // Analyze day of week patterns
+        const dayPatterns = {};
+        moods.forEach(mood => {
+          const date = new Date(mood.date);
+          const day = date.toLocaleDateString('fr-FR', { weekday: 'long' });
+          
+          if (!dayPatterns[day]) {
+            dayPatterns[day] = [];
+          }
+          dayPatterns[day].push(mood.intensity);
+        });
+        
+        // Find best and worst days
+        let bestDay = null;
+        let worstDay = null;
+        let bestAvg = 0;
+        let worstAvg = 10;
+        
+        Object.keys(dayPatterns).forEach(day => {
+          const avg = dayPatterns[day].reduce((a, b) => a + b, 0) / dayPatterns[day].length;
+          if (avg > bestAvg) {
+            bestAvg = avg;
+            bestDay = day;
+          }
+          if (avg < worstAvg) {
+            worstAvg = avg;
+            worstDay = day;
+          }
+        });
+        
+        if (bestDay && Math.abs(bestAvg - worstAvg) > 1.5) {
+          insights.push({
+            icon: '📅',
+            text: `Tu te sens généralement mieux les ${bestDay}s (intensité moyenne: ${bestAvg.toFixed(1)}/10)`
+          });
+          
+          if (worstDay) {
+            insights.push({
+              icon: '⚠️',
+              text: `Attention aux ${worstDay}s - c'est souvent plus difficile pour toi`
+            });
+          }
+        }
+        
+        // Analyze recent trend
+        const recentMoods = moods.slice(-7);
+        if (recentMoods.length >= 7) {
+          const recentAvg = recentMoods.reduce((acc, m) => acc + m.intensity, 0) / recentMoods.length;
+          const olderMoods = moods.slice(-14, -7);
+          if (olderMoods.length >= 7) {
+            const olderAvg = olderMoods.reduce((acc, m) => acc + m.intensity, 0) / olderMoods.length;
+            
+            if (recentAvg > olderAvg + 1) {
+              insights.push({
+                icon: '📈',
+                text: `Tendance positive ! Ton humeur s'améliore ces derniers jours`
+              });
+            } else if (recentAvg < olderAvg - 1) {
+              insights.push({
+                icon: '💙',
+                text: `Tu sembles traverser une période plus difficile. Prends soin de toi`
+              });
+            }
+          }
+        }
+        
+        // Check medication adherence impact
+        const history = JSON.parse(localStorage.getItem('mindflow_meds_history_v2') || '{}');
+        if (Object.keys(history).length > 0) {
+          const adherenceRate = Object.values(history).filter(h => h.status === 'taken').length / Object.keys(history).length;
+          
+          if (adherenceRate > 0.8) {
+            insights.push({
+              icon: '💊',
+              text: `Excellent suivi de ton traitement (${Math.round(adherenceRate * 100)}%) ! Continue comme ça`
+            });
+          } else if (adherenceRate < 0.5) {
+            insights.push({
+              icon: '⏰',
+              text: `Pense à prendre tes médicaments plus régulièrement - ça peut aider`
+            });
+          }
+        }
+        
+        // Display insights
+        const container = document.getElementById('insightsContainer');
+        if (insights.length > 0) {
+          container.innerHTML = insights.map(insight => `
+            <div class="insight-item">
+              <div class="insight-icon">${insight.icon}</div>
+              <div>${insight.text}</div>
+            </div>
+          `).join('');
+        }
       },
       
       initChart() {
@@ -1035,19 +1350,16 @@
             btn.style.transform = 'scale(1)';
             alert('✅ Humeur enregistrée !');
             this.loadStats();
+            this.generateInsights();
             this.initChart();
           }, 300);
         }
       },
       
-      openLuna() {
-        if (!this.isPro) {
-          if (confirm('💎 Luna est une fonctionnalité PRO.\n\nPasser à PRO maintenant ?')) {
-            window.location.href = 'profil.html';
-          }
-        } else {
-          window.location.href = 'luna.html';
-        }
+      openGuidedJournal() {
+        const prompt = document.getElementById('journalPrompt').textContent.replace(/"/g, '');
+        localStorage.setItem('mindflow_journal_prompt', prompt);
+        window.location.href = 'journal.html';
       },
       
       goToPro() {
