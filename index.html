@@ -511,6 +511,71 @@
       color: var(--primary-light);
     }
     
+    /* Daily Challenge Card */
+    .challenge-card {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      border-radius: var(--radius-lg);
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+      color: white;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .challenge-card::before {
+      content: '🎯';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      font-size: 80px;
+      opacity: 0.15;
+      animation: bounce 3s infinite;
+    }
+    
+    .challenge-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(240, 147, 251, 0.4);
+    }
+    
+    .challenge-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .challenge-desc {
+      font-size: 15px;
+      opacity: 0.95;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+    
+    .challenge-btn {
+      background: white;
+      color: #f5576c;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 15px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .challenge-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
     /* Journal Guidé Card */
     .journal-guided-card {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -887,6 +952,17 @@
           <div>Compétences</div>
         </a>
       </div>
+    </div>
+    
+    <!-- Daily Challenge Card -->
+    <div class="challenge-card fade-in ripple" onclick="window.location.href='challenge.html'">
+      <div class="challenge-title">🎯 Daily Challenge</div>
+      <div class="challenge-desc">
+        Relève un défi quotidien pour améliorer ton bien-être et gagner des points ! Streaks, achievements et récompenses t'attendent.
+      </div>
+      <button class="challenge-btn">
+        🚀 Voir le défi du jour
+      </button>
     </div>
     
     <!-- Journal Guidé Card -->
