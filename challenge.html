@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎯 Daily Challenge - MindFlow</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+    
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+    
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+      50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
+    }
+    
+    .fade-in {
+      animation: fadeInUp 0.6s ease forwards;
+    }
+    
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      animation: fadeInUp 0.5s ease;
+    }
+    
+    .back-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .back-btn:hover {
+      background: rgba(255,255,255,0.3);
+      transform: scale(1.1);
+    }
+    
+    .header-title {
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    
+    /* Stats Bar */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 25px;
+      animation: fadeInUp 0.6s ease;
+    }
+    
+    .stat-item {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      padding: 15px;
+      border-radius: 15px;
+      text-align: center;
+      color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .stat-item:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-5px);
+    }
+    
+    .stat-icon {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+    
+    .stat-number {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 3px;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+    
+    /* Challenge Card */
+    .challenge-card {
+      background: white;
+      border-radius: 25px;
+      padding: 35px;
+      margin-bottom: 25px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: fadeInUp 0.7s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .challenge-card::before {
+      content: '✨';
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 60px;
+      opacity: 0.1;
+      animation: pulse 3s infinite;
+    }
+    
+    .challenge-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    
+    .challenge-icon {
+      font-size: 80px;
+      margin-bottom: 15px;
+      display: inline-block;
+      animation: bounce 2s infinite;
+    }
+    
+    .challenge-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 10px;
+    }
+    
+    .challenge-category {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 6px 15px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    
+    .challenge-description {
+      background: rgba(102, 126, 234, 0.08);
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 25px;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #333;
+    }
+    
+    .challenge-points {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 25px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #FFD700;
+    }
+    
+    .complete-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 15px;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .complete-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+    
+    .complete-btn:active {
+      transform: scale(0.98);
+    }
+    
+    .complete-btn.completed {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      animation: glow 2s infinite;
+    }
+    
+    .complete-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    /* Progress Card */
+    .progress-card {
+      background: white;
+      border-radius: 25px;
+      padding: 30px;
+      margin-bottom: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      animation: fadeInUp 0.8s ease;
+    }
+    
+    .progress-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .progress-bar-container {
+      background: #f0f0f0;
+      height: 40px;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 15px;
+      position: relative;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      transition: width 1s ease;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 15px;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .progress-text {
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+    }
+    
+    /* Achievements */
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+    
+    .achievement-item {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .achievement-item.unlocked {
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      animation: pulse 2s infinite;
+    }
+    
+    .achievement-item.locked {
+      opacity: 0.4;
+      filter: grayscale(100%);
+    }
+    
+    .achievement-icon {
+      font-size: 40px;
+      margin-bottom: 8px;
+    }
+    
+    .achievement-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .achievement-item.unlocked .achievement-name {
+      color: white;
+    }
+    
+    /* History */
+    .history-item {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      transition: all 0.3s ease;
+    }
+    
+    .history-item:hover {
+      background: #e9ecef;
+      transform: translateX(5px);
+    }
+    
+    .history-icon {
+      font-size: 32px;
+    }
+    
+    .history-content {
+      flex: 1;
+    }
+    
+    .history-title {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 3px;
+    }
+    
+    .history-date {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .history-points {
+      color: #FFD700;
+      font-weight: bold;
+    }
+    
+    /* Confetti */
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: #f0f;
+      position: absolute;
+      animation: confetti-fall 3s linear forwards;
+    }
+    
+    @keyframes confetti-fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Success Modal */
+    .success-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .success-modal.show {
+      display: flex;
+    }
+    
+    .success-content {
+      background: white;
+      padding: 50px;
+      border-radius: 30px;
+      text-align: center;
+      max-width: 400px;
+      animation: bounce 0.5s ease;
+    }
+    
+    .success-icon {
+      font-size: 100px;
+      margin-bottom: 20px;
+      animation: pulse 1s infinite;
+    }
+    
+    .success-title {
+      font-size: 32px;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 15px;
+    }
+    
+    .success-message {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 30px;
+    }
+    
+    .success-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .success-btn:hover {
+      transform: scale(1.05);
+    }
+    
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: 25px;
+      padding: 15px 25px;
+      display: flex;
+      gap: 35px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+    
+    .nav-item {
+      font-size: 26px;
+      opacity: 0.4;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-item:hover {
+      opacity: 0.7;
+      transform: scale(1.2);
+    }
+    
+    .nav-item.active {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+      <div class="header-title">Daily Challenge</div>
+    </div>
+    
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-icon">🔥</div>
+        <div class="stat-number" id="streakCount">0</div>
+        <div class="stat-label">Streak</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">💎</div>
+        <div class="stat-number" id="totalPoints">0</div>
+        <div class="stat-label">Points</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">✅</div>
+        <div class="stat-number" id="completedCount">0</div>
+        <div class="stat-label">Complétés</div>
+      </div>
+    </div>
+    
+    <!-- Challenge Card -->
+    <div class="challenge-card fade-in">
+      <div class="challenge-header">
+        <div class="challenge-icon" id="challengeIcon">🎯</div>
+        <div class="challenge-title">Défi du jour</div>
+        <div class="challenge-category" id="challengeCategory">Bien-être</div>
+      </div>
+      
+      <div class="challenge-description" id="challengeDescription">
+        Chargement du défi...
+      </div>
+      
+      <div class="challenge-points">
+        <span>💎</span>
+        <span id="challengePoints">10</span>
+        <span>points</span>
+      </div>
+      
+      <button class="complete-btn" id="completeBtn" onclick="challenge.complete()">
+        <span id="btnText">✓ Marquer comme complété</span>
+      </button>
+    </div>
+    
+    <!-- Progress Card -->
+    <div class="progress-card fade-in">
+      <div class="progress-title">🏆 Progression hebdomadaire</div>
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar" style="width: 0%">
+          <span id="progressPercent">0%</span>
+        </div>
+      </div>
+      <div class="progress-text" id="progressText">0/7 défis complétés cette semaine</div>
+    </div>
+    
+    <!-- Achievements -->
+    <div class="progress-card fade-in">
+      <div class="progress-title">✨ Achievements</div>
+      <div class="achievements-grid">
+        <div class="achievement-item locked" data-achievement="first">
+          <div class="achievement-icon">🌟</div>
+          <div class="achievement-name">Premier pas</div>
+        </div>
+        <div class="achievement-item locked" data-achievement="week">
+          <div class="achievement-icon">📅</div>
+          <div class="achievement-name">7 jours</div>
+        </div>
+        <div class="achievement-item locked" data-achievement="month">
+          <div class="achievement-icon">🎊</div>
+          <div class="achievement-name">30 jours</div>
+        </div>
+        <div class="achievement-item locked" data-achievement="perfectWeek">
+          <div class="achievement-icon">💯</div>
+          <div class="achievement-name">Semaine parfaite</div>
+        </div>
+        <div class="achievement-item locked" data-achievement="hundred">
+          <div class="achievement-icon">💎</div>
+          <div class="achievement-name">100 points</div>
+        </div>
+        <div class="achievement-item locked" data-achievement="master">
+          <div class="achievement-icon">👑</div>
+          <div class="achievement-name">Master</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- History -->
+    <div class="progress-card fade-in">
+      <div class="progress-title">📜 Historique</div>
+      <div id="historyContainer">
+        <div style="text-align: center; padding: 20px; color: #999;">
+          Aucun défi complété pour le moment
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Success Modal -->
+  <div class="success-modal" id="successModal">
+    <div class="success-content">
+      <div class="success-icon">🎉</div>
+      <div class="success-title">Bravo !</div>
+      <div class="success-message" id="successMessage">
+        Tu as complété le défi du jour !
+      </div>
+      <button class="success-btn" onclick="challenge.closeModal()">Continuer</button>
+    </div>
+  </div>
+  
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">🏠</a>
+    <a href="mood.html" class="nav-item">😊</a>
+    <a href="journal.html" class="nav-item">📝</a>
+    <a href="challenge.html" class="nav-item active">🎯</a>
+    <a href="profil.html" class="nav-item">👤</a>
+  </div>
+  
+  <script>
+    const CHALLENGES = [
+      { icon: '🙏', category: 'Gratitude', description: 'Écris 3 choses pour lesquelles tu es reconnaissant(e) aujourd\'hui', points: 10 },
+      { icon: '🌬️', category: 'Respiration', description: 'Pratique 5 minutes de respiration consciente', points: 15 },
+      { icon: '💪', category: 'Activité', description: 'Fais 10 minutes d\'exercice physique', points: 20 },
+      { icon: '📱', category: 'Digital Detox', description: 'Passe 1 heure sans écran', points: 25 },
+      { icon: '💬', category: 'Social', description: 'Contacte une personne qui te manque', points: 15 },
+      { icon: '🎨', category: 'Créativité', description: 'Dessine ou crée quelque chose pendant 15 minutes', points: 20 },
+      { icon: '📖', category: 'Lecture', description: 'Lis 20 pages d\'un livre', points: 15 },
+      { icon: '🌳', category: 'Nature', description: 'Passe 20 minutes dehors', points: 15 },
+      { icon: '😊', category: 'Gentillesse', description: 'Fais une action gentille pour quelqu\'un', points: 20 },
+      { icon: '🧘', category: 'Méditation', description: 'Médite pendant 10 minutes', points: 20 },
+      { icon: '💧', category: 'Hydratation', description: 'Bois 2L d\'eau aujourd\'hui', points: 10 },
+      { icon: '🥗', category: 'Nutrition', description: 'Mange au moins 3 portions de légumes', points: 15 },
+      { icon: '😴', category: 'Sommeil', description: 'Couche-toi avant 23h', points: 15 },
+      { icon: '🎵', category: 'Musique', description: 'Écoute une nouvelle chanson qui te fait du bien', points: 10 },
+      { icon: '✍️', category: 'Journal', description: 'Écris dans ton journal pendant 10 minutes', points: 15 },
+      { icon: '🧹', category: 'Organisation', description: 'Range un espace de ta maison', points: 15 },
+      { icon: '📞', category: 'Connexion', description: 'Appelle un ami ou un membre de ta famille', points: 20 },
+      { icon: '🎯', category: 'Objectif', description: 'Travaille 30 minutes sur un objectif personnel', points: 25 },
+      { icon: '🌅', category: 'Routine', description: 'Crée une routine matinale apaisante', points: 20 },
+      { icon: '💭', category: 'Réflexion', description: 'Identifie une pensée négative et reformule-la', points: 20 },
+      { icon: '🎁', category: 'Auto-soin', description: 'Fais quelque chose de gentil pour toi', points: 15 },
+      { icon: '🚶', category: 'Mouvement', description: 'Marche 30 minutes', points: 20 },
+      { icon: '🧊', category: 'Grounding', description: 'Pratique l\'exercice 5-4-3-2-1', points: 15 },
+      { icon: '🌟', category: 'Affirmation', description: 'Répète 3 affirmations positives', points: 10 },
+      { icon: '🎭', category: 'Expression', description: 'Exprime une émotion difficile de façon créative', points: 20 },
+      { icon: '🤝', category: 'Limites', description: 'Pose une limite saine dans une relation', points: 25 },
+      { icon: '🌈', category: 'Joie', description: 'Fais une activité qui te rend vraiment heureux(se)', points: 15 },
+      { icon: '🔍', category: 'Introspection', description: 'Identifie un pattern dans tes émotions', points: 20 },
+      { icon: '💌', category: 'Amour-propre', description: 'Écris une lettre d\'amour à toi-même', points: 25 },
+      { icon: '🎪', category: 'Fun', description: 'Fais quelque chose de complètement ludique', points: 15 }
+    ];
+    
+    const challenge = {
+      currentChallenge: null,
+      stats: {
+        streak: 0,
+        totalPoints: 0,
+        completed: 0,
+        weekCompleted: 0,
+        lastCompletedDate: null,
+        history: [],
+        achievements: {
+          first: false,
+          week: false,
+          month: false,
+          perfectWeek: false,
+          hundred: false,
+          master: false
+        }
+      },
+      
+      init() {
+        this.loadStats();
+        this.setDailyChallenge();
+        this.updateUI();
+        this.checkAchievements();
+      },
+      
+      loadStats() {
+        const saved = localStorage.getItem('mindflow_challenge_stats');
+        if (saved) {
+          this.stats = JSON.parse(saved);
+        }
+      },
+      
+      saveStats() {
+        localStorage.setItem('mindflow_challenge_stats', JSON.stringify(this.stats));
+      },
+      
+      setDailyChallenge() {
+        const today = new Date().toISOString().split('T')[0];
+        const savedChallenge = localStorage.getItem('mindflow_daily_challenge');
+        
+        if (savedChallenge) {
+          const parsed = JSON.parse(savedChallenge);
+          if (parsed.date === today) {
+            this.currentChallenge = parsed;
+            return;
+          }
+        }
+        
+        // New challenge
+        const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+        const challengeIndex = dayOfYear % CHALLENGES.length;
+        
+        this.currentChallenge = {
+          ...CHALLENGES[challengeIndex],
+          date: today,
+          completed: false
+        };
+        
+        localStorage.setItem('mindflow_daily_challenge', JSON.stringify(this.currentChallenge));
+      },
+      
+      updateUI() {
+        // Challenge
+        document.getElementById('challengeIcon').textContent = this.currentChallenge.icon;
+        document.getElementById('challengeCategory').textContent = this.currentChallenge.category;
+        document.getElementById('challengeDescription').textContent = this.currentChallenge.description;
+        document.getElementById('challengePoints').textContent = this.currentChallenge.points;
+        
+        // Button
+        const btn = document.getElementById('completeBtn');
+        if (this.currentChallenge.completed) {
+          btn.classList.add('completed');
+          btn.disabled = true;
+          document.getElementById('btnText').textContent = '✓ Défi complété !';
+        }
+        
+        // Stats
+        document.getElementById('streakCount').textContent = this.stats.streak;
+        document.getElementById('totalPoints').textContent = this.stats.totalPoints;
+        document.getElementById('completedCount').textContent = this.stats.completed;
+        
+        // Progress
+        const weekPercent = Math.round((this.stats.weekCompleted / 7) * 100);
+        document.getElementById('progressBar').style.width = weekPercent + '%';
+        document.getElementById('progressPercent').textContent = weekPercent + '%';
+        document.getElementById('progressText').textContent = `${this.stats.weekCompleted}/7 défis complétés cette semaine`;
+        
+        // History
+        this.updateHistory();
+        
+        // Achievements
+        this.updateAchievements();
+      },
+      
+      complete() {
+        if (this.currentChallenge.completed) return;
+        
+        // Mark as completed
+        this.currentChallenge.completed = true;
+        localStorage.setItem('mindflow_daily_challenge', JSON.stringify(this.currentChallenge));
+        
+        // Update stats
+        this.stats.totalPoints += this.currentChallenge.points;
+        this.stats.completed += 1;
+        this.stats.weekCompleted += 1;
+        
+        // Streak
+        const today = new Date().toISOString().split('T')[0];
+        const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+        
+        if (this.stats.lastCompletedDate === yesterday) {
+          this.stats.streak += 1;
+        } else if (this.stats.lastCompletedDate !== today) {
+          this.stats.streak = 1;
+        }
+        
+        this.stats.lastCompletedDate = today;
+        
+        // History
+        this.stats.history.unshift({
+          date: today,
+          challenge: this.currentChallenge.description,
+          points: this.currentChallenge.points,
+          icon: this.currentChallenge.icon
+        });
+        
+        if (this.stats.history.length > 10) {
+          this.stats.history = this.stats.history.slice(0, 10);
+        }
+        
+        this.saveStats();
+        this.checkAchievements();
+        this.updateUI();
+        
+        // Animations
+        this.showConfetti();
+        this.showSuccessModal();
+      },
+      
+      showConfetti() {
+        const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500'];
+        
+        for (let i = 0; i < 100; i++) {
+          setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = Math.random() * 0.5 + 's';
+            document.body.appendChild(confetti);
+            
+            setTimeout(() => confetti.remove(), 3000);
+          }, i * 30);
+        }
+      },
+      
+      showSuccessModal() {
+        const modal = document.getElementById('successModal');
+        const message = document.getElementById('successMessage');
+        
+        message.textContent = `Tu as gagné ${this.currentChallenge.points} points ! 🎉`;
+        modal.classList.add('show');
+      },
+      
+      closeModal() {
+        document.getElementById('successModal').classList.remove('show');
+      },
+      
+      checkAchievements() {
+        const unlocked = [];
+        
+        // First challenge
+        if (!this.stats.achievements.first && this.stats.completed >= 1) {
+          this.stats.achievements.first = true;
+          unlocked.push('first');
+        }
+        
+        // 7 days streak
+        if (!this.stats.achievements.week && this.stats.streak >= 7) {
+          this.stats.achievements.week = true;
+          unlocked.push('week');
+        }
+        
+        // 30 days streak
+        if (!this.stats.achievements.month && this.stats.streak >= 30) {
+          this.stats.achievements.month = true;
+          unlocked.push('month');
+        }
+        
+        // Perfect week
+        if (!this.stats.achievements.perfectWeek && this.stats.weekCompleted >= 7) {
+          this.stats.achievements.perfectWeek = true;
+          unlocked.push('perfectWeek');
+        }
+        
+        // 100 points
+        if (!this.stats.achievements.hundred && this.stats.totalPoints >= 100) {
+          this.stats.achievements.hundred = true;
+          unlocked.push('hundred');
+        }
+        
+        // Master (50 completed)
+        if (!this.stats.achievements.master && this.stats.completed >= 50) {
+          this.stats.achievements.master = true;
+          unlocked.push('master');
+        }
+        
+        if (unlocked.length > 0) {
+          this.saveStats();
+        }
+      },
+      
+      updateAchievements() {
+        Object.keys(this.stats.achievements).forEach(key => {
+          const elem = document.querySelector(`[data-achievement="${key}"]`);
+          if (elem && this.stats.achievements[key]) {
+            elem.classList.remove('locked');
+            elem.classList.add('unlocked');
+          }
+        });
+      },
+      
+      updateHistory() {
+        const container = document.getElementById('historyContainer');
+        
+        if (this.stats.history.length === 0) {
+          container.innerHTML = '<div style="text-align: center; padding: 20px; color: #999;">Aucun défi complété pour le moment</div>';
+          return;
+        }
+        
+        container.innerHTML = this.stats.history.map(item => `
+          <div class="history-item">
+            <div class="history-icon">${item.icon}</div>
+            <div class="history-content">
+              <div class="history-title">${item.challenge}</div>
+              <div class="history-date">${new Date(item.date).toLocaleDateString('fr-FR')}</div>
+            </div>
+            <div class="history-points">+${item.points}</div>
+          </div>
+        `).join('');
+      }
+    };
+    
+    // Reset weekly counter on Mondays
+    const resetWeekly = () => {
+      const today = new Date();
+      const lastReset = localStorage.getItem('mindflow_last_weekly_reset');
+      
+      if (!lastReset || new Date(lastReset).getDay() > today.getDay()) {
+        challenge.stats.weekCompleted = 0;
+        localStorage.setItem('mindflow_last_weekly_reset', today.toISOString());
+        challenge.saveStats();
+      }
+    };
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      resetWeekly();
+      challenge.init();
+    });
+  </script>
+</body>
+</html>
