@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚡ Quick Tools - MindFlow</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      min-height: 100vh;
+      padding: 20px;
+      padding-bottom: 100px;
+    }
+    
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .fade-in {
+      animation: fadeInUp 0.6s ease forwards;
+    }
+    
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      animation: fadeInUp 0.5s ease;
+    }
+    
+    .back-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .back-btn:hover {
+      background: rgba(255,255,255,0.3);
+      transform: scale(1.1);
+    }
+    
+    .header-title {
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    
+    .subtitle {
+      color: rgba(255,255,255,0.9);
+      font-size: 14px;
+      margin-bottom: 25px;
+      animation: fadeInUp 0.6s ease;
+    }
+    
+    /* Tools Grid */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+      animation: fadeInUp 0.7s ease;
+    }
+    
+    .tool-card {
+      background: white;
+      border-radius: 20px;
+      padding: 25px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .tool-card:hover::before {
+      opacity: 1;
+    }
+    
+    .tool-card:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    }
+    
+    .tool-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+    
+    .tool-card:hover .tool-icon {
+      animation: pulse 0.5s ease;
+    }
+    
+    .tool-name {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 6px;
+    }
+    
+    .tool-desc {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.4;
+    }
+    
+    /* Tool Modal */
+    .tool-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .tool-modal.show {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 30px;
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      animation: fadeInUp 0.5s ease;
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #f0f0f0;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .modal-close:hover {
+      background: #e0e0e0;
+      transform: scale(1.1);
+    }
+    
+    .modal-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .modal-icon {
+      font-size: 80px;
+      margin-bottom: 15px;
+      animation: float 3s infinite;
+    }
+    
+    .modal-title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #4facfe;
+      margin-bottom: 10px;
+    }
+    
+    .modal-subtitle {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    /* 54321 Grounding */
+    .grounding-step {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+    
+    .grounding-step.active {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4);
+    }
+    
+    .step-number {
+      font-size: 48px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    .step-instruction {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    
+    .step-input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 12px;
+      font-size: 14px;
+      background: rgba(255,255,255,0.2);
+      color: inherit;
+      margin-bottom: 8px;
+    }
+    
+    .grounding-step.active .step-input {
+      background: rgba(255,255,255,0.9);
+      color: #333;
+    }
+    
+    .step-input::placeholder {
+      color: rgba(255,255,255,0.6);
+    }
+    
+    .grounding-step.active .step-input::placeholder {
+      color: #999;
+    }
+    
+    .next-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      border: none;
+      border-radius: 15px;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+    
+    .next-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4);
+    }
+    
+    .grounding-step.active .next-btn {
+      background: white;
+      color: #4facfe;
+    }
+    
+    /* Box Breathing */
+    .breathing-container {
+      text-align: center;
+      padding: 30px;
+    }
+    
+    .breathing-circle {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      margin: 30px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      box-shadow: 0 20px 60px rgba(79, 172, 254, 0.4);
+    }
+    
+    .breathing-circle.breathe-in {
+      animation: breathe 4s ease-in-out;
+    }
+    
+    .breathing-circle.breathe-out {
+      animation: breathe 4s ease-in-out reverse;
+    }
+    
+    .breathing-instruction {
+      font-size: 22px;
+      color: #333;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    
+    .breathing-count {
+      font-size: 48px;
+      font-weight: bold;
+      color: #4facfe;
+      margin: 20px 0;
+    }
+    
+    .breathing-controls {
+      margin-top: 30px;
+    }
+    
+    .control-btn {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 15px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 0 5px;
+    }
+    
+    .control-btn.primary {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+    }
+    
+    .control-btn.secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+    
+    .control-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+    
+    /* Thought Reframing */
+    .reframe-section {
+      margin-bottom: 25px;
+    }
+    
+    .reframe-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .reframe-textarea {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 15px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 100px;
+      transition: all 0.3s ease;
+    }
+    
+    .reframe-textarea:focus {
+      outline: none;
+      border-color: #4facfe;
+      box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+    }
+    
+    .reframe-examples {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 10px;
+      font-size: 13px;
+      color: #666;
+    }
+    
+    .reframe-examples strong {
+      color: #333;
+    }
+    
+    /* STOP Technique */
+    .stop-steps {
+      display: grid;
+      gap: 20px;
+    }
+    
+    .stop-step {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+    
+    .stop-step:hover {
+      background: #e9ecef;
+      transform: translateX(5px);
+    }
+    
+    .stop-letter {
+      font-size: 64px;
+      font-weight: bold;
+      color: #4facfe;
+      margin-bottom: 10px;
+    }
+    
+    .stop-word {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    
+    .stop-description {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+    }
+    
+    /* Distraction */
+    .distraction-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+    
+    .distraction-card {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      padding: 30px 20px;
+      border-radius: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .distraction-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4);
+    }
+    
+    .distraction-icon {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+    
+    .distraction-name {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    
+    /* Self-Compassion */
+    .compassion-message {
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .compassion-icon {
+      font-size: 64px;
+      margin-bottom: 15px;
+    }
+    
+    .compassion-text {
+      font-size: 20px;
+      color: #333;
+      line-height: 1.6;
+      font-weight: 500;
+      font-style: italic;
+    }
+    
+    .new-message-btn {
+      width: 100%;
+      padding: 15px;
+      background: white;
+      border: 2px solid #fcb69f;
+      border-radius: 15px;
+      color: #fcb69f;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .new-message-btn:hover {
+      background: #fcb69f;
+      color: white;
+      transform: translateY(-3px);
+    }
+    
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: 25px;
+      padding: 15px 25px;
+      display: flex;
+      gap: 35px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+    
+    .nav-item {
+      font-size: 26px;
+      opacity: 0.4;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-item:hover {
+      opacity: 0.7;
+      transform: scale(1.2);
+    }
+    
+    .nav-item.active {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+      <div class="header-title">⚡ Quick Tools</div>
+    </div>
+    
+    <div class="subtitle">
+      Des outils rapides pour gérer tes émotions quand tu en as besoin
+    </div>
+    
+    <!-- Tools Grid -->
+    <div class="tools-grid">
+      <div class="tool-card" onclick="tools.open('grounding')">
+        <div class="tool-icon">🧊</div>
+        <div class="tool-name">54321</div>
+        <div class="tool-desc">Grounding sensoriel</div>
+      </div>
+      
+      <div class="tool-card" onclick="tools.open('breathing')">
+        <div class="tool-icon">🌬️</div>
+        <div class="tool-name">Box Breathing</div>
+        <div class="tool-desc">Respiration guidée</div>
+      </div>
+      
+      <div class="tool-card" onclick="tools.open('reframe')">
+        <div class="tool-icon">💭</div>
+        <div class="tool-name">Recadrage</div>
+        <div class="tool-desc">Pensées alternatives</div>
+      </div>
+      
+      <div class="tool-card" onclick="tools.open('stop')">
+        <div class="tool-icon">✋</div>
+        <div class="tool-name">STOP</div>
+        <div class="tool-desc">Technique DBT</div>
+      </div>
+      
+      <div class="tool-card" onclick="tools.open('distraction')">
+        <div class="tool-icon">🎯</div>
+        <div class="tool-name">Distraction</div>
+        <div class="tool-desc">Redirection rapide</div>
+      </div>
+      
+      <div class="tool-card" onclick="tools.open('compassion')">
+        <div class="tool-icon">💙</div>
+        <div class="tool-name">Auto-compassion</div>
+        <div class="tool-desc">Bienveillance</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Tool Modals -->
+  <div class="tool-modal" id="modal"></div>
+  
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">🏠</a>
+    <a href="mood.html" class="nav-item">😊</a>
+    <a href="journal.html" class="nav-item">📝</a>
+    <a href="challenge.html" class="nav-item">🎯</a>
+    <a href="profil.html" class="nav-item">👤</a>
+  </div>
+  
+  <script>
+    const tools = {
+      grounding: {
+        currentStep: 0,
+        steps: [
+          { number: 5, instruction: 'Nomme 5 choses que tu VOIS autour de toi' },
+          { number: 4, instruction: 'Nomme 4 choses que tu peux TOUCHER' },
+          { number: 3, instruction: 'Nomme 3 choses que tu ENTENDS' },
+          { number: 2, instruction: 'Nomme 2 choses que tu SENS (odeurs)' },
+          { number: 1, instruction: 'Nomme 1 chose que tu peux GOÛTER' }
+        ]
+      },
+      
+      breathing: {
+        phase: 'ready', // ready, inhale, hold1, exhale, hold2
+        count: 4,
+        cycles: 0,
+        interval: null
+      },
+      
+      compassionMessages: [
+        "Tu fais de ton mieux, et c'est déjà beaucoup. 💜",
+        "Tes émotions sont valides. Tu as le droit de ressentir ce que tu ressens.",
+        "Tu es plus fort(e) que tu ne le penses. Regarde tout ce que tu as déjà traversé.",
+        "Sois aussi gentil(le) avec toi que tu le serais avec un(e) ami(e).",
+        "La guérison n'est pas linéaire. Les hauts et les bas font partie du processus.",
+        "Tu mérites de l'amour et de la compassion, surtout de ta part.",
+        "Ce moment difficile passera. Tu as déjà surmonté tant de choses.",
+        "Respire. Tu es là, tu fais face. C'est du courage.",
+        "Tes efforts comptent, même ceux que personne ne voit.",
+        "Tu n'as pas besoin d'être parfait(e) pour être digne d'amour."
+      ],
+      
+      open(toolName) {
+        const modal = document.getElementById('modal');
+        let content = '';
+        
+        switch(toolName) {
+          case 'grounding':
+            content = this.getGroundingContent();
+            break;
+          case 'breathing':
+            content = this.getBreathingContent();
+            break;
+          case 'reframe':
+            content = this.getReframeContent();
+            break;
+          case 'stop':
+            content = this.getStopContent();
+            break;
+          case 'distraction':
+            content = this.getDistractionContent();
+            break;
+          case 'compassion':
+            content = this.getCompassionContent();
+            break;
+        }
+        
+        modal.innerHTML = content;
+        modal.classList.add('show');
+        
+        if (toolName === 'grounding') {
+          this.initGrounding();
+        }
+      },
+      
+      close() {
+        const modal = document.getElementById('modal');
+        modal.classList.remove('show');
+        this.grounding.currentStep = 0;
+        this.stopBreathing();
+      },
+      
+      getGroundingContent() {
+        const steps = this.grounding.steps.map((step, index) => `
+          <div class="grounding-step ${index === 0 ? 'active' : ''}" id="step-${index}">
+            <div class="step-number">${step.number}</div>
+            <div class="step-instruction">${step.instruction}</div>
+            ${Array(step.number).fill(0).map((_, i) => `
+              <input type="text" class="step-input" placeholder="${step.number === 5 ? 'Ex: Mon téléphone' : ''}" />
+            `).join('')}
+            ${index < this.grounding.steps.length - 1 ? 
+              `<button class="next-btn" onclick="tools.nextGroundingStep()">Suivant →</button>` :
+              `<button class="next-btn" onclick="tools.close()">Terminer ✓</button>`
+            }
+          </div>
+        `).join('');
+        
+        return `
+          <div class="modal-content">
+            <button class="modal-close" onclick="tools.close()">×</button>
+            <div class="modal-header">
+              <div class="modal-icon">🧊</div>
+              <div class="modal-title">54321 Grounding</div>
+              <div class="modal-subtitle">Ancre-toi dans le moment présent</div>
+            </div>
+            ${steps}
+          </div>
+        `;
+      },
+      
+      initGrounding() {
+        this.grounding.currentStep = 0;
+      },
+      
+      nextGroundingStep() {
+        const current = document.getElementById(`step-${this.grounding.currentStep}`);
+        current.classList.remove('active');
+        
+        this.grounding.currentStep++;
+        const next = document.getElementById(`step-${this.grounding.currentStep}`);
+        next.classList.add('active');
+        next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      },
+      
+      getBreathingContent() {
+        return `
+          <div class="modal-content">
+            <button class="modal-close" onclick="tools.close()">×</button>
+            <div class="modal-header">
+              <div class="modal-icon">🌬️</div>
+              <div class="modal-title">Box Breathing</div>
+              <div class="modal-subtitle">Respiration carrée 4-4-4-4</div>
+            </div>
+            <div class="breathing-container">
+              <div class="breathing-instruction" id="breathInstruction">Prêt(e) à commencer ?</div>
+              <div class="breathing-circle" id="breathCircle">
+                <span id="breathText">START</span>
+              </div>
+              <div class="breathing-count" id="breathCount">Cycles: 0</div>
+              <div class="breathing-controls">
+                <button class="control-btn primary" id="breathBtn" onclick="tools.startBreathing()">
+                  Commencer
+                </button>
+                <button class="control-btn secondary" onclick="tools.stopBreathing()">
+                  Arrêter
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      },
+      
+      startBreathing() {
+        this.breathing.phase = 'inhale';
+        this.breathing.count = 4;
+        this.breathing.cycles = 0;
+        
+        const btn = document.getElementById('breathBtn');
+        btn.textContent = 'En cours...';
+        btn.disabled = true;
+        
+        this.breathingCycle();
+      },
+      
+      breathingCycle() {
+        const phases = [
+          { name: 'inhale', text: 'Inspire', instruction: 'Inspire profondément par le nez', class: 'breathe-in' },
+          { name: 'hold1', text: 'Retiens', instruction: 'Retiens ta respiration', class: '' },
+          { name: 'exhale', text: 'Expire', instruction: 'Expire lentement par la bouche', class: 'breathe-out' },
+          { name: 'hold2', text: 'Retiens', instruction: 'Retiens poumons vides', class: '' }
+        ];
+        
+        let phaseIndex = 0;
+        let count = 4;
+        
+        const updateDisplay = () => {
+          const phase = phases[phaseIndex];
+          document.getElementById('breathText').textContent = count;
+          document.getElementById('breathInstruction').textContent = phase.instruction;
+          
+          const circle = document.getElementById('breathCircle');
+          circle.className = 'breathing-circle';
+          if (phase.class) circle.classList.add(phase.class);
+        };
+        
+        this.breathing.interval = setInterval(() => {
+          count--;
+          
+          if (count === 0) {
+            phaseIndex++;
+            
+            if (phaseIndex >= phases.length) {
+              phaseIndex = 0;
+              this.breathing.cycles++;
+              document.getElementById('breathCount').textContent = `Cycles: ${this.breathing.cycles}`;
+            }
+            
+            count = 4;
+          }
+          
+          updateDisplay();
+        }, 1000);
+        
+        updateDisplay();
+      },
+      
+      stopBreathing() {
+        if (this.breathing.interval) {
+          clearInterval(this.breathing.interval);
+          this.breathing.interval = null;
+        }
+        
+        const btn = document.getElementById('breathBtn');
+        if (btn) {
+          btn.textContent = 'Commencer';
+          btn.disabled = false;
+        }
+      },
+      
+      getReframeContent() {
+        return `
+          <div class="modal-content">
+            <button class="modal-close" onclick="tools.close()">×</button>
+            <div class="modal-header">
+              <div class="modal-icon">💭</div>
+              <div class="modal-title">Recadrage Cognitif</div>
+              <div class="modal-subtitle">Transforme tes pensées négatives</div>
+            </div>
+            
+            <div class="reframe-section">
+              <div class="reframe-label">😟 Pensée négative</div>
+              <textarea class="reframe-textarea" id="negativeThought" placeholder="Ex: Je suis nul(le), je n'y arrive jamais..."></textarea>
+              <div class="reframe-examples">
+                <strong>Indices de pensée négative :</strong> Toujours/Jamais, Tout/Rien, Je suis..., C'est de ma faute
+              </div>
+            </div>
+            
+            <div class="reframe-section">
+              <div class="reframe-label">🔍 Preuves contre cette pensée</div>
+              <textarea class="reframe-textarea" id="evidence" placeholder="Ex: J'ai réussi X la semaine dernière, mes amis disent que..."></textarea>
+            </div>
+            
+            <div class="reframe-section">
+              <div class="reframe-label">✨ Pensée alternative (réaliste)</div>
+              <textarea class="reframe-textarea" id="alternative" placeholder="Ex: C'est difficile en ce moment, mais j'ai les ressources pour y arriver progressivement"></textarea>
+              <div class="reframe-examples">
+                <strong>Pensée équilibrée :</strong> Reconnaît la difficulté MAIS reste réaliste et bienveillante
+              </div>
+            </div>
+            
+            <button class="next-btn" onclick="tools.close()">Sauvegarder ✓</button>
+          </div>
+        `;
+      },
+      
+      getStopContent() {
+        return `
+          <div class="modal-content">
+            <button class="modal-close" onclick="tools.close()">×</button>
+            <div class="modal-header">
+              <div class="modal-icon">✋</div>
+              <div class="modal-title">STOP Technique</div>
+              <div class="modal-subtitle">Pause et reprends le contrôle (DBT)</div>
+            </div>
+            
+            <div class="stop-steps">
+              <div class="stop-step">
+                <div class="stop-letter">S</div>
+                <div class="stop-word">STOP</div>
+                <div class="stop-description">
+                  Arrête-toi. Ne réagis pas immédiatement. Freeze. Prends une pause physique et mentale.
+                </div>
+              </div>
+              
+              <div class="stop-step">
+                <div class="stop-letter">T</div>
+                <div class="stop-word">TAKE A STEP BACK</div>
+                <div class="stop-description">
+                  Prends du recul. Respire profondément. Détache-toi de la situation. Observe de l'extérieur.
+                </div>
+              </div>
+              
+              <div class="stop-step">
+                <div class="stop-letter">O</div>
+                <div class="stop-word">OBSERVE</div>
+                <div class="stop-description">
+                  Observe ce qui se passe. Tes pensées, tes émotions, tes sensations physiques. Qu'est-ce qui se passe vraiment ?
+                </div>
+              </div>
+              
+              <div class="stop-step">
+                <div class="stop-letter">P</div>
+                <div class="stop-word">PROCEED MINDFULLY</div>
+                <div class="stop-description">
+                  Agis avec sagesse. Choisis ta réponse consciemment. Qu'est-ce qui serait le plus efficace et bienveillant maintenant ?
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      },
+      
+      getDistractionContent() {
+        return `
+          <div class="modal-content">
+            <button class="modal-close" onclick="tools.close()">×</button>
+            <div class="modal-header">
+              <div class="modal-icon">🎯</div>
+              <div class="modal-title">Distraction Rapide</div>
+              <div class="modal-subtitle">Redirige ton attention</div>
+            </div>
+            
+            <div class="distraction-options">
+              <div class="distraction-card" onclick="alert('Compte à rebours de 100 à 0 par 7 !\\n100, 93, 86, 79...')">
+                <div class="distraction-icon">🔢</div>
+                <div class="distraction-name">Compter</div>
+              </div>
+              
+              <div class="distraction-card" onclick="alert('Nomme 10 pays commençant par la lettre S !\\nEx: Suède, Suisse, Sénégal...')">
+                <div class="distraction-icon">🌍</div>
+                <div class="distraction-name">Pays</div>
+              </div>
+              
+              <div class="distraction-card" onclick="alert('Récite l\\'alphabet à l\\'envers !\\nZ, Y, X, W, V...')">
+                <div class="distraction-icon">🔤</div>
+                <div class="distraction-name">Alphabet</div>
+              </div>
+              
+              <div class="distraction-card" onclick="alert('Pense à 5 choses bleues autour de toi !\\nRegarde vraiment et compte-les.')">
+                <div class="distraction-icon">🎨</div>
+                <div class="distraction-name">Couleurs</div>
+              </div>
+              
+              <div class="distraction-card" onclick="alert('Fais 10 sauts sur place !\\nBouge ton corps, change ton énergie.')">
+                <div class="distraction-icon">🏃</div>
+                <div class="distraction-name">Mouvement</div>
+              </div>
+              
+              <div class="distraction-card" onclick="alert('Passe de l\\'eau froide sur tes poignets !\\nSensation intense qui redirige l\\'attention.')">
+                <div class="distraction-icon">💧</div>
+                <div class="distraction-name">Eau froide</div>
+              </div>
+            </div>
+          </div>
+        `;
+      },
+      
+      getCompassionContent() {
+        const randomMessage = this.compassionMessages[Math.floor(Math.random() * this.compassionMessages.length)];
+        
+        return `
+          <div class="modal-content">
+            <button class="modal-close" onclick="tools.close()">×</button>
+            <div class="modal-header">
+              <div class="modal-icon">💙</div>
+              <div class="modal-title">Auto-compassion</div>
+              <div class="modal-subtitle">Un message pour toi</div>
+            </div>
+            
+            <div class="compassion-message">
+              <div class="compassion-icon">💜</div>
+              <div class="compassion-text" id="compassionText">${randomMessage}</div>
+            </div>
+            
+            <button class="new-message-btn" onclick="tools.newCompassionMessage()">
+              Nouveau message 💌
+            </button>
+          </div>
+        `;
+      },
+      
+      newCompassionMessage() {
+        const randomMessage = this.compassionMessages[Math.floor(Math.random() * this.compassionMessages.length)];
+        document.getElementById('compassionText').textContent = randomMessage;
+      }
+    };
+  </script>
+</body>
+</html>
