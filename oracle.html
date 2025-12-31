@@ -621,9 +621,51 @@
         this.loadHistory();
         this.setDailyMessage();
         this.updateHistoryUI();
+        this.showProLimitInfo();
+      },
+      
+      checkProStatus() {
+        try {
+          const proStatus = localStorage.getItem('mindflow_is_pro');
+          return proStatus === 'true';
+        } catch (error) {
+          return false;
+        }
+      },
+      
+      showProLimitInfo() {
+        const isPro = this.checkProStatus();
+        if (!isPro) {
+          const drawBtn = document.getElementById('drawBtn');
+          const today = new Date().toISOString().split('T')[0];
+          const lastDraw = localStorage.getItem('mindflow_oracle_last_draw');
+          
+          if (lastDraw === today) {
+            drawBtn.innerHTML = '🔒 Limite atteinte (1/jour) - <span style="color: #FFD700;">Passer PRO</span>';
+            drawBtn.style.background = 'linear-gradient(135deg, #666 0%, #888 100%)';
+          }
+        }
       },
       
       drawCard() {
+        // Check PRO status
+        const isPro = this.checkProStatus();
+        
+        // FREE users: 1 draw per day
+        if (!isPro) {
+          const today = new Date().toISOString().split('T')[0];
+          const lastDraw = localStorage.getItem('mindflow_oracle_last_draw');
+          
+          if (lastDraw === today) {
+            if (confirm('🔒 Version gratuite : 1 tirage par jour.\n\n💎 Passe à PRO pour des tirages illimités et un historique étendu !\n\nVoir les options PRO ?')) {
+              window.location.href = 'subscription.html';
+            }
+            return;
+          }
+          
+          localStorage.setItem('mindflow_oracle_last_draw', today);
+        }
+        
         // Random card
         const randomIndex = Math.floor(Math.random() * ORACLE_CARDS.length);
         this.currentCard = ORACLE_CARDS[randomIndex];
@@ -671,15 +713,17 @@
       
       addToHistory() {
         const today = new Date().toISOString().split('T')[0];
+        const isPro = this.checkProStatus();
         
         this.history.unshift({
           date: today,
           card: this.currentCard
         });
         
-        // Keep only last 10
-        if (this.history.length > 10) {
-          this.history = this.history.slice(0, 10);
+        // FREE: keep only last 5, PRO: keep 50
+        const maxHistory = isPro ? 50 : 5;
+        if (this.history.length > maxHistory) {
+          this.history = this.history.slice(0, maxHistory);
         }
         
         this.saveHistory();
@@ -711,19 +755,35 @@
       
       updateHistoryUI() {
         const container = document.getElementById('historyContainer');
+        const isPro = this.checkProStatus();
         
         if (this.history.length === 0) {
           container.innerHTML = '<div class="no-history">Aucun tirage pour le moment</div>';
           return;
         }
         
-        container.innerHTML = this.history.map(item => `
+        let html = this.history.map(item => `
           <div class="history-item">
             <div class="history-date">${new Date(item.date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
             <div class="history-card-name">${item.card.icon} ${item.card.title}</div>
             <div style="font-size: 12px; opacity: 0.8;">${item.card.category}</div>
           </div>
         `).join('');
+        
+        if (!isPro && this.history.length >= 5) {
+          html += `
+            <div style="text-align: center; padding: 20px; background: rgba(255,215,0,0.1); border-radius: 12px; margin-top: 10px;">
+              <div style="font-size: 14px; color: rgba(255,255,255,0.9); margin-bottom: 10px;">
+                🔒 Historique limité à 5 tirages en version gratuite
+              </div>
+              <button onclick="window.location.href='subscription.html'" style="background: #FFD700; color: #333; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer;">
+                💎 Débloquer 50 tirages d'historique
+              </button>
+            </div>
+          `;
+        }
+        
+        container.innerHTML = html;
       }
     };
     
