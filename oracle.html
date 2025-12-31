@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔮 Oracle - MindFlow</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #2d1b4e 0%, #4a1942 100%);
+      min-height: 100vh;
+      padding: 20px;
+      padding-bottom: 100px;
+      overflow-x: hidden;
+    }
+    
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes sparkle {
+      0%, 100% { opacity: 0; transform: scale(0); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+    
+    @keyframes flipCard {
+      0% { transform: rotateY(0deg); }
+      50% { transform: rotateY(90deg); }
+      100% { transform: rotateY(0deg); }
+    }
+    
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(186, 85, 211, 0.5); }
+      50% { box-shadow: 0 0 40px rgba(186, 85, 211, 0.8); }
+    }
+    
+    .fade-in {
+      animation: fadeInUp 0.6s ease forwards;
+    }
+    
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      animation: fadeInUp 0.5s ease;
+    }
+    
+    .back-btn {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: white;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .back-btn:hover {
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.1);
+    }
+    
+    .header-title {
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    
+    .subtitle {
+      color: rgba(255,255,255,0.8);
+      font-size: 14px;
+      margin-bottom: 30px;
+      text-align: center;
+      animation: fadeInUp 0.6s ease;
+    }
+    
+    /* Oracle Section */
+    .oracle-section {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 25px;
+      padding: 30px;
+      margin-bottom: 25px;
+      border: 1px solid rgba(255,255,255,0.1);
+      animation: fadeInUp 0.7s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .oracle-section::before {
+      content: '✨';
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 60px;
+      opacity: 0.1;
+      animation: float 3s infinite;
+    }
+    
+    .section-title {
+      font-size: 24px;
+      color: white;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+    }
+    
+    .section-subtitle {
+      text-align: center;
+      color: rgba(255,255,255,0.7);
+      font-size: 13px;
+      margin-bottom: 25px;
+    }
+    
+    /* Card */
+    .card-container {
+      perspective: 1000px;
+      margin-bottom: 25px;
+    }
+    
+    .oracle-card {
+      width: 100%;
+      aspect-ratio: 2/3;
+      max-width: 280px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #BA55D3 0%, #9370DB 100%);
+      border-radius: 20px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      border: 2px solid rgba(255,255,255,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .oracle-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .oracle-card:hover::before {
+      opacity: 1;
+    }
+    
+    .oracle-card:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 30px 80px rgba(186, 85, 211, 0.6);
+    }
+    
+    .oracle-card.flipping {
+      animation: flipCard 0.8s ease;
+    }
+    
+    .card-back {
+      color: white;
+    }
+    
+    .card-back .card-pattern {
+      font-size: 80px;
+      margin-bottom: 20px;
+      opacity: 0.9;
+    }
+    
+    .card-back .card-text {
+      font-size: 18px;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+    
+    .card-front {
+      display: none;
+      color: white;
+    }
+    
+    .card-front.revealed {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .card-icon {
+      font-size: 72px;
+      margin-bottom: 20px;
+      animation: float 3s infinite;
+    }
+    
+    .card-title {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    
+    .card-category {
+      font-size: 12px;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    /* Description */
+    .card-description {
+      background: white;
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    
+    .card-description.revealed {
+      display: block;
+      animation: fadeInUp 0.6s ease;
+    }
+    
+    .description-section {
+      margin-bottom: 20px;
+    }
+    
+    .description-section:last-child {
+      margin-bottom: 0;
+    }
+    
+    .description-label {
+      font-size: 14px;
+      font-weight: bold;
+      color: #BA55D3;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .description-text {
+      font-size: 15px;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    /* Draw Button */
+    .draw-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #BA55D3 0%, #9370DB 100%);
+      border: none;
+      border-radius: 15px;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
+    }
+    
+    .draw-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(186, 85, 211, 0.5);
+    }
+    
+    .draw-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    /* Message Section */
+    .message-section {
+      background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+      border-radius: 25px;
+      padding: 35px;
+      margin-bottom: 25px;
+      animation: fadeInUp 0.8s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .message-section::before {
+      content: '💜';
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      font-size: 80px;
+      opacity: 0.15;
+    }
+    
+    .message-icon {
+      font-size: 64px;
+      text-align: center;
+      margin-bottom: 20px;
+      animation: float 3s infinite;
+    }
+    
+    .message-text {
+      font-size: 20px;
+      color: #333;
+      text-align: center;
+      line-height: 1.7;
+      font-weight: 500;
+      font-style: italic;
+      margin-bottom: 25px;
+    }
+    
+    .new-message-btn {
+      width: 100%;
+      padding: 15px;
+      background: white;
+      border: 2px solid #fcb69f;
+      border-radius: 15px;
+      color: #fcb69f;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .new-message-btn:hover {
+      background: #fcb69f;
+      color: white;
+      transform: translateY(-3px);
+    }
+    
+    /* History */
+    .history-section {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 25px;
+      padding: 25px;
+      border: 1px solid rgba(255,255,255,0.1);
+      animation: fadeInUp 0.9s ease;
+    }
+    
+    .history-title {
+      font-size: 18px;
+      color: white;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .history-item {
+      background: rgba(255,255,255,0.08);
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .history-item:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateX(5px);
+    }
+    
+    .history-date {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-bottom: 5px;
+    }
+    
+    .history-card-name {
+      font-weight: bold;
+      margin-bottom: 3px;
+    }
+    
+    .no-history {
+      text-align: center;
+      padding: 20px;
+      color: rgba(255,255,255,0.5);
+      font-size: 14px;
+    }
+    
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: 25px;
+      padding: 15px 25px;
+      display: flex;
+      gap: 35px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+    
+    .nav-item {
+      font-size: 26px;
+      opacity: 0.4;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-item:hover {
+      opacity: 0.7;
+      transform: scale(1.2);
+    }
+    
+    .nav-item.active {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+      <div class="header-title">🔮 Oracle & Messages</div>
+    </div>
+    
+    <div class="subtitle">
+      Reçois guidance et soutien pour ton chemin de vie
+    </div>
+    
+    <!-- Oracle Section -->
+    <div class="oracle-section">
+      <div class="section-title">🔮 Oracle de Vie</div>
+      <div class="section-subtitle">Tire une carte pour recevoir un message de guidance</div>
+      
+      <div class="card-container">
+        <div class="oracle-card" id="oracleCard" onclick="oracle.flipCard()">
+          <div class="card-back" id="cardBack">
+            <div class="card-pattern">🌙✨🔮</div>
+            <div class="card-text">Clique pour révéler ta carte</div>
+          </div>
+          <div class="card-front" id="cardFront">
+            <div class="card-icon" id="cardIcon">🌟</div>
+            <div class="card-title" id="cardTitle">La Force Intérieure</div>
+            <div class="card-category" id="cardCategory">Développement Personnel</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card-description" id="cardDescription">
+        <div class="description-section">
+          <div class="description-label">💫 Message</div>
+          <div class="description-text" id="cardMessage">Message de la carte...</div>
+        </div>
+        <div class="description-section">
+          <div class="description-label">🌈 Guidance</div>
+          <div class="description-text" id="cardGuidance">Guidance détaillée...</div>
+        </div>
+        <div class="description-section">
+          <div class="description-label">💭 Réflexion</div>
+          <div class="description-text" id="cardReflection">Question de réflexion...</div>
+        </div>
+      </div>
+      
+      <button class="draw-btn" id="drawBtn" onclick="oracle.drawCard()">
+        ✨ Tirer une nouvelle carte
+      </button>
+    </div>
+    
+    <!-- Message Section -->
+    <div class="message-section">
+      <div class="section-title" style="color: #333;">💌 Message Personnel</div>
+      <div class="section-subtitle" style="color: #666;">Un message rien que pour toi</div>
+      
+      <div class="message-icon" id="messageIcon">💜</div>
+      <div class="message-text" id="messageText">
+        Chargement de ton message...
+      </div>
+      
+      <button class="new-message-btn" onclick="oracle.newMessage()">
+        Nouveau message 💫
+      </button>
+    </div>
+    
+    <!-- History -->
+    <div class="history-section">
+      <div class="history-title">📜 Historique des tirages</div>
+      <div id="historyContainer">
+        <div class="no-history">Aucun tirage pour le moment</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">🏠</a>
+    <a href="mood.html" class="nav-item">😊</a>
+    <a href="journal.html" class="nav-item">📝</a>
+    <a href="challenge.html" class="nav-item">🎯</a>
+    <a href="profil.html" class="nav-item">👤</a>
+  </div>
+  
+  <script>
+    const ORACLE_CARDS = [
+      // Développement Personnel
+      { icon: '💪', title: 'La Force Intérieure', category: 'Développement Personnel', message: 'Tu possèdes une force immense en toi. Elle a toujours été là, même dans tes moments les plus sombres.', guidance: 'Aujourd\'hui, reconnais ta résilience. Chaque défi que tu as surmonté prouve ta force. Utilise cette énergie pour avancer avec confiance.', reflection: 'Quelles épreuves as-tu déjà surmontées qui prouvent ta force ?' },
+      { icon: '🦋', title: 'La Transformation', category: 'Développement Personnel', message: 'Le changement est en cours. Comme la chenille devient papillon, tu évolues vers ta meilleure version.', guidance: 'Accueille cette période de transformation. Les changements peuvent être inconfortables, mais ils sont nécessaires à ta croissance.', reflection: 'Quelle partie de toi demande à évoluer ?' },
+      { icon: '🌱', title: 'La Croissance', category: 'Développement Personnel', message: 'Comme une graine qui germe, tu grandis à ton propre rythme. Sois patient(e) avec toi-même.', guidance: 'La croissance n\'est pas toujours visible immédiatement. Continue de te nourrir de bonnes intentions et d\'actions positives.', reflection: 'Dans quel domaine as-tu grandi récemment ?' },
+      { icon: '🎭', title: 'L\'Authenticité', category: 'Développement Personnel', message: 'Il est temps d\'enlever les masques et d\'être pleinement toi-même. Ta vraie nature est magnifique.', guidance: 'Autorise-toi à être vulnérable et authentique. Les bonnes personnes t\'aimeront pour qui tu es vraiment.', reflection: 'Où te sens-tu obligé(e) de porter un masque ?' },
+      
+      // Relations & Amour
+      { icon: '💕', title: 'L\'Amour Authentique', category: 'Relations', message: 'L\'amour véritable commence par toi-même. Quand tu t\'aimes, tu attires l\'amour authentique.', guidance: 'Cultive l\'amour-propre. Traite-toi avec la même gentillesse que tu offrirais à un être cher.', reflection: 'Comment peux-tu mieux t\'aimer aujourd\'hui ?' },
+      { icon: '🤝', title: 'Les Connexions Profondes', category: 'Relations', message: 'Les vraies connexions nourrissent l\'âme. Entoure-toi de personnes qui te font grandir.', guidance: 'Investis dans les relations qui sont réciproques et sincères. Éloigne-toi de celles qui t\'épuisent.', reflection: 'Quelles relations méritent plus de ton attention ?' },
+      { icon: '🚧', title: 'Les Limites Saines', category: 'Relations', message: 'Poser des limites n\'est pas égoïste, c\'est essentiel à ton bien-être.', guidance: 'Apprends à dire non sans culpabilité. Tes besoins sont aussi importants que ceux des autres.', reflection: 'Où dois-tu poser une limite aujourd\'hui ?' },
+      { icon: '💔', title: 'La Guérison Relationnelle', category: 'Relations', message: 'Certaines blessures prennent du temps à guérir. Sois patient(e) avec ton cœur.', guidance: 'Permets-toi de ressentir et de guérir. La douleur fait partie du processus de transformation.', reflection: 'Quelle blessure demande à être guérie ?' },
+      
+      // Carrière & Travail
+      { icon: '🎯', title: 'La Clarté d\'Objectifs', category: 'Carrière', message: 'Quand ton intention est claire, le chemin se révèle. Définis ce que tu veux vraiment.', guidance: 'Prends le temps de clarifier tes objectifs professionnels. Écris-les, visualise-les, ressens-les.', reflection: 'Quelle est ta vision pour ta carrière ?' },
+      { icon: '🌟', title: 'Nouvelle Opportunité', category: 'Carrière', message: 'Une porte s\'ouvre. Sois attentif(ve) aux nouvelles possibilités qui se présentent.', guidance: 'Reste ouvert(e) aux opportunités inattendues. Parfois, le meilleur arrive quand on s\'y attend le moins.', reflection: 'Quelle opportunité pourrais-tu explorer ?' },
+      { icon: '⏳', title: 'La Patience Professionnelle', category: 'Carrière', message: 'Tout vient à point à qui sait attendre. Ton moment viendra.', guidance: 'Continue de travailler avec diligence. Les résultats ne sont pas toujours immédiats, mais ils arrivent.', reflection: 'Que peux-tu faire maintenant pour préparer ton futur ?' },
+      { icon: '🔥', title: 'La Passion au Travail', category: 'Carrière', message: 'Quand tu fais ce que tu aimes, ce n\'est plus du travail. Reconnecte avec ta passion.', guidance: 'Identifie ce qui t\'anime vraiment. Comment peux-tu intégrer plus de passion dans ton quotidien ?', reflection: 'Qu\'est-ce qui allume vraiment ton feu intérieur ?' },
+      
+      // Finances
+      { icon: '💰', title: 'L\'Abondance', category: 'Finances', message: 'L\'abondance est un état d\'esprit avant d\'être une réalité. Tu mérites la prospérité.', guidance: 'Cultive une mentalité d\'abondance. Ce que tu crois possible devient accessible.', reflection: 'Quelles croyances limitantes as-tu sur l\'argent ?' },
+      { icon: '💎', title: 'La Sagesse Financière', category: 'Finances', message: 'La vraie richesse n\'est pas seulement matérielle. Investis aussi dans ton bien-être.', guidance: 'Gère tes ressources avec sagesse. Équilibre entre sécurité et plaisir.', reflection: 'Comment peux-tu mieux gérer tes finances ?' },
+      { icon: '🌊', title: 'Le Flux d\'Abondance', category: 'Finances', message: 'L\'argent est une énergie qui circule. Donne et reçois avec gratitude.', guidance: 'Fais confiance au flux naturel. Ce qui part revient multiplié quand c\'est donné avec cœur.', reflection: 'Bloques-tu le flux d\'abondance quelque part ?' },
+      
+      // Santé & Bien-être
+      { icon: '🏥', title: 'Écoute ton Corps', category: 'Santé', message: 'Ton corps te parle constamment. Il est temps de vraiment l\'écouter.', guidance: 'Sois attentif(ve) aux signaux de ton corps. Repos, mouvement, nutrition - donne-lui ce dont il a besoin.', reflection: 'Qu\'est-ce que ton corps essaie de te dire ?' },
+      { icon: '⚡', title: 'La Vitalité', category: 'Santé', message: 'L\'énergie est ta ressource la plus précieuse. Protège-la et nourris-la.', guidance: 'Identifie ce qui te donne de l\'énergie et ce qui t\'en prend. Fais des choix conscients.', reflection: 'Qu\'est-ce qui draine ton énergie actuellement ?' },
+      { icon: '🧘', title: 'L\'Équilibre Corps-Esprit', category: 'Santé', message: 'Le corps et l\'esprit sont interconnectés. Prends soin des deux.', guidance: 'Intègre des pratiques qui harmonisent ton corps et ton esprit : yoga, méditation, nature.', reflection: 'Es-tu plus déconnecté(e) de ton corps ou de ton esprit ?' },
+      
+      // Spiritualité
+      { icon: '✨', title: 'L\'Éveil', category: 'Spiritualité', message: 'Tu t\'éveilles à une nouvelle conscience. Accueille cette expansion.', guidance: 'Les moments de prise de conscience sont des cadeaux. Note-les, médite dessus, intègre-les.', reflection: 'Quelle nouvelle vérité émerge en toi ?' },
+      { icon: '🔮', title: 'L\'Intuition', category: 'Spiritualité', message: 'Ta voix intérieure sait. Fais-lui confiance, même si la logique ne suit pas.', guidance: 'Pratique l\'écoute de ton intuition. Elle se manifeste souvent comme un savoir calme et certain.', reflection: 'Qu\'est-ce que ton intuition te dit en ce moment ?' },
+      { icon: '🙏', title: 'La Gratitude Sacrée', category: 'Spiritualité', message: 'Dans la gratitude, tout devient sacré. Célèbre les miracles du quotidien.', guidance: 'Tiens un journal de gratitude. Remarque les petites merveilles qui parsèment ta journée.', reflection: 'Pour quoi es-tu profondément reconnaissant(e) ?' },
+      { icon: '🌌', title: 'La Connexion Universelle', category: 'Spiritualité', message: 'Tu fais partie d\'un tout plus grand. Tu n\'es jamais seul(e).', guidance: 'Ressens ta connexion à l\'univers. Dans la nature, dans le silence, dans la méditation.', reflection: 'Comment te sens-tu connecté(e) à quelque chose de plus grand ?' },
+      
+      // Famille
+      { icon: '👨‍👩‍👧', title: 'L\'Harmonie Familiale', category: 'Famille', message: 'La paix dans ta famille commence par la paix en toi.', guidance: 'Tu ne peux pas contrôler ta famille, mais tu peux choisir comment tu réagis et ce que tu permets.', reflection: 'Quelle dynamique familiale dois-tu accepter ou changer ?' },
+      { icon: '🌳', title: 'Les Racines Ancestrales', category: 'Famille', message: 'Tu portes la force de tes ancêtres. Honore d\'où tu viens tout en créant ton propre chemin.', guidance: 'Reconnais les patterns familiaux. Garde ce qui te sert, transforme ce qui te limite.', reflection: 'Quel héritage familial veux-tu perpétuer ou transformer ?' },
+      { icon: '💝', title: 'L\'Amour Inconditionnel', category: 'Famille', message: 'Aimer ne signifie pas tout accepter. Tu peux aimer à distance si nécessaire.', guidance: 'Protège ta paix intérieure. L\'amour véritable inclut aussi l\'amour de soi.', reflection: 'Comment équilibrer amour familial et protection de soi ?' },
+      
+      // Émotions & Guérison
+      { icon: '🌈', title: 'Après la Tempête', category: 'Guérison', message: 'Les moments sombres passent toujours. L\'arc-en-ciel arrive après la pluie.', guidance: 'Cette difficulté est temporaire. Accroche-toi, la lumière revient toujours.', reflection: 'Quelles tempêtes as-tu déjà traversées ?' },
+      { icon: '🕊️', title: 'Le Lâcher-prise', category: 'Guérison', message: 'Certaines choses doivent être libérées pour que du nouveau puisse entrer.', guidance: 'Identifie ce que tu retiens par peur. Lâcher prise n\'est pas abandonner, c\'est faire confiance.', reflection: 'À quoi es-tu prêt(e) à renoncer ?' },
+      { icon: '💧', title: 'Les Larmes Guérissent', category: 'Guérison', message: 'Pleurer n\'est pas une faiblesse, c\'est une libération. Permets-toi de ressentir.', guidance: 'Tes émotions méritent d\'être honorées. Pleure si tu en as besoin, c\'est thérapeutique.', reflection: 'Quelle émotion retiens-tu qui demande à être libérée ?' },
+      { icon: '🎈', title: 'La Légèreté', category: 'Guérison', message: 'Tout ne doit pas être lourd et sérieux. Autorise-toi la légèreté et la joie.', guidance: 'Fais quelque chose juste pour le plaisir aujourd\'hui. Ris, joue, sois spontané(e).', reflection: 'Quand t\'es-tu senti(e) léger(ère) pour la dernière fois ?' },
+      
+      // Objectifs & Manifestation
+      { icon: '🎯', title: 'La Persévérance', category: 'Objectifs', message: 'Le succès appartient à ceux qui persistent. Continue, tu es plus proche que tu ne le penses.', guidance: 'Chaque petit pas compte. Ne te décourage pas si les résultats ne sont pas immédiats.', reflection: 'Quel objectif mérite ta persévérance ?' },
+      { icon: '🌠', title: 'Manifeste tes Rêves', category: 'Objectifs', message: 'Ce que tu visualises avec clarté et émotion se manifeste. Rêve grand.', guidance: 'Écris tes rêves comme s\'ils étaient déjà réalisés. Ressens la joie de leur accomplissement.', reflection: 'Si tout était possible, que manifesterais-tu ?' },
+      { icon: '🔑', title: 'La Clé du Succès', category: 'Objectifs', message: 'Le succès n\'est pas une destination, c\'est un chemin. Célèbre chaque étape.', guidance: 'Définis le succès selon TES propres termes, pas ceux des autres.', reflection: 'Qu\'est-ce que le succès signifie vraiment pour toi ?' },
+      
+      // Sagesse & Acceptation
+      { icon: '🦉', title: 'La Sagesse Intérieure', category: 'Sagesse', message: 'Tu as toutes les réponses en toi. Fais silence et écoute.', guidance: 'Dans le calme, ta sagesse intérieure parle. Médite, écris, observe.', reflection: 'Quelle sagesse ton moi profond veut-il partager ?' },
+      { icon: '☯️', title: 'L\'Acceptation', category: 'Sagesse', message: 'Accepter ce qui est ne signifie pas abandonner. C\'est choisir la paix.', guidance: 'Distingue ce que tu peux changer de ce que tu dois accepter. Agis sur l\'un, fais la paix avec l\'autre.', reflection: 'Qu\'est-ce qui demande ton acceptation ?' },
+      { icon: '⚖️', title: 'L\'Équilibre', category: 'Sagesse', message: 'La vie est un équilibre constant. Trouve ton centre au milieu du chaos.', guidance: 'Quand tout semble déséquilibré, reviens à ton centre : ta respiration, ton corps, l\'instant présent.', reflection: 'Où dans ta vie l\'équilibre est-il nécessaire ?' },
+      { icon: '🌅', title: 'Le Nouveau Départ', category: 'Sagesse', message: 'Chaque jour est une page blanche. Tu peux recommencer à tout moment.', guidance: 'Ne te laisse pas définir par ton passé. Aujourd\'hui, tu peux choisir différemment.', reflection: 'Si tu pouvais recommencer quelque chose, ce serait quoi ?' }
+    ];
+    
+    const PERSONAL_MESSAGES = [
+      { icon: '💜', text: 'Tu fais de ton mieux, et c\'est déjà énorme. Sois fier(ère) de toi.' },
+      { icon: '🌟', text: 'Tu es plus fort(e) que tu ne le penses. Regarde tout ce que tu as déjà traversé.' },
+      { icon: '✨', text: 'Aujourd\'hui, choisis de te traiter avec la même gentillesse que tu offres aux autres.' },
+      { icon: '💫', text: 'Tes émotions sont valides. Tu as le droit de ressentir ce que tu ressens.' },
+      { icon: '🌈', text: 'Après la pluie vient toujours le beau temps. Accroche-toi, ça va s\'améliorer.' },
+      { icon: '🦋', text: 'Le changement peut faire peur, mais c\'est dans la transformation que tu trouves ta vraie beauté.' },
+      { icon: '🌺', text: 'Tu mérites l\'amour, le repos, et la paix. Ne laisse personne te faire croire le contraire.' },
+      { icon: '🔥', text: 'Ta lumière ne peut pas être éteinte. Même dans l\'obscurité, elle brille.' },
+      { icon: '🎯', text: 'Chaque petit pas compte. Tu avances, même si c\'est lentement.' },
+      { icon: '💝', text: 'Sois aussi patient(e) avec toi-même que tu le serais avec quelqu\'un que tu aimes.' },
+      { icon: '🌱', text: 'Tu grandis, même quand tu ne le vois pas. La transformation est en cours.' },
+      { icon: '🌙', text: 'Repose-toi. Tu n\'as pas à être productif(ve) tout le temps pour avoir de la valeur.' },
+      { icon: '🎨', text: 'Ta créativité, ta sensibilité, tes émotions - ce ne sont pas des faiblesses, ce sont des forces.' },
+      { icon: '🏔️', text: 'Les montagnes que tu as escaladées prouvent ta résilience. Tu peux grimper celle-ci aussi.' },
+      { icon: '💎', text: 'Tu es précieux(se), unique, irremplaçable. Le monde a besoin de ta lumière.' },
+      { icon: '🌸', text: 'Fleuris à ton propre rythme. Comparaison est le vol de la joie.' },
+      { icon: '🦅', text: 'Élève-toi au-dessus des pensées qui te limitent. Tu es capable de tellement plus.' },
+      { icon: '🎭', text: 'Enlève le masque. Ta vraie nature est magnifique et mérite d\'être vue.' },
+      { icon: '🌊', text: 'Comme l\'océan, tu as des profondeurs que peu connaissent. C\'est ta richesse.' },
+      { icon: '⭐', text: 'Même les étoiles ont besoin de l\'obscurité pour briller. Tes difficultés révèlent ta force.' }
+    ];
+    
+    const oracle = {
+      currentCard: null,
+      history: [],
+      
+      init() {
+        this.loadHistory();
+        this.setDailyMessage();
+        this.updateHistoryUI();
+      },
+      
+      drawCard() {
+        // Random card
+        const randomIndex = Math.floor(Math.random() * ORACLE_CARDS.length);
+        this.currentCard = ORACLE_CARDS[randomIndex];
+        
+        // Reset UI
+        document.getElementById('cardFront').classList.remove('revealed');
+        document.getElementById('cardDescription').classList.remove('revealed');
+        document.getElementById('cardBack').style.display = 'flex';
+        
+        // Flip animation
+        const card = document.getElementById('oracleCard');
+        card.classList.add('flipping');
+        
+        setTimeout(() => {
+          this.revealCard();
+          card.classList.remove('flipping');
+        }, 400);
+      },
+      
+      flipCard() {
+        if (!this.currentCard) {
+          this.drawCard();
+        }
+      },
+      
+      revealCard() {
+        // Hide back
+        document.getElementById('cardBack').style.display = 'none';
+        
+        // Show front
+        document.getElementById('cardIcon').textContent = this.currentCard.icon;
+        document.getElementById('cardTitle').textContent = this.currentCard.title;
+        document.getElementById('cardCategory').textContent = this.currentCard.category;
+        document.getElementById('cardFront').classList.add('revealed');
+        
+        // Show description
+        document.getElementById('cardMessage').textContent = this.currentCard.message;
+        document.getElementById('cardGuidance').textContent = this.currentCard.guidance;
+        document.getElementById('cardReflection').textContent = this.currentCard.reflection;
+        document.getElementById('cardDescription').classList.add('revealed');
+        
+        // Add to history
+        this.addToHistory();
+      },
+      
+      addToHistory() {
+        const today = new Date().toISOString().split('T')[0];
+        
+        this.history.unshift({
+          date: today,
+          card: this.currentCard
+        });
+        
+        // Keep only last 10
+        if (this.history.length > 10) {
+          this.history = this.history.slice(0, 10);
+        }
+        
+        this.saveHistory();
+        this.updateHistoryUI();
+      },
+      
+      setDailyMessage() {
+        const randomIndex = Math.floor(Math.random() * PERSONAL_MESSAGES.length);
+        const message = PERSONAL_MESSAGES[randomIndex];
+        
+        document.getElementById('messageIcon').textContent = message.icon;
+        document.getElementById('messageText').textContent = message.text;
+      },
+      
+      newMessage() {
+        this.setDailyMessage();
+      },
+      
+      saveHistory() {
+        localStorage.setItem('mindflow_oracle_history', JSON.stringify(this.history));
+      },
+      
+      loadHistory() {
+        const saved = localStorage.getItem('mindflow_oracle_history');
+        if (saved) {
+          this.history = JSON.parse(saved);
+        }
+      },
+      
+      updateHistoryUI() {
+        const container = document.getElementById('historyContainer');
+        
+        if (this.history.length === 0) {
+          container.innerHTML = '<div class="no-history">Aucun tirage pour le moment</div>';
+          return;
+        }
+        
+        container.innerHTML = this.history.map(item => `
+          <div class="history-item">
+            <div class="history-date">${new Date(item.date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
+            <div class="history-card-name">${item.card.icon} ${item.card.title}</div>
+            <div style="font-size: 12px; opacity: 0.8;">${item.card.category}</div>
+          </div>
+        `).join('');
+      }
+    };
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      oracle.init();
+    });
+  </script>
+</body>
+</html>
