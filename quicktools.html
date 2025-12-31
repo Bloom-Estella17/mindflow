@@ -946,38 +946,231 @@
             </div>
             
             <div class="distraction-options">
-              <div class="distraction-card" onclick="alert('Compte à rebours de 100 à 0 par 7 !\\n100, 93, 86, 79...')">
+              <div class="distraction-card" onclick="tools.openDistractionExercise('count')">
                 <div class="distraction-icon">🔢</div>
                 <div class="distraction-name">Compter</div>
               </div>
               
-              <div class="distraction-card" onclick="alert('Nomme 10 pays commençant par la lettre S !\\nEx: Suède, Suisse, Sénégal...')">
+              <div class="distraction-card" onclick="tools.openDistractionExercise('countries')">
                 <div class="distraction-icon">🌍</div>
                 <div class="distraction-name">Pays</div>
               </div>
               
-              <div class="distraction-card" onclick="alert('Récite l\\'alphabet à l\\'envers !\\nZ, Y, X, W, V...')">
+              <div class="distraction-card" onclick="tools.openDistractionExercise('alphabet')">
                 <div class="distraction-icon">🔤</div>
                 <div class="distraction-name">Alphabet</div>
               </div>
               
-              <div class="distraction-card" onclick="alert('Pense à 5 choses bleues autour de toi !\\nRegarde vraiment et compte-les.')">
+              <div class="distraction-card" onclick="tools.openDistractionExercise('colors')">
                 <div class="distraction-icon">🎨</div>
                 <div class="distraction-name">Couleurs</div>
               </div>
               
-              <div class="distraction-card" onclick="alert('Fais 10 sauts sur place !\\nBouge ton corps, change ton énergie.')">
+              <div class="distraction-card" onclick="tools.openDistractionExercise('movement')">
                 <div class="distraction-icon">🏃</div>
                 <div class="distraction-name">Mouvement</div>
               </div>
               
-              <div class="distraction-card" onclick="alert('Passe de l\\'eau froide sur tes poignets !\\nSensation intense qui redirige l\\'attention.')">
+              <div class="distraction-card" onclick="tools.openDistractionExercise('water')">
                 <div class="distraction-icon">💧</div>
                 <div class="distraction-name">Eau froide</div>
               </div>
             </div>
           </div>
         `;
+      },
+      
+      openDistractionExercise(type) {
+        const modal = document.getElementById('modal');
+        let content = '';
+        
+        switch(type) {
+          case 'count':
+            content = `
+              <div class="modal-content">
+                <button class="modal-close" onclick="tools.close()">×</button>
+                <div class="modal-header">
+                  <div class="modal-icon">🔢</div>
+                  <div class="modal-title">Compte à rebours</div>
+                  <div class="modal-subtitle">De 100 à 0 par 7</div>
+                </div>
+                <div style="padding: 20px;">
+                  <p style="margin-bottom: 20px; color: #666; text-align: center;">
+                    Écris les nombres un par un (100, 93, 86, 79...)
+                  </p>
+                  <textarea class="reframe-textarea" id="countInput" placeholder="100, 93, 86..." style="min-height: 200px;"></textarea>
+                  <div style="margin-top: 15px; text-align: center; color: #4facfe; font-weight: bold;" id="countProgress"></div>
+                </div>
+              </div>
+            `;
+            break;
+            
+          case 'countries':
+            content = `
+              <div class="modal-content">
+                <button class="modal-close" onclick="tools.close()">×</button>
+                <div class="modal-header">
+                  <div class="modal-icon">🌍</div>
+                  <div class="modal-title">Pays en S</div>
+                  <div class="modal-subtitle">Liste 10 pays commençant par S</div>
+                </div>
+                <div style="padding: 20px;">
+                  ${Array(10).fill(0).map((_, i) => `
+                    <input type="text" class="step-input" placeholder="${i+1}. Ex: ${i === 0 ? 'Suède' : i === 1 ? 'Suisse' : '...'}" style="margin-bottom: 10px; background: white; color: #333;" />
+                  `).join('')}
+                  <div style="margin-top: 15px; text-align: center; color: #4facfe; font-weight: bold;">
+                    <span id="countriesCount">0</span>/10 pays listés
+                  </div>
+                </div>
+              </div>
+            `;
+            setTimeout(() => {
+              document.querySelectorAll('.step-input').forEach(input => {
+                input.addEventListener('input', () => {
+                  const filled = Array.from(document.querySelectorAll('.step-input')).filter(i => i.value.trim()).length;
+                  document.getElementById('countriesCount').textContent = filled;
+                });
+              });
+            }, 100);
+            break;
+            
+          case 'alphabet':
+            content = `
+              <div class="modal-content">
+                <button class="modal-close" onclick="tools.close()">×</button>
+                <div class="modal-header">
+                  <div class="modal-icon">🔤</div>
+                  <div class="modal-title">Alphabet à l'envers</div>
+                  <div class="modal-subtitle">De Z à A</div>
+                </div>
+                <div style="padding: 20px;">
+                  <p style="margin-bottom: 20px; color: #666; text-align: center;">
+                    Écris l'alphabet à l'envers (Z, Y, X, W, V...)
+                  </p>
+                  <textarea class="reframe-textarea" id="alphabetInput" placeholder="Z, Y, X, W, V..." style="min-height: 150px;"></textarea>
+                  <div style="margin-top: 15px; text-align: center; color: #4facfe; font-weight: bold;" id="alphabetFeedback"></div>
+                </div>
+              </div>
+            `;
+            break;
+            
+          case 'colors':
+            content = `
+              <div class="modal-content">
+                <button class="modal-close" onclick="tools.close()">×</button>
+                <div class="modal-header">
+                  <div class="modal-icon">🎨</div>
+                  <div class="modal-title">Trouve les couleurs</div>
+                  <div class="modal-subtitle">5 choses bleues autour de toi</div>
+                </div>
+                <div style="padding: 20px;">
+                  <p style="margin-bottom: 20px; color: #666; text-align: center;">
+                    Regarde vraiment autour de toi et coche quand tu les trouves
+                  </p>
+                  ${Array(5).fill(0).map((_, i) => `
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px;">
+                      <input type="checkbox" id="color${i}" style="width: 24px; height: 24px; cursor: pointer;" onchange="tools.updateColorCount()" />
+                      <input type="text" placeholder="Chose bleue ${i+1}" style="flex: 1; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px;" />
+                    </div>
+                  `).join('')}
+                  <div style="margin-top: 20px; text-align: center; color: #4facfe; font-weight: bold; font-size: 20px;">
+                    <span id="colorCount">0</span>/5 trouvées ✓
+                  </div>
+                </div>
+              </div>
+            `;
+            break;
+            
+          case 'movement':
+            content = `
+              <div class="modal-content">
+                <button class="modal-close" onclick="tools.close()">×</button>
+                <div class="modal-header">
+                  <div class="modal-icon">🏃</div>
+                  <div class="modal-title">Bouge ton corps</div>
+                  <div class="modal-subtitle">10 sauts sur place</div>
+                </div>
+                <div style="padding: 40px; text-align: center;">
+                  <div style="font-size: 120px; font-weight: bold; color: #4facfe; margin: 30px 0;" id="jumpCount">0</div>
+                  <p style="font-size: 24px; color: #333; margin-bottom: 30px;">sauts effectués</p>
+                  <button class="control-btn primary" onclick="tools.incrementJump()" style="font-size: 20px; padding: 20px 40px;">
+                    Faire un saut ! 🏃
+                  </button>
+                  <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 15px; color: #666;">
+                    Clique sur le bouton à chaque saut, ou saute vraiment et compte !
+                  </div>
+                </div>
+              </div>
+            `;
+            this.jumpCounter = 0;
+            break;
+            
+          case 'water':
+            content = `
+              <div class="modal-content">
+                <button class="modal-close" onclick="tools.close()">×</button>
+                <div class="modal-header">
+                  <div class="modal-icon">💧</div>
+                  <div class="modal-title">Eau froide</div>
+                  <div class="modal-subtitle">30 secondes sur les poignets</div>
+                </div>
+                <div style="padding: 40px; text-align: center;">
+                  <div style="font-size: 80px; font-weight: bold; color: #4facfe; margin: 30px 0;" id="waterTimer">30</div>
+                  <p style="font-size: 20px; color: #333; margin-bottom: 30px;">secondes restantes</p>
+                  <button class="control-btn primary" id="waterBtn" onclick="tools.startWaterTimer()" style="font-size: 18px; padding: 15px 35px;">
+                    Démarrer ⏱️
+                  </button>
+                  <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 15px; color: #666;">
+                    Passe de l'eau froide sur tes poignets pendant le compte à rebours
+                  </div>
+                </div>
+              </div>
+            `;
+            break;
+        }
+        
+        modal.innerHTML = content;
+      },
+      
+      updateColorCount() {
+        const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+        document.getElementById('colorCount').textContent = checked;
+      },
+      
+      jumpCounter: 0,
+      
+      incrementJump() {
+        this.jumpCounter++;
+        document.getElementById('jumpCount').textContent = this.jumpCounter;
+        
+        if (this.jumpCounter >= 10) {
+          setTimeout(() => {
+            alert('🎉 Bravo ! Tu as fait 10 sauts ! Tu te sens mieux ?');
+          }, 300);
+        }
+      },
+      
+      waterInterval: null,
+      
+      startWaterTimer() {
+        let seconds = 30;
+        const display = document.getElementById('waterTimer');
+        const btn = document.getElementById('waterBtn');
+        
+        btn.disabled = true;
+        btn.textContent = 'En cours...';
+        
+        this.waterInterval = setInterval(() => {
+          seconds--;
+          display.textContent = seconds;
+          
+          if (seconds <= 0) {
+            clearInterval(this.waterInterval);
+            display.textContent = '✓';
+            btn.textContent = 'Terminé !';
+            alert('🎉 Bien joué ! Comment te sens-tu maintenant ?');
+          }
+        }, 1000);
       },
       
       getCompassionContent() {
