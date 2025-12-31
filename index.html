@@ -645,9 +645,9 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
     
-    /* Insights Card */
-    .insights-card {
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    /* Quick Tools Card */
+    .quicktools-card {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
       border-radius: var(--radius-lg);
       padding: 25px;
       margin-bottom: 20px;
@@ -655,11 +655,12 @@
       color: white;
       position: relative;
       overflow: hidden;
+      cursor: pointer;
       transition: all 0.3s ease;
     }
     
-    .insights-card::before {
-      content: '📊';
+    .quicktools-card::before {
+      content: '⚡';
       position: absolute;
       top: -10px;
       right: -10px;
@@ -668,48 +669,45 @@
       animation: pulse 3s infinite;
     }
     
-    .insights-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 40px rgba(240, 147, 251, 0.4);
+    .quicktools-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(79, 172, 254, 0.4);
     }
     
-    .insights-title {
+    .quicktools-title {
       font-size: 20px;
       font-weight: bold;
-      margin-bottom: 15px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
       gap: 10px;
     }
     
-    .insight-item {
-      background: rgba(255,255,255,0.15);
-      padding: 12px 15px;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      font-size: 14px;
+    .quicktools-desc {
+      font-size: 15px;
+      opacity: 0.95;
+      margin-bottom: 15px;
       line-height: 1.5;
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
+    }
+    
+    .quicktools-btn {
+      background: white;
+      color: #4facfe;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 15px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       transition: all 0.3s ease;
     }
     
-    .insight-item:hover {
-      background: rgba(255,255,255,0.25);
-      transform: translateX(5px);
-    }
-    
-    .insight-icon {
-      font-size: 20px;
-      flex-shrink: 0;
-    }
-    
-    .no-insights {
-      text-align: center;
-      padding: 20px;
-      opacity: 0.9;
-      font-size: 14px;
+    .quicktools-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
     
     /* PRO Teaser */
@@ -976,14 +974,15 @@
       </button>
     </div>
     
-    <!-- Insights & Patterns Card -->
-    <div class="insights-card fade-in">
-      <div class="insights-title">📊 Insights & Patterns</div>
-      <div id="insightsContainer">
-        <div class="no-insights">
-          Continue d'utiliser MindFlow pour découvrir des insights personnalisés sur tes patterns émotionnels ! 📈
-        </div>
+    <!-- Quick Tools Card -->
+    <div class="quicktools-card fade-in ripple" onclick="window.location.href='quicktools.html'">
+      <div class="quicktools-title">⚡ Quick Tools</div>
+      <div class="quicktools-desc">
+        6 outils puissants pour gérer tes émotions immédiatement : Grounding, Respiration, Recadrage, STOP, Distraction et Auto-compassion.
       </div>
+      <button class="quicktools-btn">
+        🛠️ Ouvrir la boîte à outils
+      </button>
     </div>
     
     <!-- PRO Teaser -->
@@ -1163,7 +1162,6 @@
         this.setQuote();
         this.setJournalPrompt();
         this.loadStats();
-        this.generateInsights();
         this.initChart();
         this.hideLoading();
       },
@@ -1254,111 +1252,6 @@
         document.getElementById('medRate').textContent = rate + '%';
       },
       
-      generateInsights() {
-        const moods = JSON.parse(localStorage.getItem('mindflow_moods_v2') || '[]');
-        
-        if (moods.length < 5) {
-          return; // Not enough data
-        }
-        
-        const insights = [];
-        
-        // Analyze day of week patterns
-        const dayPatterns = {};
-        moods.forEach(mood => {
-          const date = new Date(mood.date);
-          const day = date.toLocaleDateString('fr-FR', { weekday: 'long' });
-          
-          if (!dayPatterns[day]) {
-            dayPatterns[day] = [];
-          }
-          dayPatterns[day].push(mood.intensity);
-        });
-        
-        // Find best and worst days
-        let bestDay = null;
-        let worstDay = null;
-        let bestAvg = 0;
-        let worstAvg = 10;
-        
-        Object.keys(dayPatterns).forEach(day => {
-          const avg = dayPatterns[day].reduce((a, b) => a + b, 0) / dayPatterns[day].length;
-          if (avg > bestAvg) {
-            bestAvg = avg;
-            bestDay = day;
-          }
-          if (avg < worstAvg) {
-            worstAvg = avg;
-            worstDay = day;
-          }
-        });
-        
-        if (bestDay && Math.abs(bestAvg - worstAvg) > 1.5) {
-          insights.push({
-            icon: '📅',
-            text: `Tu te sens généralement mieux les ${bestDay}s (intensité moyenne: ${bestAvg.toFixed(1)}/10)`
-          });
-          
-          if (worstDay) {
-            insights.push({
-              icon: '⚠️',
-              text: `Attention aux ${worstDay}s - c'est souvent plus difficile pour toi`
-            });
-          }
-        }
-        
-        // Analyze recent trend
-        const recentMoods = moods.slice(-7);
-        if (recentMoods.length >= 7) {
-          const recentAvg = recentMoods.reduce((acc, m) => acc + m.intensity, 0) / recentMoods.length;
-          const olderMoods = moods.slice(-14, -7);
-          if (olderMoods.length >= 7) {
-            const olderAvg = olderMoods.reduce((acc, m) => acc + m.intensity, 0) / olderMoods.length;
-            
-            if (recentAvg > olderAvg + 1) {
-              insights.push({
-                icon: '📈',
-                text: `Tendance positive ! Ton humeur s'améliore ces derniers jours`
-              });
-            } else if (recentAvg < olderAvg - 1) {
-              insights.push({
-                icon: '💙',
-                text: `Tu sembles traverser une période plus difficile. Prends soin de toi`
-              });
-            }
-          }
-        }
-        
-        // Check medication adherence impact
-        const history = JSON.parse(localStorage.getItem('mindflow_meds_history_v2') || '{}');
-        if (Object.keys(history).length > 0) {
-          const adherenceRate = Object.values(history).filter(h => h.status === 'taken').length / Object.keys(history).length;
-          
-          if (adherenceRate > 0.8) {
-            insights.push({
-              icon: '💊',
-              text: `Excellent suivi de ton traitement (${Math.round(adherenceRate * 100)}%) ! Continue comme ça`
-            });
-          } else if (adherenceRate < 0.5) {
-            insights.push({
-              icon: '⏰',
-              text: `Pense à prendre tes médicaments plus régulièrement - ça peut aider`
-            });
-          }
-        }
-        
-        // Display insights
-        const container = document.getElementById('insightsContainer');
-        if (insights.length > 0) {
-          container.innerHTML = insights.map(insight => `
-            <div class="insight-item">
-              <div class="insight-icon">${insight.icon}</div>
-              <div>${insight.text}</div>
-            </div>
-          `).join('');
-        }
-      },
-      
       initChart() {
         const ctx = document.getElementById('weekChart').getContext('2d');
         const moods = JSON.parse(localStorage.getItem('mindflow_moods_v2') || '[]');
@@ -1426,7 +1319,6 @@
             btn.style.transform = 'scale(1)';
             alert('✅ Humeur enregistrée !');
             this.loadStats();
-            this.generateInsights();
             this.initChart();
           }, 300);
         }
