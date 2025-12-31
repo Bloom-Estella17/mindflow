@@ -710,6 +710,76 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
     
+    /* Oracle Card */
+    .oracle-card {
+      background: linear-gradient(135deg, #BA55D3 0%, #9370DB 100%);
+      border-radius: var(--radius-lg);
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+      color: white;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .oracle-card::before {
+      content: '🔮';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      font-size: 80px;
+      opacity: 0.15;
+      animation: float 3s infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .oracle-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(186, 85, 211, 0.5);
+    }
+    
+    .oracle-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .oracle-desc {
+      font-size: 15px;
+      opacity: 0.95;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+    
+    .oracle-btn {
+      background: white;
+      color: #BA55D3;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 15px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .oracle-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
     /* PRO Teaser */
     .pro-teaser {
       background: linear-gradient(135deg, var(--gold) 0%, #FFA500 100%);
@@ -982,6 +1052,17 @@
       </div>
       <button class="quicktools-btn">
         🛠️ Ouvrir la boîte à outils
+      </button>
+    </div>
+    
+    <!-- Oracle Card -->
+    <div class="oracle-card fade-in ripple" onclick="window.location.href='oracle.html'">
+      <div class="oracle-title">🔮 Oracle & Messages</div>
+      <div class="oracle-desc">
+        Tire une carte d'oracle pour recevoir guidance et soutien sur tous les aspects de ta vie : amour, travail, santé, spiritualité...
+      </div>
+      <button class="oracle-btn">
+        ✨ Consulter l'oracle
       </button>
     </div>
     
