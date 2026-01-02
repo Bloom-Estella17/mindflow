@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎨 Mood Art - MindFlow</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      padding-bottom: 100px;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      animation: fadeInUp 0.5s ease;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .back-btn {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: white;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .back-btn:hover {
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.1);
+    }
+    
+    .header-title {
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    
+    .subtitle {
+      color: rgba(255,255,255,0.9);
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 15px;
+      animation: fadeInUp 0.6s ease;
+    }
+    
+    /* Canvas Container */
+    .canvas-container {
+      background: white;
+      border-radius: 25px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: fadeInUp 0.7s ease;
+    }
+    
+    #moodCanvas {
+      width: 100%;
+      border: 2px solid #eee;
+      border-radius: 15px;
+      cursor: crosshair;
+      touch-action: none;
+      display: block;
+    }
+    
+    /* Tools */
+    .tools {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      animation: fadeInUp 0.8s ease;
+    }
+    
+    .tool-section {
+      margin-bottom: 20px;
+    }
+    
+    .tool-section:last-child {
+      margin-bottom: 0;
+    }
+    
+    .tool-label {
+      font-size: 14px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 12px;
+      display: block;
+    }
+    
+    /* Color Palette */
+    .color-palette {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+    }
+    
+    .color-btn {
+      width: 100%;
+      aspect-ratio: 1;
+      border: 3px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .color-btn:hover {
+      transform: scale(1.1);
+    }
+    
+    .color-btn.active {
+      border-color: #333;
+      transform: scale(1.15);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    
+    .color-btn.active::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      text-shadow: 0 0 3px rgba(0,0,0,0.5);
+    }
+    
+    /* Brush Size */
+    .size-options {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    
+    .size-btn {
+      width: 50px;
+      height: 50px;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .size-btn:hover {
+      border-color: #667eea;
+      transform: scale(1.1);
+    }
+    
+    .size-btn.active {
+      border-color: #667eea;
+      background: #667eea;
+      color: white;
+    }
+    
+    .size-circle {
+      border-radius: 50%;
+      background: #333;
+    }
+    
+    .size-btn.active .size-circle {
+      background: white;
+    }
+    
+    /* Action Buttons */
+    .action-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    
+    .action-btn {
+      padding: 15px;
+      border: none;
+      border-radius: 15px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .action-btn:hover {
+      transform: translateY(-3px);
+    }
+    
+    .btn-clear {
+      background: #ef4444;
+      color: white;
+    }
+    
+    .btn-save {
+      background: #10b981;
+      color: white;
+    }
+    
+    /* Gallery */
+    .gallery {
+      background: white;
+      border-radius: 25px;
+      padding: 25px;
+      animation: fadeInUp 0.9s ease;
+    }
+    
+    .gallery-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+    
+    .gallery-item {
+      position: relative;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .gallery-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    
+    .gallery-item img {
+      width: 100%;
+      display: block;
+    }
+    
+    .gallery-date {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 8px;
+      font-size: 11px;
+      text-align: center;
+    }
+    
+    .delete-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(239,68,68,0.9);
+      color: white;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      display: none;
+      transition: all 0.3s ease;
+    }
+    
+    .gallery-item:hover .delete-btn {
+      display: block;
+    }
+    
+    .no-gallery {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+      font-size: 14px;
+    }
+    
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: 25px;
+      padding: 15px 25px;
+      display: flex;
+      gap: 35px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+    
+    .nav-item {
+      font-size: 26px;
+      opacity: 0.4;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-item:hover {
+      opacity: 0.7;
+      transform: scale(1.2);
+    }
+    
+    .nav-item.active {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+    
+    /* Success Toast */
+    .toast {
+      position: fixed;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-200px);
+      background: #10b981;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      font-weight: bold;
+      z-index: 2000;
+      transition: all 0.3s ease;
+    }
+    
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+      <div class="header-title">🎨 Mood Art</div>
+    </div>
+    
+    <div class="subtitle">
+      Dessine ton humeur du moment. Pas besoin de mots, juste des couleurs et des formes.
+    </div>
+    
+    <!-- Canvas -->
+    <div class="canvas-container">
+      <canvas id="moodCanvas" width="560" height="560"></canvas>
+    </div>
+    
+    <!-- Tools -->
+    <div class="tools">
+      <!-- Colors -->
+      <div class="tool-section">
+        <label class="tool-label">🎨 Couleurs</label>
+        <div class="color-palette">
+          <button class="color-btn active" style="background: #ef4444;" data-color="#ef4444"></button>
+          <button class="color-btn" style="background: #f59e0b;" data-color="#f59e0b"></button>
+          <button class="color-btn" style="background: #eab308;" data-color="#eab308"></button>
+          <button class="color-btn" style="background: #22c55e;" data-color="#22c55e"></button>
+          <button class="color-btn" style="background: #3b82f6;" data-color="#3b82f6"></button>
+          <button class="color-btn" style="background: #a855f7;" data-color="#a855f7"></button>
+          <button class="color-btn" style="background: #ec4899;" data-color="#ec4899"></button>
+          <button class="color-btn" style="background: #14b8a6;" data-color="#14b8a6"></button>
+          <button class="color-btn" style="background: #64748b;" data-color="#64748b"></button>
+          <button class="color-btn" style="background: #1e293b;" data-color="#1e293b"></button>
+          <button class="color-btn" style="background: #ffffff; border: 2px solid #ddd;" data-color="#ffffff"></button>
+          <button class="color-btn" style="background: #000000;" data-color="#000000"></button>
+        </div>
+      </div>
+      
+      <!-- Brush Size -->
+      <div class="tool-section">
+        <label class="tool-label">🖌️ Taille du pinceau</label>
+        <div class="size-options">
+          <button class="size-btn" data-size="5">
+            <div class="size-circle" style="width: 5px; height: 5px;"></div>
+          </button>
+          <button class="size-btn active" data-size="10">
+            <div class="size-circle" style="width: 10px; height: 10px;"></div>
+          </button>
+          <button class="size-btn" data-size="20">
+            <div class="size-circle" style="width: 20px; height: 20px;"></div>
+          </button>
+          <button class="size-btn" data-size="40">
+            <div class="size-circle" style="width: 30px; height: 30px;"></div>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Actions -->
+      <div class="tool-section">
+        <div class="action-buttons">
+          <button class="action-btn btn-clear" onclick="moodArt.clear()">
+            🗑️ Effacer
+          </button>
+          <button class="action-btn btn-save" onclick="moodArt.save()">
+            💾 Sauvegarder
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Gallery -->
+    <div class="gallery">
+      <div class="gallery-title">📸 Ma galerie d'humeurs</div>
+      <div class="gallery-grid" id="galleryGrid">
+        <div class="no-gallery">Aucun dessin sauvegardé pour le moment</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Toast -->
+  <div class="toast" id="toast">✅ Dessin sauvegardé !</div>
+  
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <a href="index.html" class="nav-item">🏠</a>
+    <a href="mood.html" class="nav-item">😊</a>
+    <a href="journal.html" class="nav-item">📝</a>
+    <a href="challenge.html" class="nav-item">🎯</a>
+    <a href="profil.html" class="nav-item">👤</a>
+  </div>
+  
+  <script>
+    const moodArt = {
+      canvas: null,
+      ctx: null,
+      isDrawing: false,
+      currentColor: '#ef4444',
+      currentSize: 10,
+      drawings: [],
+      
+      init() {
+        this.canvas = document.getElementById('moodCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        
+        // Set canvas background
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Setup drawing
+        this.setupDrawing();
+        this.setupColorPicker();
+        this.setupSizePicker();
+        this.loadGallery();
+      },
+      
+      setupDrawing() {
+        // Mouse events
+        this.canvas.addEventListener('mousedown', (e) => this.startDrawing(e));
+        this.canvas.addEventListener('mousemove', (e) => this.draw(e));
+        this.canvas.addEventListener('mouseup', () => this.stopDrawing());
+        this.canvas.addEventListener('mouseout', () => this.stopDrawing());
+        
+        // Touch events
+        this.canvas.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          this.startDrawing(e.touches[0]);
+        });
+        
+        this.canvas.addEventListener('touchmove', (e) => {
+          e.preventDefault();
+          this.draw(e.touches[0]);
+        });
+        
+        this.canvas.addEventListener('touchend', (e) => {
+          e.preventDefault();
+          this.stopDrawing();
+        });
+      },
+      
+      setupColorPicker() {
+        document.querySelectorAll('.color-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            this.currentColor = btn.dataset.color;
+          });
+        });
+      },
+      
+      setupSizePicker() {
+        document.querySelectorAll('.size-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            this.currentSize = parseInt(btn.dataset.size);
+          });
+        });
+      },
+      
+      getMousePos(e) {
+        const rect = this.canvas.getBoundingClientRect();
+        const scaleX = this.canvas.width / rect.width;
+        const scaleY = this.canvas.height / rect.height;
+        
+        return {
+          x: (e.clientX - rect.left) * scaleX,
+          y: (e.clientY - rect.top) * scaleY
+        };
+      },
+      
+      startDrawing(e) {
+        this.isDrawing = true;
+        const pos = this.getMousePos(e);
+        this.ctx.beginPath();
+        this.ctx.moveTo(pos.x, pos.y);
+      },
+      
+      draw(e) {
+        if (!this.isDrawing) return;
+        
+        const pos = this.getMousePos(e);
+        
+        this.ctx.strokeStyle = this.currentColor;
+        this.ctx.lineWidth = this.currentSize;
+        this.ctx.lineCap = 'round';
+        this.ctx.lineJoin = 'round';
+        
+        this.ctx.lineTo(pos.x, pos.y);
+        this.ctx.stroke();
+      },
+      
+      stopDrawing() {
+        this.isDrawing = false;
+      },
+      
+      clear() {
+        if (confirm('Effacer ton dessin ?')) {
+          this.ctx.fillStyle = 'white';
+          this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        }
+      },
+      
+      save() {
+        const dataURL = this.canvas.toDataURL('image/png');
+        const drawing = {
+          date: new Date().toISOString(),
+          image: dataURL
+        };
+        
+        this.drawings.unshift(drawing);
+        
+        // Keep only last 20
+        if (this.drawings.length > 20) {
+          this.drawings = this.drawings.slice(0, 20);
+        }
+        
+        localStorage.setItem('mindflow_mood_art', JSON.stringify(this.drawings));
+        
+        this.showToast();
+        this.loadGallery();
+        this.clear();
+      },
+      
+      loadGallery() {
+        const saved = localStorage.getItem('mindflow_mood_art');
+        if (saved) {
+          this.drawings = JSON.parse(saved);
+        }
+        
+        const grid = document.getElementById('galleryGrid');
+        
+        if (this.drawings.length === 0) {
+          grid.innerHTML = '<div class="no-gallery">Aucun dessin sauvegardé pour le moment</div>';
+          return;
+        }
+        
+        grid.innerHTML = this.drawings.map((drawing, index) => `
+          <div class="gallery-item">
+            <img src="${drawing.image}" alt="Mood art">
+            <div class="gallery-date">${new Date(drawing.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</div>
+            <button class="delete-btn" onclick="moodArt.deleteDrawing(${index})">×</button>
+          </div>
+        `).join('');
+      },
+      
+      deleteDrawing(index) {
+        if (confirm('Supprimer ce dessin ?')) {
+          this.drawings.splice(index, 1);
+          localStorage.setItem('mindflow_mood_art', JSON.stringify(this.drawings));
+          this.loadGallery();
+        }
+      },
+      
+      showToast() {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2000);
+      }
+    };
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      moodArt.init();
+    });
+  </script>
+</body>
+</html>
