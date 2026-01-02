@@ -366,10 +366,26 @@
         <div class="features-title">✨ Tout ce que tu débloques</div>
         
         <div class="feature-item">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-text">
+            <div class="feature-title">Daily Challenge illimité</div>
+            <div class="feature-desc">Défis illimités + tous les achievements débloqués</div>
+          </div>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-icon">🔮</div>
+          <div class="feature-text">
+            <div class="feature-title">Oracle illimité</div>
+            <div class="feature-desc">Tirages illimités + historique de 50 cartes</div>
+          </div>
+        </div>
+        
+        <div class="feature-item">
           <div class="feature-icon">🎭</div>
           <div class="feature-text">
             <div class="feature-title">Émotions illimitées</div>
-            <div class="feature-desc">Sélectionne plusieurs émotions par entrée au lieu d'une seule</div>
+            <div class="feature-desc">Sélectionne plusieurs émotions par entrée</div>
           </div>
         </div>
         
@@ -385,7 +401,7 @@
           <div class="feature-icon">💊</div>
           <div class="feature-text">
             <div class="feature-title">Médicaments illimités</div>
-            <div class="feature-desc">Suivi complet de tous tes traitements avec historique</div>
+            <div class="feature-desc">Suivi complet de tous tes traitements</div>
           </div>
         </div>
         
@@ -394,14 +410,6 @@
           <div class="feature-text">
             <div class="feature-title">Stats avancées 30 jours</div>
             <div class="feature-desc">Graphiques détaillés et analyse de patterns</div>
-          </div>
-        </div>
-        
-        <div class="feature-item">
-          <div class="feature-icon">💬</div>
-          <div class="feature-text">
-            <div class="feature-title">Luna - Chatbot IA</div>
-            <div class="feature-desc">Compagnon IA disponible 24/7 pour soutien émotionnel</div>
           </div>
         </div>
         
@@ -476,7 +484,7 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
     
-    // REMPLACE PAR TA CLÉ STRIPE PUBLISHABLE (mode test)
+    // CLÉ STRIPE PUBLISHABLE (mode test)
     const STRIPE_PUBLISHABLE_KEY = 'pk_test_51QdjJYP5z8yQb2rqh5O6rDnAKp7pQgNr2fMBDMU8QcM0h7PbnbYiZmBKV7b2OqbCzPkGrPXP4C6tLkHQZ9h9lNEa00MG53p9K8';
     const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
     
@@ -529,13 +537,10 @@
         btn.textContent = '⏳ Redirection vers Stripe...';
         
         try {
-          // MÉTHODE 1 : Stripe Checkout (la plus simple)
-          // Tu devras créer un "Price" dans ton dashboard Stripe
-          // et remplacer 'price_xxxxx' par ton vrai Price ID
-          
+          // Stripe Checkout avec TON Price ID
           const { error } = await stripe.redirectToCheckout({
             lineItems: [{
-              price: 'price_1QdjbYP5z8yQb2rqYrxON2WP', // REMPLACE par ton Price ID Stripe
+              price: 'price_1SiE8BAEBZNGGY2r0zs3M2p2', // ← TON NOUVEAU PRICE ID !
               quantity: 1,
             }],
             mode: 'subscription',
