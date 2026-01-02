@@ -1260,9 +1260,14 @@
             try {
               const userDoc = await db.collection('users').doc(user.uid).get();
               this.isPro = userDoc.exists && userDoc.data().isPro === true;
+              
+              // Update localStorage for other pages to check
+              localStorage.setItem('mindflow_is_pro', this.isPro ? 'true' : 'false');
+              
               this.updateProUI();
             } catch (error) {
               console.error('Erreur:', error);
+              localStorage.setItem('mindflow_is_pro', 'false');
             }
             
             resolve();
