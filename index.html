@@ -1507,6 +1507,17 @@
     
     document.addEventListener('DOMContentLoaded', () => {
       dashboard.init();
+      
+      // Enregistrer le service worker pour PWA
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('Service Worker enregistré:', registration);
+          })
+          .catch(error => {
+            console.log('Erreur Service Worker:', error);
+          });
+      }
     });
   </script>
 </body>
