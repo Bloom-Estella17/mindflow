@@ -13,7 +13,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   
   <!-- Stripe -->
-  <!-- Temporairement désactivé -->
+  <script src="https://js.stripe.com/v3/"></script>
   
   <style>
     * {
@@ -484,9 +484,11 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
     
-    // STRIPE TEMPORAIREMENT DÉSACTIVÉ
-    // const STRIPE_PUBLISHABLE_KEY = 'pk_test_...';
-    // const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+    // CLÉ STRIPE PUBLISHABLE (mode test)
+    const STRIPE_PUBLISHABLE_KEY = 'pk_test_51QdjJYP5z8yQb2rqh5O6rDnAKp7pQgNr2fMBDMU8QcM0h7PbnbYiZmBKV7b2OqbCzPkGrPXP4C6tLkHQZ9h9lNEa00MG53p9K8';
+    
+    // Initialiser Stripe seulement quand on en a besoin
+    let stripe = null;
     
     const subscriptionManager = {
       user: null,
@@ -539,11 +541,42 @@
       },
       
       async subscribe() {
-        // VERSION TEMPORAIRE - STRIPE EN COURS DE CONFIGURATION
-        alert('🚧 Paiements temporairement désactivés\n\n' +
-              'Le système de paiement est en cours de configuration.\n' +
-              'Toutes les fonctionnalités sont gratuites pour le moment ! 🎉\n\n' +
-              'Profite de MindFlow sans limites ✨');
+        const btn = document.getElementById('subscribeBtn');
+        btn.disabled = true;
+        btn.textContent = '⏳ Redirection vers Stripe...';
+        
+        try {
+          // Initialiser Stripe seulement maintenant
+          if (!stripe) {
+            stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+          }
+          
+          // Stripe Checkout avec TON Price ID
+          const { error } = await stripe.redirectToCheckout({
+            lineItems: [{
+              price: 'price_1SiE8BAEBZNGGY2r0zs3M2p2', // ← TON PRICE ID !
+              quantity: 1,
+            }],
+            mode: 'subscription',
+            successUrl: window.location.origin + '/mindflow/success.html?session_id={CHECKOUT_SESSION_ID}',
+            cancelUrl: window.location.origin + '/mindflow/subscription.html',
+            customerEmail: this.user.email,
+            clientReferenceId: this.user.uid
+          });
+          
+          if (error) {
+            console.error('Erreur Stripe:', error);
+            alert('Erreur lors de la redirection vers Stripe. Réessaye !');
+            btn.disabled = false;
+            btn.textContent = '🚀 Commencer l\'essai gratuit';
+          }
+          
+        } catch (error) {
+          console.error('Erreur:', error);
+          alert('Une erreur est survenue. Réessaye !');
+          btn.disabled = false;
+          btn.textContent = '🚀 Commencer l\'essai gratuit';
+        }
       }
     };
     
