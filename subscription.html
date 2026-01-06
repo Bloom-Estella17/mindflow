@@ -13,7 +13,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   
   <!-- Stripe -->
-  <script src="https://js.stripe.com/v3/"></script>
+  <!-- Désactivé temporairement pour le lancement -->
   
   <style>
     * {
@@ -551,10 +551,10 @@
             stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
           }
           
-          // Stripe Checkout avec TON Price ID
+          // Stripe Checkout avec LE BON Price ID
           const { error } = await stripe.redirectToCheckout({
             lineItems: [{
-              price: 'price_1SiE8BAEBZNGGY2r0zs3M2p2', // ← TON PRICE ID !
+              price: 'price_1SidhaAEBZNGGY2rvRskYvgJ', // ← TON VRAI PRICE ID 4,99€ !
               quantity: 1,
             }],
             mode: 'subscription',
