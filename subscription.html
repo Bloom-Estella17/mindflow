@@ -493,23 +493,29 @@
       isPro: false,
       
       async init() {
-        await this.checkAuth();
-        await this.checkProStatus();
-        this.showContent();
+        try {
+          await this.checkAuth();
+          await this.checkProStatus();
+          this.showContent();
+        } catch (error) {
+          console.log('Redirection vers login...');
+          // L'erreur est normale si pas connecté, on laisse la redirection se faire
+        }
       },
       
       async checkAuth() {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
           auth.onAuthStateChanged((user) => {
             if (!user) {
-              // Rediriger vers login sans alert
+              // Pas connecté, on redirige après un court délai
               setTimeout(() => {
                 window.location.href = 'login.html';
-              }, 500);
+              }, 1000);
+              reject('Not authenticated');
               return;
             }
             this.user = user;
-            resolve();
+            resolve(user);
           });
         });
       },
