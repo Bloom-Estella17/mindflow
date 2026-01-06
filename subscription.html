@@ -13,7 +13,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   
   <!-- Stripe -->
-  <script src="https://js.stripe.com/v3/"></script>
+  <!-- Temporairement désactivé -->
   
   <style>
     * {
@@ -484,9 +484,9 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
     
-    // CLÉ STRIPE PUBLISHABLE (mode test)
-    const STRIPE_PUBLISHABLE_KEY = 'pk_test_51QdjJYP5z8yQb2rqh5O6rDnAKp7pQgNr2fMBDMU8QcM0h7PbnbYiZmBKV7b2OqbCzPkGrPXP4C6tLkHQZ9h9lNEa00MG53p9K8';
-    const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+    // STRIPE TEMPORAIREMENT DÉSACTIVÉ
+    // const STRIPE_PUBLISHABLE_KEY = 'pk_test_...';
+    // const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
     
     const subscriptionManager = {
       user: null,
@@ -499,7 +499,6 @@
           this.showContent();
         } catch (error) {
           console.log('Redirection vers login...');
-          // L'erreur est normale si pas connecté, on laisse la redirection se faire
         }
       },
       
@@ -507,7 +506,6 @@
         return new Promise((resolve, reject) => {
           auth.onAuthStateChanged((user) => {
             if (!user) {
-              // Pas connecté, on redirige après un court délai
               setTimeout(() => {
                 window.location.href = 'login.html';
               }, 1000);
@@ -541,37 +539,11 @@
       },
       
       async subscribe() {
-        const btn = document.getElementById('subscribeBtn');
-        btn.disabled = true;
-        btn.textContent = '⏳ Redirection vers Stripe...';
-        
-        try {
-          // Stripe Checkout avec TON Price ID
-          const { error } = await stripe.redirectToCheckout({
-            lineItems: [{
-              price: 'price_1SiE8BAEBZNGGY2r0zs3M2p2', // ← TON NOUVEAU PRICE ID !
-              quantity: 1,
-            }],
-            mode: 'subscription',
-            successUrl: window.location.origin + '/success.html?session_id={CHECKOUT_SESSION_ID}',
-            cancelUrl: window.location.origin + '/subscription.html',
-            customerEmail: this.user.email,
-            clientReferenceId: this.user.uid
-          });
-          
-          if (error) {
-            console.error('Erreur Stripe:', error);
-            alert('Erreur lors de la redirection vers Stripe. Réessaye !');
-            btn.disabled = false;
-            btn.textContent = '🚀 Commencer l\'essai gratuit';
-          }
-          
-        } catch (error) {
-          console.error('Erreur:', error);
-          alert('Une erreur est survenue. Réessaye !');
-          btn.disabled = false;
-          btn.textContent = '🚀 Commencer l\'essai gratuit';
-        }
+        // VERSION TEMPORAIRE - STRIPE EN COURS DE CONFIGURATION
+        alert('🚧 Paiements temporairement désactivés\n\n' +
+              'Le système de paiement est en cours de configuration.\n' +
+              'Toutes les fonctionnalités sont gratuites pour le moment ! 🎉\n\n' +
+              'Profite de MindFlow sans limites ✨');
       }
     };
     
